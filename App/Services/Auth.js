@@ -1,9 +1,8 @@
 import apisauce from 'apisauce';
-import Secrets from 'react-native-config';
 
 const create = () => {
   const api = apisauce.create({
-    baseURL: Secrets.AUTHORIZATION_ENDPOINT
+    baseURL: 'https://7s6pizsaij.executeapi.uswest2.amazonaws.com/dev/jwt'
   });
 
   const generateToken = (name, sub) => {

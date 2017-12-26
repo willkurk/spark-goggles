@@ -2,10 +2,16 @@ import { combineReducers } from 'redux'
 import configureStore from './CreateStore'
 import rootSaga from '../Sagas/'
 
+/* ------------- Import our reducers ---------- */
+
+import { reducer as nav } from './NavigationRedux';
+import { reducer as currentUser } from './CurrentUser';
+
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
-  nav: require('./NavigationRedux').reducer
-})
+  nav,
+  currentUser
+});
 
 export default () => {
   let { store, sagasManager, sagaMiddleware } = configureStore(reducers, rootSaga)
