@@ -35,6 +35,12 @@ Next, you can either run the app on a device or on an emulator.
 4. Find the developer settings section and find "USB Debugging". Make sure it's set to on.
 5. Run `yarn android` to launch the app.
 
+## Adding a Native package
+
+If you add a package that contains Java or ObjC code, you'll need to link it. To do so, you'll simply run `yarn react-native link`.
+
+After linking, you'll want to re-build the app entirely: `yarn android`.
+
 ## :no_entry_sign: Standard Compliant
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
