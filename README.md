@@ -11,6 +11,8 @@
 
 **Step 3:** Install the Application with `yarn` or `npm i`
 
+**Step 4:** Run `yarn start` to start the React Native packager
+
 
 ## :arrow_forward: How to run the App
 
