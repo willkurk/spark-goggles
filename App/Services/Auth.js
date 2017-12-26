@@ -9,8 +9,17 @@ const create = () => {
     return api.post('/', { name, sub });
   };
 
+  const exchangeToken = (token) => {
+    return api.post('https://api.ciscospark.com/v1/jwt/login', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  };
+
   return {
-    generateToken
+    generateToken,
+    exchangeToken
   };
 };
 
