@@ -6,8 +6,8 @@ const create = () => {
     baseURL: Secrets.AUTHORIZATION_ENDPOINT
   });
 
-  const generateToken = (name, userId) => {
-    return api.post('/', { name, sub: userId });
+  const generateToken = (name, sub) => {
+    return api.post('/', { name, sub });
   };
 
   return {

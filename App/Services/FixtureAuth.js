@@ -1,8 +1,8 @@
 export default {
-  generateToken (name, userId) {
+  generateToken (name, sub) {
     return Promise.resolve({
       name,
-      sub: userId,
+      sub,
       token: '1234567890'
     });
   }

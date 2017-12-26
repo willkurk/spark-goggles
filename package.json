@@ -72,10 +72,6 @@
     "standard": "10.0.2"
   },
   "jest": {
-    "testMatch": [
-      "<rootDir>/Tests/**/*.js",
-      "**/?(*.)(spec|test).js?(x)"
-    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "<rootDir>/Tests/Setup.js"
