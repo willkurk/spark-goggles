@@ -13,6 +13,7 @@
 
 **Step 4:** Run `yarn start` to start the React Native packager
 
+You can see the debugger interface at [](http://localhost:8081/debugger-ui/).
 
 ## :arrow_forward: How to run the App
 
@@ -63,7 +64,7 @@ GOOGLE_MAPS_API_KEY=abcdefgh
 
 and access them from React Native like so:
 
-```
+```javascript
 import Secrets from 'react-native-config'
 
 Secrets.API_URL  // 'https://myapi.com'
