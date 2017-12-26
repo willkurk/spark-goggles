@@ -23,8 +23,8 @@ Next, you can either run the app on a device or on an emulator.
 #### Emulator
 
 1. Run `yarn android:emulator:create` to create an Android virtual device.
-2. Run `yarn android:emulator` to start the emulator
-3. Run `yarn android` to launch the app.
+2. Run `yarn android:emulator` to start the emulator in a tab.
+3. Open another tab, run `yarn android` to launch the app.
 
 #### Device
 
