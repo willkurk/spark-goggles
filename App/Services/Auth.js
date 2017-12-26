@@ -2,7 +2,7 @@ import apisauce from 'apisauce';
 
 const create = () => {
   const api = apisauce.create({
-    baseURL: 'https://7s6pizsaij.executeapi.uswest2.amazonaws.com/dev/jwt'
+    baseURL: 'https://7s6pizsaij.execute-api.us-west-2.amazonaws.com/dev/jwt'
   });
 
   const generateToken = (name, sub) => {
