@@ -1,0 +1,3 @@
+rootProject.name = 'SparkGoggles'
+
+include ':app'
