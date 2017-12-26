@@ -12,15 +12,25 @@
 **Step 3:** Install the Application with `yarn` or `npm i`
 
 
-## :arrow_forward: How to Run App
+## :arrow_forward: How to run the App
 
-1. cd to the repo
-2. Run Build for either OS
-  * for iOS
-    * run `react-native run-ios`
-  * for Android
-    * Run Genymotion
-    * run `react-native run-android`
+First, you'll need to install the Android SDK.
+
+Next, you can either run the app on a device or on an emulator.
+
+#### Emulator
+
+1. Run `yarn android:create-emulator` to create an Android virtual device.
+2. Run `yarn android:emulator` to start the emulator
+3. Run `yarn android` to launch the app.
+
+#### Device
+
+1. On the device, go into `Settings > About`.
+2. Find the build number. Tap it a bunch of times until it says "You've unlocked developer mode".
+3. Go back to the main settings menu.
+4. Find the developer settings section and find "USB Debugging". Make sure it's set to on.
+5. Run `yarn android` to launch the app.
 
 ## :no_entry_sign: Standard Compliant
 
