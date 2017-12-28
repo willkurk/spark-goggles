@@ -14,16 +14,17 @@ class LaunchScreen extends Component {
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
           <View style={styles.centered}>
-            {/* <Button
-              title="Yo"
+            <Button
+              title="Get a guess access token"
               onPress={() => this.props.generateToken('Rick', 'ricky')}
-            /> */}
+            />
           </View>
 
           <View style={styles.section}>
             <Phone style={{ width: 100, height: 100 }} />
+
             <Text style={styles.sectionText} style={{color: 'black'}}>
-              {JSON.stringify(this.props.currentUser)}
+              Current user: {JSON.stringify(this.props.currentUser)}
             </Text>
           </View>
         </ScrollView>
