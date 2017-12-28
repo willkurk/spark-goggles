@@ -110,6 +110,7 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/LICENSE'
     }
     splits {
         abi {
