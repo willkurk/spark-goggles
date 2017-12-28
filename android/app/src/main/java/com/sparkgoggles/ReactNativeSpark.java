@@ -5,6 +5,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
+import com.sparkgoggles.phone.Phone;
 import com.sparkgoggles.phone.PhoneManager;
 
 import java.util.Arrays;
@@ -19,6 +20,6 @@ public class ReactNativeSpark implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        return Arrays.<NativeModule>asList(new Phone(reactContext));
     }
 }

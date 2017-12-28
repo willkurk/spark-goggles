@@ -5,8 +5,14 @@ import { Images } from '../Themes';
 import * as CurrentUser from '../Redux/CurrentUser';
 import Phone from '../Components/Spark/Phone';
 
+import { NativeModules } from 'react-native';
+
 // Styles
 import styles from './Styles/LaunchScreenStyles'
+
+const PhoneImpl = NativeModules.PhoneImpl;
+
+console.log(PhoneImpl);
 
 class LaunchScreen extends Component {
   render () {
@@ -17,6 +23,11 @@ class LaunchScreen extends Component {
             <Button
               title="Get a guess access token"
               onPress={() => this.props.generateToken('Rick', 'ricky')}
+            />
+
+            <Button
+              title="Toast"
+              onPress={() => PhoneImpl.toast('Hello', 2000)}
             />
           </View>
 
