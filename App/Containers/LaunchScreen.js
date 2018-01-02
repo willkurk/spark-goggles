@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { NativeModules, ScrollView, Text, Button, View, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import * as CurrentUser from '../Redux/CurrentUser';
-import VideoView from '../Components/Phone/VideoView';
-import { NativeModules } from 'react-native';
+import VideoView from '../Components/VideoView';
 import styles from './Styles/LaunchScreenStyles'
 
 const { Phone } = NativeModules;
@@ -118,8 +117,8 @@ class LaunchScreen extends Component {
               />
             )}
 
-            <VideoView nativeID="localView" />
-            <VideoView nativeID="remoteView" />
+            <VideoView style={{width: 100, height: 100}} nativeID="localView" />
+            <VideoView style={{width: 100, height: 100}} nativeID="remoteView" />
           </View>
         </ScrollView>
       </View>
