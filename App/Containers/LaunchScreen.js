@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NativeModules, ScrollView, Text, Button, View, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import { authenticate } from '../Redux/CurrentUser';
+import { registerPhone } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
 import styles from './Styles/LaunchScreenStyles'
 
@@ -23,7 +24,6 @@ const requestPermission = async (name) => {
 
 class LaunchScreen extends Component {
   state = {
-    registered: false,
     activeCall: false,
     permissions: false
   };
@@ -36,9 +36,7 @@ class LaunchScreen extends Component {
   }
 
   handleRegister = () => {
-    Phone.register()
-      .then(() => this.setState({ registered: true }))
-      .catch((error) => console.error(error));
+    this.props.registerPhone();
   }
 
   handlePermissions = () => {
@@ -71,6 +69,7 @@ class LaunchScreen extends Component {
             <Text style={{color: 'black'}}>
               {JSON.stringify({
                 ...this.state,
+                registered: this.props.phone.registration.complete,
                 accessToken: !!accessToken
               })}
             </Text>
@@ -87,7 +86,7 @@ class LaunchScreen extends Component {
               />
             )}
 
-            {this.state.registered && (
+            {this.props.phone.registration.complete && (
               <Button
                 title="Request permissions"
                 onPress={this.handlePermissions}
@@ -117,8 +116,14 @@ class LaunchScreen extends Component {
   }
 }
 
-const mapStateToProps = ({ currentUser }) => ({
-  currentUser
+const mapStateToProps = ({ currentUser, phone }) => ({
+  currentUser,
+  phone
 });
 
-export default connect(mapStateToProps, { authenticate })(LaunchScreen);
+const mapDispatchToProps = {
+  authenticate,
+  registerPhone
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LaunchScreen);
