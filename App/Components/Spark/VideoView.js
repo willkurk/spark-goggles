@@ -1,9 +1,8 @@
 import { requireNativeComponent, ViewPropTypes } from 'react-native';
-import PropTypes from 'prop-types';
 
 const iface = {
-  name: 'Phone',
+  name: 'VideoView',
   propTypes: ViewPropTypes
 };
 
-export default requireNativeComponent('Phone', iface)
+export default requireNativeComponent('VideoView', iface)

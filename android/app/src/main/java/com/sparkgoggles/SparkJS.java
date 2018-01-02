@@ -2,6 +2,7 @@ package com.sparkgoggles;
 
 import android.app.Activity;
 import android.app.Application;
+import android.view.View;
 
 import com.ciscospark.androidsdk.CompletionHandler;
 import com.ciscospark.androidsdk.Result;
