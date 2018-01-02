@@ -10,7 +10,6 @@ import com.ciscospark.androidsdk.Spark;
 import com.ciscospark.androidsdk.auth.JWTAuthenticator;
 import com.ciscospark.androidsdk.phone.Call;
 import com.ciscospark.androidsdk.phone.MediaOption;
-import com.ciscospark.androidsdk.phone.Phone;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -19,7 +18,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
 public class Phone extends ReactContextBaseJavaModule {
-    private final String REACT_CLASS = "Spark";
+    private final String REACT_CLASS = "Phone";
 
     private final String E_REGISTER_ERROR = "E_REGISTER_ERROR";
     private final String E_NO_CALL_IN_PROGRESS = "E_NO_CALL_IN_PROGRESS";
@@ -76,9 +75,7 @@ public class Phone extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void register(final Promise promise) {
-        com.ciscospark.androidsdk.phone.Phone phone = spark.phone();
-
-        phone.register(new CompletionHandler<Void>() {
+        spark.phone().register(new CompletionHandler<Void>() {
             @Override
             public void onComplete(Result<Void> result) {
                 if (result.isSuccessful()) {
@@ -107,10 +104,9 @@ public class Phone extends ReactContextBaseJavaModule {
         View localView = ReactFindViewUtil.findView(rootView, localViewId);
         View remoteView = ReactFindViewUtil.findView(rootView, remoteViewId);
 
-        com.ciscospark.androidsdk.phone.Phone phone = spark.phone();
         MediaOption mediaOption = MediaOption.audioVideo(localView, remoteView);
 
-        phone.dial(address, mediaOption, new CompletionHandler<Call>() {
+        spark.phone().dial(address, mediaOption, new CompletionHandler<Call>() {
             @Override
             public void onComplete(Result<Call> result) {
                 if (result.isSuccessful()) {

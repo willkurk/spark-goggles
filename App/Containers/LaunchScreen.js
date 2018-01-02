@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, Button, View, PermissionsAndroid } from 'react-native';
+import { NativeModules, ScrollView, Text, Button, View, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
-import { Images } from '../Themes';
 import * as CurrentUser from '../Redux/CurrentUser';
-
+import VideoView from '../Components/Phone/VideoView';
 import { NativeModules } from 'react-native';
-
-// Styles
 import styles from './Styles/LaunchScreenStyles'
 
-const Spark = NativeModules.Spark;
-
-console.log(Spark);
+const { Phone } = NativeModules;
 
 const requestPermission = async (name) => {
   try {
@@ -40,13 +35,13 @@ class LaunchScreen extends Component {
   }
 
   handleAuthenticate = () => {
-    Spark.authenticate(this.props.currentUser.data.token)
+    Phone.authenticate(this.props.currentUser.data.token)
       .then(accessToken => this.setState({ accessToken }))
       .catch((error) => console.error(error));
   }
 
   handleRegister = () => {
-    Spark.register()
+    Phone.register()
       .then(() => this.setState({ registered: true }))
       .catch((error) => console.error(error));
   }
@@ -59,13 +54,13 @@ class LaunchScreen extends Component {
   }
 
   handleCall = () => {
-    Spark.dial('ray@promptworks.com')
+    Phone.dial('ray@promptworks.com', 'localView', 'remoteView')
       .then(() => this.setState({ activeCall: true }))
       .catch((error) => console.error(error));
   }
 
   handleHangup = () => {
-    Spark.hangup()
+    Phone.hangup()
       .then(() => this.setState({ activeCall: false, permissions: false }))
       .catch((error) => console.error(error));
   }
@@ -122,6 +117,9 @@ class LaunchScreen extends Component {
                 onPress={this.handleHangup}
               />
             )}
+
+            <VideoView nativeID="localView" />
+            <VideoView nativeID="remoteView" />
           </View>
         </ScrollView>
       </View>
