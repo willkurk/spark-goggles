@@ -1,4 +1,4 @@
-package com.sparkgoggles;
+package com.sparkgoggles.spark;
 
 import android.app.Activity;
 import android.app.Application;
@@ -16,8 +16,9 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.uimanager.util.ReactFindViewUtil;
 
-public class SparkJS extends ReactContextBaseJavaModule {
+public class Phone extends ReactContextBaseJavaModule {
     private final String REACT_CLASS = "Spark";
 
     private final String E_REGISTER_ERROR = "E_REGISTER_ERROR";
@@ -32,7 +33,7 @@ public class SparkJS extends ReactContextBaseJavaModule {
     private Spark spark;
     private JWTAuthenticator authenticator;
 
-    public SparkJS(ReactApplicationContext reactApplicationContext) {
+    public Phone(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
     }
 
@@ -75,7 +76,7 @@ public class SparkJS extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void register(final Promise promise) {
-        Phone phone = spark.phone();
+        com.ciscospark.androidsdk.phone.Phone phone = spark.phone();
 
         phone.register(new CompletionHandler<Void>() {
             @Override
@@ -95,14 +96,19 @@ public class SparkJS extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void dial(String address, final Promise promise) {
+    public void dial(String address, String localViewId, String remoteViewId, final Promise promise) {
         if (this.hasActiveCall()) {
             promise.reject(E_CALL_ALREADY_IN_PROGRESS, "There is already a call in progress.");
             return;
         }
 
-        Phone phone = spark.phone();
-        MediaOption mediaOption = MediaOption.audioOnly();
+        Activity activity = getCurrentActivity();
+        View rootView = activity.getWindow().getDecorView().getRootView();
+        View localView = ReactFindViewUtil.findView(rootView, localViewId);
+        View remoteView = ReactFindViewUtil.findView(rootView, remoteViewId);
+
+        com.ciscospark.androidsdk.phone.Phone phone = spark.phone();
+        MediaOption mediaOption = MediaOption.audioVideo(localView, remoteView);
 
         phone.dial(address, mediaOption, new CompletionHandler<Call>() {
             @Override
