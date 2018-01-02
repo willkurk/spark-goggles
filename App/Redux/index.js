@@ -6,11 +6,13 @@ import rootSaga from '../Sagas/'
 
 import { reducer as nav } from './NavigationRedux';
 import { reducer as currentUser } from './CurrentUser';
+import { reducer as phone } from './Phone';
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
   nav,
-  currentUser
+  currentUser,
+  phone
 });
 
 export default () => {

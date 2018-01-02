@@ -13,13 +13,12 @@ const create = () => {
     return response.data.token;
   };
 
-  const exchangeGuestToken = (guestToken) => {
-    return Phone.authenticate(guestToken);
-  };
-
   return {
     generateGuestToken,
-    exchangeGuestToken
+    exchangeGuestToken: Phone.authenticate,
+    registerPhone: Phone.register,
+    dialPhone: Phone.dial,
+    hangupPhone: Phone.hangup
   };
 };
 

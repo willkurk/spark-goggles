@@ -3,14 +3,18 @@ export const AUTHENTICATE = 'currentUser/AUTHENTICATE';
 
 export const set = ({ data, loading }) => ({
   type: SET,
-  data,
-  loading
+  payload: {
+    data,
+    loading
+  }
 });
 
 export const authenticate = ({ name, sub }) => ({
   type: AUTHENTICATE,
-  name,
-  sub
+  payload: {
+    name,
+    sub
+  }
 });
 
 const INITIAL_STATE = {
@@ -21,7 +25,7 @@ const INITIAL_STATE = {
 export function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case SET: {
-      const { loading, data } = action;
+      const { loading, data } = action.payload;
       return { loading, data };
     }
 

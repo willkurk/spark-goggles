@@ -9,8 +9,10 @@ const user = {
 test('set', () => {
   expect(set({ data: user, loading: false })).toEqual({
     type: 'currentUser/SET',
-    data: user,
-    loading: false
+    payload: {
+      data: user,
+      loading: false
+    }
   });
 });
 
@@ -20,8 +22,10 @@ test('generateToken', () => {
 
   expect(authenticate({ name, sub })).toEqual({
     type: 'currentUser/AUTHENTICATE',
-    name,
-    sub
+    payload: {
+      name,
+      sub
+    }
   });
 });
 
