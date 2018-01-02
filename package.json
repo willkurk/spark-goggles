@@ -27,7 +27,7 @@
     "git-hook": "npm run lint -s && npm run test -s"
   },
   "dependencies": {
-    "apisauce": "^0.14.2",
+    "axios": "^0.17.1",
     "ciscospark": "^1.23.2",
     "format-json": "^1.0.3",
     "identity-obj-proxy": "^3.0.0",

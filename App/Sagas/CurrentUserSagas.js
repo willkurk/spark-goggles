@@ -1,8 +1,20 @@
 import { call, put } from 'redux-saga/effects';
 import { set } from '../Redux/CurrentUser';
 
-export function* generateToken(auth, { name, sub }) {
+export function* authenticate(api, { name, sub }) {
   yield put(set({ loading: true, data: null }));
-  const { data: user } = yield call(auth.generateToken, name, sub);
-  yield put(set({ loading: false, data: user }));
+
+  const guestToken = yield call(api.generateGuestToken, { name, sub });
+  const accessToken = yield call(api.exchangeGuestToken, guestToken);
+
+  yield put(
+    set({
+      loading: false,
+      data: {
+        name,
+        sub,
+        accessToken
+      }
+    })
+  );
 }

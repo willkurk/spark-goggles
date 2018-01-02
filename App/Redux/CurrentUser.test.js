@@ -1,4 +1,4 @@
-import { reducer, set, generateToken } from './CurrentUser';
+import { reducer, set, authenticate } from './CurrentUser';
 
 const user = {
   name: 'Rick',
@@ -18,8 +18,8 @@ test('generateToken', () => {
   const name = 'Rick';
   const sub = 'ross';
 
-  expect(generateToken(name, sub)).toEqual({
-    type: 'currentUser/GENERATE_TOKEN',
+  expect(authenticate({ name, sub })).toEqual({
+    type: 'currentUser/AUTHENTICATE',
     name,
     sub
   });

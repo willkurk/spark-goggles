@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NativeModules, ScrollView, Text, Button, View, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
-import * as CurrentUser from '../Redux/CurrentUser';
+import { authenticate } from '../Redux/CurrentUser';
 import VideoView from '../Components/VideoView';
 import styles from './Styles/LaunchScreenStyles'
 
@@ -24,19 +24,15 @@ const requestPermission = async (name) => {
 class LaunchScreen extends Component {
   state = {
     registered: false,
-    accessToken: null,
     activeCall: false,
     permissions: false
   };
 
-  handleGenerateToken = () => {
-    this.props.generateToken('Rick', 'ricky');
-  }
-
   handleAuthenticate = () => {
-    Phone.authenticate(this.props.currentUser.data.token)
-      .then(accessToken => this.setState({ accessToken }))
-      .catch((error) => console.error(error));
+    this.props.authenticate({
+      name: 'Rick',
+      sub: 'ricky'
+    });
   }
 
   handleRegister = () => {
@@ -65,6 +61,9 @@ class LaunchScreen extends Component {
   }
 
   render () {
+    const { currentUser } = this.props;
+    const accessToken = currentUser.data && currentUser.data.accessToken;
+
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
@@ -72,24 +71,16 @@ class LaunchScreen extends Component {
             <Text style={{color: 'black'}}>
               {JSON.stringify({
                 ...this.state,
-                jwt: !!this.props.currentUser.data,
-                accessToken: !!this.state.accessToken
+                accessToken: !!accessToken
               })}
             </Text>
 
             <Button
-              title="Get a guess access token"
-              onPress={this.handleGenerateToken}
+              title="Authenticate"
+              onPress={this.handleAuthenticate}
             />
 
-            {this.props.currentUser.data && (
-              <Button
-                title="Authenticate"
-                onPress={this.handleAuthenticate}
-              />
-            )}
-
-            {this.state.accessToken && (
+            {accessToken && (
               <Button
                 title="Register"
                 onPress={this.handleRegister}
@@ -130,8 +121,4 @@ const mapStateToProps = ({ currentUser }) => ({
   currentUser
 });
 
-const mapDispatchToProps = {
-  generateToken: CurrentUser.generateToken
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(LaunchScreen);
+export default connect(mapStateToProps, { authenticate })(LaunchScreen);

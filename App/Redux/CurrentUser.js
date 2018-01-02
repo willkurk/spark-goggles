@@ -1,5 +1,5 @@
 export const SET = 'currentUser/SET';
-export const GENERATE_TOKEN = 'currentUser/GENERATE_TOKEN';
+export const AUTHENTICATE = 'currentUser/AUTHENTICATE';
 
 export const set = ({ data, loading }) => ({
   type: SET,
@@ -7,8 +7,8 @@ export const set = ({ data, loading }) => ({
   loading
 });
 
-export const generateToken = (name, sub) => ({
-  type: GENERATE_TOKEN,
+export const authenticate = ({ name, sub }) => ({
+  type: AUTHENTICATE,
   name,
   sub
 });

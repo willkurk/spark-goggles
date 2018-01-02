@@ -1,28 +1,36 @@
 import { call, put } from 'redux-saga/effects';
-import * as CurrentUserSagas from '../../App/Sagas/CurrentUserSagas';
-import fixtureAuth from '../../App/Services/FixtureAuth';
+import FixtureApi from '../../App/Services/FixtureApi';
+import { authenticate } from './CurrentUserSagas';
 
-test('generateToken', () => {
-  const saga = CurrentUserSagas.generateToken(fixtureAuth, {
-    name: 'Rick',
-    sub: 'ricky'
-  });
+const name = 'Rick';
+const sub = 'ricky';
+const guestToken = '1234567890';
+const accessToken = '0987654321';
 
-  const data = {
-    name: 'Rick',
-    sub: 'ricky',
-    token: '1234567890'
-  };
+test('authenticate', () => {
+  const saga = authenticate(FixtureApi, { name, sub });
 
   expect(saga.next().value).toEqual(
     put({ type: 'currentUser/SET', data: null, loading: true })
   );
 
   expect(saga.next().value).toEqual(
-    call(fixtureAuth.generateToken, 'Rick', 'ricky')
+    call(FixtureApi.generateGuestToken, { name, sub })
   );
 
-  expect(saga.next({ ok: true, data }).value).toEqual(
-    put({ type: 'currentUser/SET', data, loading: false })
+  expect(saga.next(guestToken).value).toEqual(
+    call(FixtureApi.exchangeGuestToken, '1234567890')
+  );
+
+  expect(saga.next(accessToken).value).toEqual(
+    put({
+      type: 'currentUser/SET',
+      loading: false,
+      data: {
+        name,
+        sub,
+        accessToken
+      }
+    })
   );
 });
