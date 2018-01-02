@@ -27,31 +27,21 @@ public class SparkJS extends ReactContextBaseJavaModule {
     private final String E_HANGUP_ERROR = "E_HANGUP_ERROR";
     private final String E_AUTHENTICATION_ERROR = "E_AUTHENTICATION_ERROR";
 
-    private JWTAuthenticator authenticator;
     private Call activeCall;
     private Spark spark;
+    private JWTAuthenticator authenticator;
 
-    public SparkJS(ReactApplicationContext reactContext) {
-        super(reactContext);
-        authenticator = new JWTAuthenticator();
+    public SparkJS(ReactApplicationContext reactApplicationContext) {
+        super(reactApplicationContext);
     }
 
-    // We'll cache the spark instance in an instance variable.
-    public Spark getSpark() {
+    @Override
+    public void initialize() {
         Activity activity = getCurrentActivity();
-
-        if (spark != null) {
-            return spark;
-        }
-
-        // FIXME: Gracefully handle the case where the activity is null!
-        if (activity == null) {
-            throw new java.lang.Error("Activity is null, so Spark can't be initialized");
-        }
-
         Application application = activity.getApplication();
+
+        authenticator = new JWTAuthenticator();
         spark = new Spark(application, authenticator);
-        return spark;
     }
 
     @Override
@@ -84,7 +74,7 @@ public class SparkJS extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void register(final Promise promise) {
-        Phone phone = getSpark().phone();
+        Phone phone = spark.phone();
 
         phone.register(new CompletionHandler<Void>() {
             @Override
@@ -110,7 +100,7 @@ public class SparkJS extends ReactContextBaseJavaModule {
             return;
         }
 
-        Phone phone = getSpark().phone();
+        Phone phone = spark.phone();
         MediaOption mediaOption = MediaOption.audioOnly();
 
         phone.dial(address, mediaOption, new CompletionHandler<Call>() {
