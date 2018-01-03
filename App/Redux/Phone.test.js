@@ -1,9 +1,19 @@
 import {
   updateRegistration,
   updatePermissions,
+  updateCall,
+  requestPermissions,
+  registerPhone,
+  dialPhone,
+  hangupPhone,
   reducer,
   UPDATE_REGISTRATION,
-  UPDATE_PERMISSIONS
+  UPDATE_PERMISSIONS,
+  UPDATE_CALL,
+  REQUEST_PERMISSIONS,
+  REGISTER_PHONE,
+  DIAL_PHONE,
+  HANGUP_PHONE
 } from './Phone';
 
 test('updateRegistration', () => {
@@ -27,6 +37,49 @@ test('updatePermissions', () => {
   });
 });
 
+test('updateCall', () => {
+  const call = {
+    connected: false,
+    outgoing: true
+  };
+
+  expect(updateCall(call)).toEqual({
+    type: UPDATE_CALL,
+    payload: { call }
+  });
+});
+
+test('requestPermissions', () => {
+  expect(requestPermissions()).toEqual({
+    type: REQUEST_PERMISSIONS
+  });
+});
+
+test('registerPhone', () => {
+  expect(registerPhone()).toEqual({
+    type: REGISTER_PHONE
+  });
+});
+
+test('dialPhone', () => {
+  const payload = {
+    address: '1234567',
+    localView: 'localView',
+    remoteView: 'remoteView'
+  };
+
+  expect(dialPhone(payload)).toEqual({
+    type: DIAL_PHONE,
+    payload
+  });
+});
+
+test('hangupPhone', () => {
+  expect(hangupPhone()).toEqual({
+    type: HANGUP_PHONE
+  });
+});
+
 describe('reducer', () => {
   let state;
 
@@ -36,6 +89,10 @@ describe('reducer', () => {
 
   test('initial state', () => {
     expect(state).toEqual({
+      call: {
+        connected: false,
+        outgoing: false
+      },
       registration: {
         loading: false,
         complete: false

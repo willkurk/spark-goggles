@@ -8,7 +8,8 @@ import {
   observePhone,
   registerPhone,
   requestPermissions,
-  dialPhone
+  dialPhone,
+  hangupPhone
 } from './PhoneSagas';
 
 import {
@@ -125,4 +126,10 @@ test('observePhone', () => {
   );
 
   saga.return(); // this generator contains a while loop. abort it.
+});
+
+test('hangupPhone', () => {
+  const saga = hangupPhone(FixtureApi);
+
+  expect(saga.next().value).toEqual(call(FixtureApi.hangupPhone));
 });

@@ -87,6 +87,9 @@ export function* dialPhone(api, { payload }) {
  * Hangup the phone.
  */
 export function* hangupPhone(api) {
-  yield call(api.hangupPhone);
-  yield put(updateCall({ outgoing: false, connected: false }));
+  try {
+    yield call(api.hangupPhone);
+  } catch (err) {
+    // nothing?
+  }
 }

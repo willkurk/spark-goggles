@@ -34,3 +34,14 @@ test('authenticate', () => {
     )
   );
 });
+
+test('authenticate failure', () => {
+  const saga = authenticate(FixtureApi, { payload: { name, sub } });
+
+  saga.next();
+  saga.next();
+
+  expect(saga.throw(new Error('whoops')).value).toEqual(
+    put(set({ loading: false, data: null }))
+  );
+});
