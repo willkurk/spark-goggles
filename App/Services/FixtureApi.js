@@ -1,3 +1,5 @@
+import { requestPermissions } from "../Sagas/PhoneSagas";
+
 export default {
   generateGuestToken(name, sub) {
     return Promise.resolve({
@@ -23,5 +25,9 @@ export default {
 
   hangupPhone() {
     return Promise.resolve(true);
+  },
+
+  requestPermissions(_permission) {
+    return Promise.resolve();
   }
 };

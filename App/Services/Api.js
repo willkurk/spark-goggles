@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { NativeModules } from 'react-native';
+import { NativeModules, PermissionsAndroid } from 'react-native';
 
 const { Phone } = NativeModules;
 
@@ -13,8 +13,17 @@ const create = () => {
     return response.data.token;
   };
 
+  const requestPermission = async (name) => {
+    const granted = await PermissionsAndroid.request(name);
+
+    if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+      throw new Error('Failed to grant permission.');
+    }
+  }
+
   return {
     generateGuestToken,
+    requestPermission,
     exchangeGuestToken: Phone.authenticate,
     registerPhone: Phone.register,
     dialPhone: Phone.dial,

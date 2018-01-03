@@ -8,20 +8,6 @@ import styles from './Styles/LaunchScreenStyles'
 
 const { Phone } = NativeModules;
 
-const requestPermission = async (name) => {
-  try {
-    const granted = await PermissionsAndroid.request(name);
-
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject();
-    }
-  } catch (err) {
-    return Promise.reject(err);
-  }
-}
-
 class LaunchScreen extends Component {
   state = {
     activeCall: false,
@@ -40,7 +26,7 @@ class LaunchScreen extends Component {
   }
 
   handlePermissions = () => {
-    requestPermission(PermissionsAndroid.PERMISSIONS.CAMERA)
+    this.props.phone.requestPermission(PermissionsAndroid.PERMISSIONS.CAMERA)
       .then(() => requestPermission(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO))
       .then(() => this.setState({ permissions: true }))
       .catch((error) => console.error(error));
