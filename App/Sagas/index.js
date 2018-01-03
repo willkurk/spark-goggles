@@ -34,6 +34,7 @@ export default function* root() {
     fork(PhoneSagas.observePhone, api),
     takeLatest(Phone.REQUEST_PERMISSIONS, PhoneSagas.requestPermissions, api),
     takeLatest(Phone.REGISTER_PHONE, PhoneSagas.registerPhone, api),
-    takeLatest(Phone.DIAL_PHONE, PhoneSagas.dialPhone, api)
+    takeLatest(Phone.DIAL_PHONE, PhoneSagas.dialPhone, api),
+    takeLatest(Phone.HANGUP_PHONE, PhoneSagas.hangupPhone, api)
   ]);
 }

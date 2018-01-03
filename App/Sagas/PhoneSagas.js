@@ -70,7 +70,16 @@ export function* dialPhone(api, { payload }) {
   try {
     yield put(updateCall({ outgoing: true, connected: false }));
     yield call(api.dialPhone, payload);
+    yield put(updateCall({ outgoing: false, connected: true }));
   } catch (err) {
     yield put(updateCall({ outgoing: false, connected: false }));
   }
+}
+
+/**
+ * Hangup the phone.
+ */
+export function* hangupPhone(api) {
+  yield call(api.hangupPhone);
+  yield put(updateCall({ outgoing: false, connected: false }));
 }

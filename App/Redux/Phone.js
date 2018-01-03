@@ -5,6 +5,7 @@ export const UPDATE_CALL = 'phone/UPDATE_CALL';
 export const REGISTER_PHONE = 'phone/REGISTER_PHONE';
 export const REQUEST_PERMISSIONS = 'phone/REQUEST_PERMISSIONS';
 export const DIAL_PHONE = 'phone/DIAL_PHONE';
+export const HANGUP_PHONE = 'phone/HANGUP_PHONE';
 
 export const updateRegistration = registration => ({
   type: UPDATE_REGISTRATION,
@@ -32,6 +33,10 @@ export const registerPhone = () => ({
 export const dialPhone = ({ localView, remoteView }) => ({
   type: DIAL_PHONE,
   payload: { localView, remoteView }
+});
+
+export const hangupPhone = () => ({
+  type: HANGUP_PHONE
 });
 
 const INITIAL_STATE = {
