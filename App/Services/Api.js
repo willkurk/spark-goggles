@@ -1,7 +1,18 @@
 import axios from 'axios';
-import { NativeModules, PermissionsAndroid } from 'react-native';
+import {
+  NativeModules,
+  PermissionsAndroid,
+  DeviceEventEmitter
+} from 'react-native';
 
 const { Phone } = NativeModules;
+
+const PHONE_EVENTS = [
+  'phone:ringing',
+  'phone:connected',
+  'phone:disconnected',
+  'phone:media-changed'
+];
 
 const create = () => {
   const api = axios.create({
@@ -21,12 +32,25 @@ const create = () => {
     }
   };
 
+  const dialPhone = async ({ address, localView, remoteView }) => {
+    return Phone.dial(address, localView, remoteView);
+  };
+
+  const observePhone = callback => {
+    PHONE_EVENTS.forEach(eventName => {
+      DeviceEventEmitter.addListener(eventName, _event => {
+        callback({ type: eventName });
+      });
+    });
+  };
+
   return {
     generateGuestToken,
     requestPermission,
+    dialPhone,
+    observePhone,
     exchangeGuestToken: Phone.authenticate,
     registerPhone: Phone.register,
-    dialPhone: Phone.dial,
     hangupPhone: Phone.hangup
   };
 };

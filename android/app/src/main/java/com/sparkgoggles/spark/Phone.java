@@ -21,7 +21,6 @@ public class Phone extends ReactContextBaseJavaModule {
     private final String REACT_CLASS = "Phone";
 
     private final String E_REGISTER_ERROR = "E_REGISTER_ERROR";
-    private final String E_NO_CALL_IN_PROGRESS = "E_NO_CALL_IN_PROGRESS";
     private final String E_CALL_ALREADY_IN_PROGRESS = "E_CALL_ALREADY_IN_PROGRESS";
     private final String E_NULL_JWT = "E_NULL_JWT";
     private final String E_DIAL_ERROR = "E_DIAL_ERROR";
@@ -88,13 +87,8 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public Boolean hasActiveCall() {
-        return activeCall != null;
-    }
-
-    @ReactMethod
     public void dial(String address, String localViewId, String remoteViewId, final Promise promise) {
-        if (this.hasActiveCall()) {
+        if (getActiveCall() != null) {
             promise.reject(E_CALL_ALREADY_IN_PROGRESS, "There is already a call in progress.");
             return;
         }
@@ -110,7 +104,7 @@ public class Phone extends ReactContextBaseJavaModule {
             @Override
             public void onComplete(Result<Call> result) {
                 if (result.isSuccessful()) {
-                    activeCall = result.getData();
+                    setActiveCall(result.getData());
                     promise.resolve(true);
                 } else {
                     promise.reject(E_DIAL_ERROR, result.getError().toString());
@@ -121,8 +115,10 @@ public class Phone extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void hangup(final Promise promise) {
-        if (!this.hasActiveCall()) {
-            promise.reject(E_NO_CALL_IN_PROGRESS, "There is not a call in progress.");
+        Call activeCall = getActiveCall();
+
+        if (activeCall == null) {
+            promise.resolve(true);
             return;
         }
 
@@ -130,7 +126,7 @@ public class Phone extends ReactContextBaseJavaModule {
             @Override
             public void onComplete(Result<Void> result) {
                 if (result.isSuccessful()) {
-                    activeCall = null;
+                    clearActiveCall();
                     promise.resolve(true);
                 } else {
                     promise.reject(E_HANGUP_ERROR, result.getError().toString());
@@ -138,5 +134,23 @@ public class Phone extends ReactContextBaseJavaModule {
 
             }
         });
+    }
+
+    private Call getActiveCall() {
+        if (activeCall.getStatus() == Call.CallStatus.DISCONNECTED) {
+            activeCall = null;
+            return null;
+        }
+
+        return activeCall;
+    }
+
+    private void clearActiveCall() {
+        activeCall = null;
+    }
+
+    private void setActiveCall(Call call) {
+        call.setObserver(new PhoneObserver(getReactApplicationContext()));
+        activeCall = call;
     }
 }

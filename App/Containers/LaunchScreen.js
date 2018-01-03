@@ -22,18 +22,16 @@ class LaunchScreen extends Component {
     });
   };
 
-  handleRegister = () => {
-    this.props.registerPhone();
-  };
-
   handlePermissions = () => {
     this.props.requestPermissions();
   };
 
   handleCall = () => {
-    Phone.dial('ray@promptworks.com', 'localView', 'remoteView')
-      .then(() => this.setState({ activeCall: true }))
-      .catch(error => console.error(error));
+    this.props.dialPhone({
+      address: 'ray@promptworks.com',
+      localView: 'localView',
+      remoteView: 'remoteView'
+    });
   };
 
   handleHangup = () => {
@@ -61,7 +59,7 @@ class LaunchScreen extends Component {
             <Button title="Authenticate" onPress={this.handleAuthenticate} />
 
             {accessToken && (
-              <Button title="Register" onPress={this.handleRegister} />
+              <Button title="Register" onPress={this.props.registerPhone} />
             )}
 
             {this.props.phone.registration.complete && (

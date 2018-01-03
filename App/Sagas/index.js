@@ -1,4 +1,4 @@
-import { takeLatest, all } from 'redux-saga/effects';
+import { takeLatest, all, fork } from 'redux-saga/effects';
 import Api from '../Services/Api';
 import FixtureApi from '../Services/FixtureApi';
 import DebugConfig from '../Config/DebugConfig';
@@ -31,7 +31,9 @@ export default function* root() {
     /**
      * Phone
      */
+    fork(PhoneSagas.observePhone, api),
     takeLatest(Phone.REQUEST_PERMISSIONS, PhoneSagas.requestPermissions, api),
-    takeLatest(Phone.REGISTER_PHONE, PhoneSagas.registerPhone, api)
+    takeLatest(Phone.REGISTER_PHONE, PhoneSagas.registerPhone, api),
+    takeLatest(Phone.DIAL_PHONE, PhoneSagas.dialPhone, api)
   ]);
 }
