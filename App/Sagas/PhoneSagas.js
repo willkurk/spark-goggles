@@ -12,8 +12,9 @@ import {
  * I think this is basically just establishing a websocket connection.
  */
 export function* registerPhone(api) {
+  yield put(updateRegistration({ loading: true, complete: false }));
+
   try {
-    yield put(updateRegistration({ loading: true, complete: false }));
     yield call(api.registerPhone);
     yield put(updateRegistration({ loading: false, complete: true }));
   } catch (err) {
@@ -69,11 +70,13 @@ export function* requestPermissions(api) {
 }
 
 /**
- * Dial the phone. What else do you need to know?
+ * Dial the phone. Take a look at `observePhone`. That's where
+ * we'll find out that the call has been accepted.
  */
 export function* dialPhone(api, { payload }) {
+  yield put(updateCall({ outgoing: true, connected: false }));
+
   try {
-    yield put(updateCall({ outgoing: true, connected: false }));
     yield call(api.dialPhone, payload);
   } catch (err) {
     yield put(updateCall({ outgoing: false, connected: false }));
