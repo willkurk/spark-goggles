@@ -1,12 +1,6 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import {
-  NativeModules,
-  ScrollView,
-  Text,
-  Button,
-  View,
-  PermissionsAndroid
-} from 'react-native';
+import { NativeModules, ScrollView, Text, Button, View } from 'react-native';
 import { connect } from 'react-redux';
 import { authenticate } from '../Redux/CurrentUser';
 import { registerPhone, requestPermissions } from '../Redux/Phone';
