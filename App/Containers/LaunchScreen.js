@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
-import { NativeModules, ScrollView, Text, Button, View, PermissionsAndroid } from 'react-native';
+import {
+  NativeModules,
+  ScrollView,
+  Text,
+  Button,
+  View,
+  PermissionsAndroid
+} from 'react-native';
 import { connect } from 'react-redux';
 import { authenticate } from '../Redux/CurrentUser';
 import { registerPhone, requestPermissions } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
-import styles from './Styles/LaunchScreenStyles'
+import styles from './Styles/LaunchScreenStyles';
 
 const { Phone } = NativeModules;
 
@@ -19,29 +26,29 @@ class LaunchScreen extends Component {
       name: 'Rick',
       sub: 'ricky'
     });
-  }
+  };
 
   handleRegister = () => {
     this.props.registerPhone();
-  }
+  };
 
   handlePermissions = () => {
     this.props.requestPermissions();
-  }
+  };
 
   handleCall = () => {
     Phone.dial('ray@promptworks.com', 'localView', 'remoteView')
       .then(() => this.setState({ activeCall: true }))
-      .catch((error) => console.error(error));
-  }
+      .catch(error => console.error(error));
+  };
 
   handleHangup = () => {
     Phone.hangup()
       .then(() => this.setState({ activeCall: false, permissions: false }))
-      .catch((error) => console.error(error));
-  }
+      .catch(error => console.error(error));
+  };
 
-  render () {
+  render() {
     const { currentUser } = this.props;
     const accessToken = currentUser.data && currentUser.data.accessToken;
 
@@ -49,7 +56,7 @@ class LaunchScreen extends Component {
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
           <View style={styles.section}>
-            <Text style={{color: 'black'}}>
+            <Text style={{ color: 'black' }}>
               {JSON.stringify({
                 ...this.state,
                 registered: this.props.phone.registration.complete,
@@ -57,16 +64,10 @@ class LaunchScreen extends Component {
               })}
             </Text>
 
-            <Button
-              title="Authenticate"
-              onPress={this.handleAuthenticate}
-            />
+            <Button title="Authenticate" onPress={this.handleAuthenticate} />
 
             {accessToken && (
-              <Button
-                title="Register"
-                onPress={this.handleRegister}
-              />
+              <Button title="Register" onPress={this.handleRegister} />
             )}
 
             {this.props.phone.registration.complete && (
@@ -77,25 +78,25 @@ class LaunchScreen extends Component {
             )}
 
             {this.props.phone.permissionsGranted && (
-              <Button
-                title="Make a call"
-                onPress={this.handleCall}
-              />
+              <Button title="Make a call" onPress={this.handleCall} />
             )}
 
             {this.state.activeCall && (
-              <Button
-                title="Hangup call"
-                onPress={this.handleHangup}
-              />
+              <Button title="Hangup call" onPress={this.handleHangup} />
             )}
 
-            <VideoView style={{width: 100, height: 100}} nativeID="localView" />
-            <VideoView style={{width: 100, height: 100}} nativeID="remoteView" />
+            <VideoView
+              style={{ width: 100, height: 100 }}
+              nativeID="localView"
+            />
+            <VideoView
+              style={{ width: 100, height: 100 }}
+              nativeID="remoteView"
+            />
           </View>
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 

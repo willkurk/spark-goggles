@@ -15,7 +15,10 @@ export function* registerPhone(api) {
 export function* requestPermissions(api) {
   try {
     yield call(api.requestPermissions, PermissionsAndroid.PERMISSIONS.CAMERA);
-    yield call(api.requestPermissions, PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+    yield call(
+      api.requestPermissions,
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
+    );
     yield put(updatePermissions(true));
   } catch (err) {
     yield put(updatePermissions(false));

@@ -1,4 +1,4 @@
-import { requestPermissions } from "../Sagas/PhoneSagas";
+import { requestPermissions } from '../Sagas/PhoneSagas';
 
 export default {
   generateGuestToken(name, sub) {

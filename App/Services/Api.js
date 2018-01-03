@@ -13,13 +13,13 @@ const create = () => {
     return response.data.token;
   };
 
-  const requestPermission = async (name) => {
+  const requestPermission = async name => {
     const granted = await PermissionsAndroid.request(name);
 
     if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
       throw new Error('Failed to grant permission.');
     }
-  }
+  };
 
   return {
     generateGuestToken,

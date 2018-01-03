@@ -1,6 +1,6 @@
-import './App/Config/ReactotronConfig'
-import { AppRegistry } from 'react-native'
-import App from './App/Containers/App'
+import './App/Config/ReactotronConfig';
+import { AppRegistry } from 'react-native';
+import App from './App/Containers/App';
 
 /**
  * CiscoSpark relies on `nextTick`, which apparently
@@ -8,4 +8,4 @@ import App from './App/Containers/App'
  */
 process.nextTick = setImmediate;
 
-AppRegistry.registerComponent('SparkGoggles', () => App)
+AppRegistry.registerComponent('SparkGoggles', () => App);

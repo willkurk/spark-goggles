@@ -1,4 +1,4 @@
-import { reducer, set, authenticate, SET, AUTHENTICATE} from './CurrentUser';
+import { reducer, set, authenticate, SET, AUTHENTICATE } from './CurrentUser';
 
 const user = {
   name: 'Rick',
@@ -41,9 +41,7 @@ describe('reducer', () => {
   });
 
   test('set', () => {
-    expect(
-      reducer(state, set({ data: user, loading: false }))
-    ).toEqual({
+    expect(reducer(state, set({ data: user, loading: false }))).toEqual({
       data: user,
       loading: false
     });

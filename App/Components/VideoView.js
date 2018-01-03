@@ -5,4 +5,4 @@ const iface = {
   propTypes: ViewPropTypes
 };
 
-export default requireNativeComponent('VideoView', iface)
+export default requireNativeComponent('VideoView', iface);

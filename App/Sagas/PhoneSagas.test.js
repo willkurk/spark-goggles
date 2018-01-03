@@ -11,9 +11,7 @@ test('registerPhone', () => {
     put(updateRegistration({ loading: true, complete: false }))
   );
 
-  expect(saga.next().value).toEqual(
-    call(FixtureApi.registerPhone)
-  );
+  expect(saga.next().value).toEqual(call(FixtureApi.registerPhone));
 
   expect(saga.next().value).toEqual(
     put(updateRegistration({ loading: false, complete: true }))
@@ -42,12 +40,13 @@ test('requestPermissions', () => {
   );
 
   expect(saga.next().value).toEqual(
-    call(FixtureApi.requestPermissions, PermissionsAndroid.PERMISSIONS.RECORD_AUDIO)
+    call(
+      FixtureApi.requestPermissions,
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
+    )
   );
 
-  expect(saga.next().value).toEqual(
-    put(updatePermissions(true))
-  );
+  expect(saga.next().value).toEqual(put(updatePermissions(true)));
 });
 
 test('requestPermissions failure', () => {

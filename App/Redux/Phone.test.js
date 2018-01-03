@@ -1,4 +1,10 @@
-import { updateRegistration, updatePermissions, reducer, UPDATE_REGISTRATION, UPDATE_PERMISSIONS } from './Phone';
+import {
+  updateRegistration,
+  updatePermissions,
+  reducer,
+  UPDATE_REGISTRATION,
+  UPDATE_PERMISSIONS
+} from './Phone';
 
 test('updateRegistration', () => {
   expect(updateRegistration({ loading: true, complete: false })).toEqual({
@@ -18,30 +24,29 @@ test('updatePermissions', () => {
     payload: {
       permissionsGranted: true
     }
-  })
+  });
 });
 
 describe('reducer', () => {
   let state;
 
   beforeEach(() => {
-    state = reducer(undefined, { type: 'foobar'});
+    state = reducer(undefined, { type: 'foobar' });
   });
 
   test('initial state', () => {
-    expect(state).toEqual(
-      {
-        registration: {
-          loading: false,
-          complete: false 
-        },
-        permissionsGranted: false
-      });
+    expect(state).toEqual({
+      registration: {
+        loading: false,
+        complete: false
+      },
+      permissionsGranted: false
+    });
   });
 
   test('updateRegistration', () => {
     expect(
-      reducer(state, updateRegistration({loading: true, complete: false}))
+      reducer(state, updateRegistration({ loading: true, complete: false }))
     ).toMatchObject({
       registration: {
         loading: true,
@@ -51,10 +56,8 @@ describe('reducer', () => {
   });
 
   test('updatePermissions', () => {
-    expect(
-      reducer(state, updatePermissions(true))
-    ).toMatchObject({
+    expect(reducer(state, updatePermissions(true))).toMatchObject({
       permissionsGranted: true
-    })
+    });
   });
 });

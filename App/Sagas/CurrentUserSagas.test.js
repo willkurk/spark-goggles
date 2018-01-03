@@ -11,9 +11,7 @@ const accessToken = '0987654321';
 test('authenticate', () => {
   const saga = authenticate(FixtureApi, { payload: { name, sub } });
 
-  expect(saga.next().value).toEqual(
-    put(set({ data: null, loading: true }))
-  );
+  expect(saga.next().value).toEqual(put(set({ data: null, loading: true })));
 
   expect(saga.next().value).toEqual(
     call(FixtureApi.generateGuestToken, { name, sub })
@@ -24,13 +22,15 @@ test('authenticate', () => {
   );
 
   expect(saga.next(accessToken).value).toEqual(
-    put(set({
-      loading: false,
-      data: {
-        name,
-        sub,
-        accessToken
-      }
-    }))
+    put(
+      set({
+        loading: false,
+        data: {
+          name,
+          sub,
+          accessToken
+        }
+      })
+    )
   );
 });
