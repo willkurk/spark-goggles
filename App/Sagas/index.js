@@ -6,10 +6,12 @@ import DebugConfig from '../Config/DebugConfig'
 /* ------------- Types ------------- */
 
 import * as CurrentUser from '../Redux/CurrentUser';
+import * as Phone from '../Redux/Phone';
 
 /* ------------- Sagas ------------- */
 
 import * as CurrentUserSagas from './CurrentUserSagas';
+import * as PhoneSagas from './PhoneSagas';
 
 /* ------------- API ------------- */
 
@@ -21,6 +23,15 @@ const api = DebugConfig.useFixtures ? FixtureApi : Api.create()
 
 export default function * root () {
   yield all([
-    takeLatest(CurrentUser.AUTHENTICATE, CurrentUserSagas.authenticate, api)
+    /**
+     * Current user
+     */
+    takeLatest(CurrentUser.AUTHENTICATE, CurrentUserSagas.authenticate, api),
+
+    /**
+     * Phone
+     */
+    takeLatest(Phone.REQUEST_PERMISSIONS, PhoneSagas.requestPermissions, api),
+    takeLatest(Phone.REGISTER_PHONE, PhoneSagas.registerPhone, api)
   ]);
 }
