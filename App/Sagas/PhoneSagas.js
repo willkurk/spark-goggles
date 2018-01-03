@@ -26,7 +26,12 @@ export function* registerPhone(api) {
  * we'll update state
  */
 export function* observePhone(api) {
-  const createChannel = () => eventChannel(emit => api.observePhone(emit));
+  const createChannel = () =>
+    eventChannel(emit => {
+      api.addPhoneListener(emit);
+      return () => api.removePhoneListener(emit);
+    });
+
   const channel = yield call(createChannel);
 
   while (true) {
@@ -38,7 +43,7 @@ export function* observePhone(api) {
         break;
 
       case 'phone:disconnected':
-        yield put(updateCall({ outgoing: false, connected: true }));
+        yield put(updateCall({ outgoing: false, connected: false }));
         break;
 
       default:
@@ -52,9 +57,9 @@ export function* observePhone(api) {
  */
 export function* requestPermissions(api) {
   try {
-    yield call(api.requestPermissions, PermissionsAndroid.PERMISSIONS.CAMERA);
+    yield call(api.requestPermission, PermissionsAndroid.PERMISSIONS.CAMERA);
     yield call(
-      api.requestPermissions,
+      api.requestPermission,
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
     );
     yield put(updatePermissions(true));
@@ -70,7 +75,6 @@ export function* dialPhone(api, { payload }) {
   try {
     yield put(updateCall({ outgoing: true, connected: false }));
     yield call(api.dialPhone, payload);
-    yield put(updateCall({ outgoing: false, connected: true }));
   } catch (err) {
     yield put(updateCall({ outgoing: false, connected: false }));
   }

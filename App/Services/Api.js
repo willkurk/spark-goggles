@@ -1,4 +1,5 @@
 import axios from 'axios';
+import promiseRetry from 'promise-retry';
 import {
   NativeModules,
   PermissionsAndroid,
@@ -36,7 +37,7 @@ const create = () => {
     return Phone.dial(address, localView, remoteView);
   };
 
-  const observePhone = callback => {
+  const addPhoneListener = callback => {
     PHONE_EVENTS.forEach(eventName => {
       DeviceEventEmitter.addListener(eventName, _event => {
         callback({ type: eventName });
@@ -44,12 +45,40 @@ const create = () => {
     });
   };
 
+  const removePhoneListener = callback => {
+    PHONE_EVENTS.forEach(eventName => {
+      DeviceEventEmitter.removeListener(eventName, callback);
+    });
+  };
+
+  const exchangeGuestToken = jwt => {
+    return promiseRetry(
+      (retry, number) => {
+        return Phone.authenticate(jwt)
+          .catch(error => {
+            console.warn(
+              `Failed to exchangeGuestToken ${number} times.`,
+              error
+            );
+
+            throw error;
+          })
+          .catch(retry);
+      },
+      {
+        retries: 5,
+        minTimeout: 500
+      }
+    );
+  };
+
   return {
     generateGuestToken,
     requestPermission,
     dialPhone,
-    observePhone,
-    exchangeGuestToken: Phone.authenticate,
+    addPhoneListener,
+    removePhoneListener,
+    exchangeGuestToken,
     registerPhone: Phone.register,
     hangupPhone: Phone.hangup
   };

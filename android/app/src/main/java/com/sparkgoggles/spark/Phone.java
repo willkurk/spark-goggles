@@ -137,8 +137,12 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     private Call getActiveCall() {
+        if (activeCall == null) {
+            return null;
+        }
+
         if (activeCall.getStatus() == Call.CallStatus.DISCONNECTED) {
-            activeCall = null;
+            clearActiveCall();
             return null;
         }
 

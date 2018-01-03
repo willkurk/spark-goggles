@@ -30,9 +30,9 @@ export const registerPhone = () => ({
   type: REGISTER_PHONE
 });
 
-export const dialPhone = ({ localView, remoteView }) => ({
+export const dialPhone = ({ address, localView, remoteView }) => ({
   type: DIAL_PHONE,
-  payload: { localView, remoteView }
+  payload: { address, localView, remoteView }
 });
 
 export const hangupPhone = () => ({
