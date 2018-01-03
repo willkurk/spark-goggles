@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { NativeModules, ScrollView, Text, Button, View, PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import { authenticate } from '../Redux/CurrentUser';
-import { registerPhone } from '../Redux/Phone';
+import { registerPhone, requestPermissions } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
 import styles from './Styles/LaunchScreenStyles'
 
@@ -26,10 +26,7 @@ class LaunchScreen extends Component {
   }
 
   handlePermissions = () => {
-    this.props.phone.requestPermission(PermissionsAndroid.PERMISSIONS.CAMERA)
-      .then(() => requestPermission(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO))
-      .then(() => this.setState({ permissions: true }))
-      .catch((error) => console.error(error));
+    this.props.requestPermissions();
   }
 
   handleCall = () => {
@@ -79,7 +76,7 @@ class LaunchScreen extends Component {
               />
             )}
 
-            {this.state.permissions && (
+            {this.props.phone.permissionsGranted && (
               <Button
                 title="Make a call"
                 onPress={this.handleCall}
@@ -102,6 +99,25 @@ class LaunchScreen extends Component {
   }
 }
 
+LaunchScreen.propTypes = {
+  authenticate: PropTypes.func.isRequired,
+  registerPhone: PropTypes.func.isRequired,
+  requestPermissions: PropTypes.func.isRequired,
+
+  phone: PropTypes.shape({
+    registration: PropTypes.shape({
+      complete: PropTypes.bool.isRequired,
+      loading: PropTypes.bool.isRequired
+    }).isRequired
+  }).isRequired,
+
+  currentUser: PropTypes.shape({
+    name: PropTypes.string,
+    sub: PropTypes.string,
+    accessToken: PropTypes.string
+  })
+};
+
 const mapStateToProps = ({ currentUser, phone }) => ({
   currentUser,
   phone
@@ -109,7 +125,8 @@ const mapStateToProps = ({ currentUser, phone }) => ({
 
 const mapDispatchToProps = {
   authenticate,
-  registerPhone
+  registerPhone,
+  requestPermissions
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LaunchScreen);
