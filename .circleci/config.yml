@@ -10,14 +10,14 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: deps-{{ checksum "yarn.lock" }}
+          key: deps-v1-{{ checksum "yarn.lock" }}
 
       - run:
           name: Install dependencies
           command: yarn install
 
       - save_cache:
-          key: deps-{{ checksum "yarn.lock" }}
+          key: deps-v1-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
 
@@ -28,3 +28,7 @@ jobs:
       - run:
           name: Test
           command: yarn test --coverage
+
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
