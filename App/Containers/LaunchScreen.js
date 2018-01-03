@@ -3,7 +3,12 @@ import React, { Component } from 'react';
 import { ScrollView, Text, Button, View } from 'react-native';
 import { connect } from 'react-redux';
 import { authenticate } from '../Redux/CurrentUser';
-import { registerPhone, requestPermissions, dialPhone, hangupPhone } from '../Redux/Phone';
+import {
+  registerPhone,
+  requestPermissions,
+  dialPhone,
+  hangupPhone
+} from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
 import styles from './Styles/LaunchScreenStyles';
 

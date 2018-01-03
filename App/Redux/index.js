@@ -16,10 +16,9 @@ export const reducers = combineReducers({
 });
 
 export default () => {
-  let { store, sagasManager, sagaMiddleware } = configureStore(
-    reducers,
-    rootSaga
-  );
+  const config = configureStore(reducers, rootSaga);
+  const { store, sagaMiddleware } = config;
+  let { sagasManager } = config;
 
   if (module.hot) {
     module.hot.accept(() => {

@@ -1,6 +1,5 @@
 import { eventChannel } from 'redux-saga';
 import { PermissionsAndroid } from 'react-native';
-import { EventEmitter } from 'events';
 import { call, put, take } from 'redux-saga/effects';
 import FixtureApi from '../../App/Services/FixtureApi';
 
