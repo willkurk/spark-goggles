@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+user='{"name":"Spark Goggles", "sub":"goggles"}'
+guest_url="https://7s6pizsaij.execute-api.us-west-2.amazonaws.com/dev/jwt"
+exchange_url="https://api.ciscospark.com/v1/jwt/login"
+
+# Fetch a JWT
+guest_resp=$(curl -sS -X POST "$guest_url" -d "$user")
+guest_jwt=$(echo "$guest_resp" | jq -r .token)
+
+echo -e "Guest token:\n"
+echo "$guest_resp" | jq
+echo
+
+# Exchange the JWT for an access token
+echo -e "Access token:\n"
+curl -sS -X POST -H "Authorization: Bearer $guest_jwt" "$exchange_url" | jq
+
