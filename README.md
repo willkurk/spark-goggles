@@ -1,25 +1,20 @@
-#  SparkGoggles
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
-
-* Standard compliant React Native App Utilizing [Ignite](https://github.com/infinitered/ignite)
+#  Spark Goggles
 
 ## :arrow_up: How to Setup
 
-**Step 1:** git clone this repo:
+**Step 1:** Run `git clone git@github.com:promptworks/spark-goggles`.
 
-**Step 2:** cd to the cloned repo:
+**Step 2:** Run `cd spark-goggles`.
 
-**Step 3:** Install the Application with `yarn` or `npm i`
+**Step 3:** Install the dependencies by running `yarn install`.
 
-**Step 4:** Run `yarn start` to start the React Native packager
+**Step 4:** Run `yarn start` to start the React Native packager.
 
 You can see the debugger interface at [](http://localhost:8081/debugger-ui/).
 
 ## :arrow_forward: How to run the App
 
-First, you'll need to install the Android SDK.
-
-Next, you can either run the app on a device or on an emulator.
+First, you'll need to install the Android SDK. Next, you can either run the app on a device or on an emulator.
 
 #### Emulator
 
@@ -35,28 +30,26 @@ Next, you can either run the app on a device or on an emulator.
 4. Find the developer settings section and find "USB Debugging". Make sure it's set to on.
 5. Run `yarn android` to launch the app.
 
+#### Tips
+
+* If your device isn't cooperating, run `yarn android:devices` to see the list of connected devices. When correctly configured, the second column should say `device`.
+* To access some of the development settings, you can shake an android device. If you're using the emulator, you can run `yarn android:shake`.
+
 ## Adding a Native package
 
 If you add a package that contains Java or ObjC code, you'll need to link it. To do so, you'll simply run `yarn react-native link`.
 
 After linking, you'll want to re-build the app entirely: `yarn android`.
 
-## :no_entry_sign: Standard Compliant
+## :no_entry_sign: Linting
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
-This project adheres to Standard.  Our CI enforces this, so we suggest you enable linting to keep your project compliant during development.
-
-**To Lint on Commit**
-
-This is implemented using [husky](https://github.com/typicode/husky). There is no additional setup needed.
-
-**Bypass Lint**
+To run the linter, run `yarn lint`. You can fix some of the errors automatically with `yarn lint:fix`. The linter will run automatically when you commit.
 
 If you have to bypass lint for a special commit that you will come back and clean (pushing something to a branch etc.) then you can bypass git hooks with adding `--no-verify` to your commit command.
 
-**Understanding Linting Errors**
+## :white_check_mark: Testing
 
-The linting rules are from JS Standard and React-Standard.  [Regular JS errors can be found with descriptions here](http://eslint.org/docs/rules/), while [React errors and descriptions can be found here](https://github.com/yannickcr/eslint-plugin-react).
+You can run the tests with `yarn test`.
 
 ## :closed_lock_with_key: Secrets
 
@@ -78,9 +71,3 @@ Secrets.GOOGLE_MAPS_API_KEY  // 'abcdefgh'
 ```
 
 The `.env` file is ignored by git keeping those secrets out of your repo.
-
-### Get started:
-1. Copy .env.example to .env
-2. Add your config variables
-3. Follow instructions at [https://github.com/luggit/react-native-config#setup](https://github.com/luggit/react-native-config#setup)
-4. Done!
