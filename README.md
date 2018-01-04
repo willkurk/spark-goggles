@@ -1,6 +1,6 @@
-#  Spark Goggles
+# :eyeglasses: Spark Goggles [![CircleCI](https://circleci.com/gh/promptworks/spark-goggles.svg?style=svg&circle-token=7a0f4585726eb1d7e5bb1a0c33539faa485804ee)](https://circleci.com/gh/promptworks/spark-goggles)
 
-## :arrow_up: How to Setup
+## :point_up: How to Setup
 
 **Step 1:** Run `git clone git@github.com:promptworks/spark-goggles`.
 
@@ -10,9 +10,9 @@
 
 **Step 4:** Run `yarn start` to start the React Native packager.
 
-You can see the debugger interface at [](http://localhost:8081/debugger-ui/).
+You can see the debugger interface at [http://localhost:8081/debugger-ui/](http://localhost:8081/debugger-ui/).
 
-## :arrow_forward: How to run the App
+## :rocket: How to run the App
 
 First, you'll need to install the Android SDK. Next, you can either run the app on a device or on an emulator.
 
@@ -34,12 +34,6 @@ First, you'll need to install the Android SDK. Next, you can either run the app 
 
 * If your device isn't cooperating, run `yarn android:devices` to see the list of connected devices. When correctly configured, the second column should say `device`.
 * To access some of the development settings, you can shake an android device. If you're using the emulator, you can run `yarn android:shake`.
-
-## Adding a Native package
-
-If you add a package that contains Java or ObjC code, you'll need to link it. To do so, you'll simply run `yarn react-native link`.
-
-After linking, you'll want to re-build the app entirely: `yarn android`.
 
 ## :no_entry_sign: Linting
 
@@ -71,3 +65,9 @@ Secrets.GOOGLE_MAPS_API_KEY  // 'abcdefgh'
 ```
 
 The `.env` file is ignored by git keeping those secrets out of your repo.
+
+## :package: Adding a Native package
+
+If you add a package that contains Java or ObjC code, you'll need to link it. To do so, you'll simply run `yarn react-native link`.
+
+After linking, you'll want to re-build the app entirely: `yarn android`.
