@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "android": "react-native run-android",
-    "test": "jest",
     "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && npm cache clean --force",
     "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android",
-    "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && npm i",
+    "clean:all": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && npm i",
+    "test": "jest",
     "test:watch": "jest --watch",
     "updateSnapshot": "jest --updateSnapshot",
     "coverage": "jest --coverage && open coverage/lcov-report/index.html || xdg-open coverage/lcov-report/index.html",
+    "android": "react-native run-android",
     "android:emulator": "$ANDROID_HOME/tools/emulator @SparkGoggles",
     "android:build": "cd android && ./gradlew assembleRelease",
     "android:install": "cd android && ./gradlew assembleRelease && ./gradlew installRelease",
@@ -23,7 +23,7 @@
     "storybook": "storybook start -p 7007",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "git-hook": "npm run lint -s && npm run test -s"
+    "prepush": "eslint ."
   },
   "dependencies": {
     "axios": "^0.17.1",
