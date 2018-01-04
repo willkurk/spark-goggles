@@ -1,32 +1,40 @@
-export const SET = 'currentUser/SET';
-export const AUTHENTICATE = 'currentUser/AUTHENTICATE';
+export const AUTHENTICATE = 'login/AUTHENTICATE';
+export const GRANT_ACCESS = 'login/GRANT_ACCESS';
+export const REVOKE_ACCESS = 'login/REVOKE_ACCESS';
 
-export const set = ({ data, loading }) => ({
-  type: SET,
+export const authenticate = () => ({
+  type: AUTHENTICATE
+});
+
+export const grantAccess = () => ({
+  type: GRANT_ACCESS,
   payload: {
-    data,
-    loading
+    error: null,
+    loading: false
   }
 });
 
-export const authenticate = ({ code }) => ({
-  type: AUTHENTICATE,
+export const revokeAccess = (error = null) => ({
+  type: REVOKE_ACCESS,
   payload: {
-    code
+    error: error,
+    loading: false
   }
 });
 
 const INITIAL_STATE = {
-  data: null,
+  error: null,
   loading: false
 };
 
 export function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case SET: {
-      const { loading, data } = action.payload;
-      return { loading, data };
-    }
+    case AUTHENTICATE:
+      return { ...INITIAL_STATE, loading: true };
+
+    case GRANT_ACCESS:
+    case REVOKE_ACCESS:
+      return { ...state, ...action.payload };
 
     default:
       return state;

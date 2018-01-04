@@ -1,5 +1,6 @@
 import { takeLatest, all, fork } from 'redux-saga/effects';
 import Api from '../Services/Api';
+import OAuth from '../Services/OAuth';
 import FixtureApi from '../Services/FixtureApi';
 import DebugConfig from '../Config/DebugConfig';
 
@@ -26,7 +27,7 @@ export default function* root() {
     /**
      * Current user
      */
-    takeLatest(CurrentUser.AUTHENTICATE, CurrentUserSagas.authenticate, api),
+    takeLatest(CurrentUser.AUTHENTICATE, CurrentUserSagas.authenticate, api, OAuth),
 
     /**
      * Phone

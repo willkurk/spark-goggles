@@ -9,16 +9,18 @@ import { reducer as currentUser } from './CurrentUser';
 import { reducer as phone } from './Phone';
 
 /* ------------- Assemble The Reducers ------------- */
+
 export const reducers = combineReducers({
-  nav,
   currentUser,
+  nav,
   phone
 });
 
 export default () => {
   const config = configureStore(reducers, rootSaga);
-  const { store, sagaMiddleware } = config;
+
   let { sagasManager } = config;
+  const { store, sagaMiddleware } = config;
 
   if (module.hot) {
     module.hot.accept(() => {

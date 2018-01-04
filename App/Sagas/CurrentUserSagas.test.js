@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
 import FixtureApi from '../../App/Services/FixtureApi';
-import { authenticate } from './CurrentUserSagas';
+import { authenticate, refreshToken } from './CurrentUserSagas';
 import { set } from '../Redux/CurrentUser';
 
 const code = '1234567890';
@@ -37,5 +37,19 @@ test('authenticate failure', () => {
 
   expect(saga.throw(new Error('whoops')).value).toEqual(
     put(set({ loading: false, data: null }))
+  );
+});
+
+test('refreshToken', () => {
+  const saga = refreshToken(FixtureApi);
+
+  expect(saga.next().value).toEqual(call(FixtureApi.getAccessToken));
+
+  expect(saga.next(accessToken).value).toEqual(
+    put(set({ loading: false, data: { accessToken } }))
+  );
+
+  expect(saga.next().value).toEqual(
+    put(NavigationActions.navigate({ routeName: 'Main' }))
   );
 });

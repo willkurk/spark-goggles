@@ -1,4 +1,12 @@
-import { reducer, set, authenticate, SET, AUTHENTICATE } from './CurrentUser';
+import {
+  reducer,
+  set,
+  authenticate,
+  refreshToken,
+  SET,
+  AUTHENTICATE,
+  REFRESH_TOKEN
+} from './CurrentUser';
 
 const user = {
   name: 'Rick',
@@ -22,6 +30,12 @@ test('authenticate', () => {
   expect(authenticate({ code })).toEqual({
     type: AUTHENTICATE,
     payload: { code }
+  });
+});
+
+test('refreshToken', () => {
+  expect(refreshToken()).toEqual({
+    type: REFRESH_TOKEN
   });
 });
 
