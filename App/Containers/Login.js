@@ -1,39 +1,48 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, ScrollView, Button } from 'react-native';
+import { WebView, View } from 'react-native';
 import { authenticate } from '../Redux/CurrentUser';
 import OAuth from '../Services/OAuth';
-
-const mapStateToProps = ({ currentUser }) => ({
-  currentUser
-});
 
 const mapDispatchToProps = {
   authenticate
 };
 
+const generateId = () =>
+  Math.random()
+    .toString(36)
+    .substring(7);
+
 class Login extends Component {
-  async componentDidMount() {
-    const code = await OAuth.callback();
+  stateParameter = generateId();
 
-    if (code) {
-      this.props.authenticate({ code });
+  handleLoadStart = ({ nativeEvent }) => {
+    const auth = OAuth.checkAuthorization({
+      url: nativeEvent.url,
+      state: this.stateParameter
+    });
+
+    if (auth.code) {
+      this.props.authenticate({ code: auth.code });
     }
-  }
 
-  handleLogin = () => {
-    OAuth.redirect();
+    if (auth.error) {
+      console.error(auth.error);
+    }
   };
 
   render() {
-    console.log('currentUser:', this.props.currentUser); // eslint-disable-line
-
     return (
-      <View>
-        <ScrollView>
-          <Button title="Login" onPress={this.handleLogin} />
-        </ScrollView>
+      <View style={{ flex: 1 }}>
+        <WebView
+          style={{ flex: 1 }}
+          source={{ uri: OAuth.generateRedirectURL(this.stateParameter) }}
+          onLoadStart={this.handleLoadStart}
+          domStorageEnabled
+          javaScriptEnabled
+          thirdPartyCookiesEnabled
+        />
       </View>
     );
   }
@@ -42,16 +51,9 @@ class Login extends Component {
 Login.propTypes = {
   authenticate: PropTypes.func.isRequired,
 
-  currentUser: PropTypes.shape({
-    loading: PropTypes.bool.isRequired,
-    data: PropTypes.shape({
-      accessToken: PropTypes.string
-    })
-  }).isRequired,
-
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired
   }).isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login);

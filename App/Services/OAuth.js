@@ -1,37 +1,44 @@
 import url from 'url';
 import querystring from 'querystring';
-import { Linking } from 'react-native';
 import Config from 'react-native-config';
 
-const generateRedirectURL = () => {
+const generateRedirectURL = state => {
   const query = querystring.stringify({
     client_id: Config.SPARK_CLIENT_ID,
     redirect_uri: Config.SPARK_REDIRECT_URI,
     scope: Config.SPARK_SCOPE,
-    response_type: 'code'
+    response_type: 'code',
+    state
   });
 
   return `${Config.SPARK_ENDPOINT}?${query}`;
 };
 
-const redirect = () => {
-  Linking.openURL(generateRedirectURL());
-};
+const checkAuthorization = ({ url: value, state }) => {
+  const redirectUri = url.parse(Config.SPARK_REDIRECT_URI);
+  const location = url.parse(value);
+  const params = querystring.parse(location.query);
 
-const callback = async () => {
-  const initialURL = await Linking.getInitialURL();
-
-  if (!initialURL) {
-    return;
+  if (params.error) {
+    return { error: params.error };
   }
 
-  const { query } = url.parse(initialURL);
-  const { code } = querystring.parse(query);
-  return code;
+  if (redirectUri.protocol !== location.protocol) {
+    return {};
+  }
+
+  if (redirectUri.host !== location.host) {
+    return {};
+  }
+
+  if (params.state !== state) {
+    return { error: 'State parameter does not match' };
+  }
+
+  return { code: params.code };
 };
 
 export default {
   generateRedirectURL,
-  callback,
-  redirect
+  checkAuthorization
 };
