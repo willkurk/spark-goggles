@@ -13,7 +13,7 @@ const mapDispatchToProps = {
   authenticate
 };
 
-class Login extends Component {
+class LoginScreen extends Component {
   async componentDidMount() {
     const code = await OAuth.callback();
 
@@ -39,7 +39,7 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
+LoginScreen.propTypes = {
   authenticate: PropTypes.func.isRequired,
 
   currentUser: PropTypes.shape({
@@ -49,4 +49,4 @@ Login.propTypes = {
   })
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
