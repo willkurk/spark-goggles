@@ -7,7 +7,7 @@ import android.view.View;
 import com.ciscospark.androidsdk.CompletionHandler;
 import com.ciscospark.androidsdk.Result;
 import com.ciscospark.androidsdk.Spark;
-import com.ciscospark.androidsdk.auth.JWTAuthenticator;
+import com.ciscospark.androidsdk.auth.OAuthAuthenticator;
 import com.ciscospark.androidsdk.phone.Call;
 import com.ciscospark.androidsdk.phone.MediaOption;
 
@@ -22,14 +22,13 @@ public class Phone extends ReactContextBaseJavaModule {
 
     private final String E_REGISTER_ERROR = "E_REGISTER_ERROR";
     private final String E_CALL_ALREADY_IN_PROGRESS = "E_CALL_ALREADY_IN_PROGRESS";
-    private final String E_NULL_JWT = "E_NULL_JWT";
     private final String E_DIAL_ERROR = "E_DIAL_ERROR";
     private final String E_HANGUP_ERROR = "E_HANGUP_ERROR";
     private final String E_AUTHENTICATION_ERROR = "E_AUTHENTICATION_ERROR";
 
     private Call activeCall;
     private Spark spark;
-    private JWTAuthenticator authenticator;
+    private OAuthAuthenticator authenticator;
 
     public Phone(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
@@ -40,7 +39,7 @@ public class Phone extends ReactContextBaseJavaModule {
         Activity activity = getCurrentActivity();
         Application application = activity.getApplication();
 
-        authenticator = new JWTAuthenticator();
+        authenticator = new OAuthAuthenticator();
         spark = new Spark(application, authenticator);
     }
 
@@ -50,16 +49,24 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void authenticate(String jwt, final Promise promise) {
-        if (jwt == null) {
-            promise.reject(E_NULL_JWT, "The JWT cannot be null.");
-            return;
+    public void authenticate(String code, final Promise promise) {
+        if (authenticator.isAuthorized()) {
+            getAccessToken(promise);
+        } else {
+            authenticator.authorize(code, new CompletionHandler<Void>() {
+                @Override
+                public void onComplete(Result<Void> result) {
+                    if (result.isSuccessful()) {
+                        getAccessToken(promise);
+                    } else {
+                        promise.reject(E_AUTHENTICATION_ERROR, result.getError().toString());
+                    }
+                }
+            });
         }
+    }
 
-        if (!authenticator.isAuthorized()) {
-            authenticator.authorize(jwt);
-        }
-
+    private void getAccessToken(final Promise promise) {
         authenticator.getToken(new CompletionHandler<String>() {
             @Override
             public void onComplete(Result<String> result) {
