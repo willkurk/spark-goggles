@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -ex
+
+$ANDROID_HOME/tools/bin/sdkmanager 'platform-tools' 'emulator' 'system-images;android-23;google_apis;x86'
+
+$ANDROID_HOME/tools/bin/avdmanager -v create avd --force --abi x86 --device 'Nexus 5X' --name SparkGoggles -k 'system-images;android-23;google_apis;x86'
+
+# Enable some stuff
+echo 'hw.keyboard=yes' >> ~/.android/avd/SparkGoggles.avd/config.ini
+echo 'hw.camera=yes' >> ~/.android/avd/SparkGoggles.avd/config.ini
