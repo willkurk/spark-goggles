@@ -44,7 +44,9 @@ export function* observePhone(api) {
         break;
 
       case 'phone:disconnected':
-        yield put(updateCall({ outgoing: false, connected: false }));
+        yield put(
+          updateCall({ outgoing: false, connected: false, address: null })
+        );
         break;
 
       default:
@@ -74,7 +76,9 @@ export function* requestPermissions(api) {
  * we'll find out that the call has been accepted.
  */
 export function* dialPhone(api, { payload }) {
-  yield put(updateCall({ outgoing: true, connected: false }));
+  yield put(
+    updateCall({ outgoing: true, connected: false, address: payload.address })
+  );
 
   try {
     yield call(api.dialPhone, payload);

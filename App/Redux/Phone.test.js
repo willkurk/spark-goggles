@@ -91,7 +91,8 @@ describe('reducer', () => {
     expect(state).toEqual({
       call: {
         connected: false,
-        outgoing: false
+        outgoing: false,
+        address: null
       },
       registration: {
         loading: false,
@@ -115,6 +116,23 @@ describe('reducer', () => {
   test('updatePermissions', () => {
     expect(reducer(state, updatePermissions(true))).toMatchObject({
       permissionsGranted: true
+    });
+  });
+
+  test('updateCall', () => {
+    const nextState = reducer(
+      state,
+      updateCall({ address: 'foo@bar.com', connected: false, outgoing: true })
+    );
+
+    expect(nextState).toMatchObject({
+      call: { address: 'foo@bar.com', connected: false, outgoing: true }
+    });
+
+    expect(
+      reducer(nextState, updateCall({ connected: true, outgoing: false }))
+    ).toMatchObject({
+      call: { address: 'foo@bar.com', connected: true, outgoing: false }
     });
   });
 });

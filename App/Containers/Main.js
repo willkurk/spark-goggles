@@ -46,7 +46,7 @@ class Main extends Component {
           <VideoView style={styles.remoteView} nativeID="remoteView" />
         </View>
 
-        {call.outgoing && <Loading text="Dialing..." />}
+        {call.outgoing && <Loading text={`Calling ${call.address}...`} />}
 
         {call.connected || call.outgoing ? (
           <Button title="Hangup call" onPress={this.handleHangup} />
