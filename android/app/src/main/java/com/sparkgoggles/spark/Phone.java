@@ -107,10 +107,8 @@ public class Phone extends ReactContextBaseJavaModule {
             return;
         }
 
-        Activity activity = getCurrentActivity();
-        View rootView = activity.getWindow().getDecorView().getRootView();
-        View localView = ReactFindViewUtil.findView(rootView, localViewId);
-        View remoteView = ReactFindViewUtil.findView(rootView, remoteViewId);
+        View localView = findViewById(localViewId);
+        View remoteView = findViewById(remoteViewId);
 
         MediaOption mediaOption = MediaOption.audioVideo(localView, remoteView);
 
@@ -170,5 +168,17 @@ public class Phone extends ReactContextBaseJavaModule {
     private void setActiveCall(Call call) {
         call.setObserver(new PhoneObserver(getReactApplicationContext()));
         activeCall = call;
+    }
+
+    private View findViewById(String nativeId) {
+        Activity activity = getCurrentActivity();
+        View rootView = activity.getWindow().getDecorView().getRootView();
+        View result = ReactFindViewUtil.findView(rootView, nativeId);
+
+        if (result == null) {
+            throw new Error("Failed to locate a view with ID: " + nativeId);
+        }
+
+        return result;
     }
 }
