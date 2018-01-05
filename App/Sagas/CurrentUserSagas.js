@@ -1,24 +1,13 @@
 import { call, put } from 'redux-saga/effects';
 import { set } from '../Redux/CurrentUser';
 
-export function* authenticate(api, { payload: { name, sub } }) {
+export function* authenticate(api, { payload: { code } }) {
+  yield put(set({ loading: true, data: null }));
+
   try {
-    yield put(set({ loading: true, data: null }));
-
-    const guestToken = yield call(api.generateGuestToken, { name, sub });
-    const accessToken = yield call(api.exchangeGuestToken, guestToken);
-
-    yield put(
-      set({
-        loading: false,
-        data: {
-          name,
-          sub,
-          accessToken
-        }
-      })
-    );
-  } catch (err) {
+    const accessToken = yield call(api.authenticate, code);
+    yield put(set({ loading: false, data: { accessToken } }));
+  } catch (error) {
     yield put(set({ loading: false, data: null }));
   }
 }

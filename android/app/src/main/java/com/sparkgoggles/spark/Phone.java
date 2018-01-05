@@ -16,6 +16,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
+import com.sparkgoggles.BuildConfig;
 
 public class Phone extends ReactContextBaseJavaModule {
     private final String REACT_CLASS = "Phone";
@@ -25,6 +26,11 @@ public class Phone extends ReactContextBaseJavaModule {
     private final String E_DIAL_ERROR = "E_DIAL_ERROR";
     private final String E_HANGUP_ERROR = "E_HANGUP_ERROR";
     private final String E_AUTHENTICATION_ERROR = "E_AUTHENTICATION_ERROR";
+
+    private final String clientId = BuildConfig.SPARK_CLIENT_ID;
+    private final String clientSecret = BuildConfig.SPARK_CLIENT_SECRET;
+    private final String scope = BuildConfig.SPARK_SCOPE;
+    private final String redirectUri = BuildConfig.SPARK_REDIRECT_URI;
 
     private Call activeCall;
     private Spark spark;
@@ -39,7 +45,7 @@ public class Phone extends ReactContextBaseJavaModule {
         Activity activity = getCurrentActivity();
         Application application = activity.getApplication();
 
-        authenticator = new OAuthAuthenticator();
+        authenticator = new OAuthAuthenticator(clientId, clientSecret, scope, redirectUri);
         spark = new Spark(application, authenticator);
     }
 
@@ -66,6 +72,7 @@ public class Phone extends ReactContextBaseJavaModule {
         }
     }
 
+    @ReactMethod
     private void getAccessToken(final Promise promise) {
         authenticator.getToken(new CompletionHandler<String>() {
             @Override
