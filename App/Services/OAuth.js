@@ -1,6 +1,7 @@
 import url from 'url';
 import querystring from 'querystring';
 import Config from 'react-native-config';
+import { Linking } from 'react-native';
 
 const generateRedirectURL = state => {
   const query = querystring.stringify({
@@ -14,7 +15,7 @@ const generateRedirectURL = state => {
   return `${Config.SPARK_ENDPOINT}?${query}`;
 };
 
-const checkAuthorization = ({ url: value, state }) => {
+const checkAuthorization = value => {
   const redirectUri = url.parse(Config.SPARK_REDIRECT_URI);
   const location = url.parse(value);
   const params = querystring.parse(location.query);
@@ -31,14 +32,26 @@ const checkAuthorization = ({ url: value, state }) => {
     return {};
   }
 
-  if (params.state !== state) {
-    return { error: 'State parameter does not match' };
+  return { code: params.code };
+};
+
+const redirect = () => {
+  return Linking.openURL(generateRedirectURL());
+};
+
+const callback = async () => {
+  const initialURL = await Linking.getInitialURL();
+
+  if (!initialURL) {
+    return {};
   }
 
-  return { code: params.code };
+  return checkAuthorization(initialURL);
 };
 
 export default {
   generateRedirectURL,
-  checkAuthorization
+  checkAuthorization,
+  redirect,
+  callback
 };
