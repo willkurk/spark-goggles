@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { TextInput, ScrollView, Text, Button, View } from 'react-native';
+import { Button, View } from 'react-native';
 import { connect } from 'react-redux';
 import {
   registerPhone,
@@ -9,20 +9,19 @@ import {
   hangupPhone
 } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
+import Dialer from '../Components/Dialer';
+import Loading from '../Components/Loading';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
-  state = {
-    address: 'thomas@promptworks.com'
-  };
-
-  handlePermissions = () => {
+  async componentDidMount() {
+    this.props.registerPhone();
     this.props.requestPermissions();
-  };
+  }
 
-  handleCall = () => {
+  handleCall = address => {
     this.props.dialPhone({
-      address: 'thomas@promptworks.com',
+      address,
       localView: 'localView',
       remoteView: 'remoteView'
     });
@@ -33,55 +32,27 @@ class Main extends Component {
   };
 
   render() {
+    const { call } = this.props.phone;
+
     return (
-      <View style={styles.mainContainer}>
-        <ScrollView style={styles.container}>
-          <View style={styles.section}>
-            <Text style={{ color: 'black' }}>
-              {JSON.stringify(this.props.phone)}
-            </Text>
+      <View style={styles.container}>
+        <View
+          style={{
+            flex: 1,
+            display: call.connected ? 'flex' : 'none'
+          }}
+        >
+          <VideoView style={styles.localView} nativeID="localView" />
+          <VideoView style={styles.remoteView} nativeID="remoteView" />
+        </View>
 
-            <Button title="Register" onPress={this.props.registerPhone} />
+        {call.outgoing && <Loading text="Dialing..." />}
 
-            {this.props.phone.registration.complete && (
-              <Button
-                title="Request permissions"
-                onPress={this.handlePermissions}
-              />
-            )}
-
-            {this.props.phone.permissionsGranted && [
-              <TextInput
-                key="address"
-                onChangeText={address => this.setState({ address })}
-                value={this.state.address}
-              />,
-
-              <Button
-                key="call"
-                title="Make a call"
-                onPress={this.handleCall}
-              />
-            ]}
-
-            {this.props.phone.call.connected && (
-              <Button title="Hangup call" onPress={this.handleHangup} />
-            )}
-
-            {this.props.phone.call.outgoing && (
-              <Text style={{ color: 'black' }}>Dialing...</Text>
-            )}
-
-            <VideoView
-              style={{ width: 100, height: 100 }}
-              nativeID="localView"
-            />
-            <VideoView
-              style={{ width: 100, height: 100 }}
-              nativeID="remoteView"
-            />
-          </View>
-        </ScrollView>
+        {call.connected || call.outgoing ? (
+          <Button title="Hangup call" onPress={this.handleHangup} />
+        ) : (
+          <Dialer onCall={this.handleCall} />
+        )}
       </View>
     );
   }

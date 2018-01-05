@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { WebView, View } from 'react-native';
 import { authenticate } from '../Redux/CurrentUser';
 import OAuth from '../Services/OAuth';
+import styles from './Styles/LoginStyles';
 
 const mapDispatchToProps = {
   authenticate
@@ -34,16 +35,14 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <WebView
-          style={{ flex: 1 }}
-          source={{ uri: OAuth.generateRedirectURL(this.stateParameter) }}
-          onLoadStart={this.handleLoadStart}
-          domStorageEnabled
-          javaScriptEnabled
-          thirdPartyCookiesEnabled
-        />
-      </View>
+      <WebView
+        style={styles.container}
+        source={{ uri: OAuth.generateRedirectURL(this.stateParameter) }}
+        onLoadStart={this.handleLoadStart}
+        domStorageEnabled
+        javaScriptEnabled
+        thirdPartyCookiesEnabled
+      />
     );
   }
 }
