@@ -12,7 +12,7 @@
     "updateSnapshot": "jest --updateSnapshot",
     "coverage": "jest --coverage && open coverage/lcov-report/index.html || xdg-open coverage/lcov-report/index.html",
     "android": "react-native run-android",
-    "android:emulator": "$ANDROID_HOME/tools/emulator @SparkGoggles",
+    "android:emulator": "$ANDROID_HOME/tools/emulator @SparkGoggles -wipe-data",
     "android:build": "cd android && ./gradlew assembleRelease",
     "android:install": "cd android && ./gradlew assembleRelease && ./gradlew installRelease",
     "android:hockeyapp": "cd android && ./gradlew assembleRelease && puck -submit=auto app/build/outputs/apk/app-release.apk",
