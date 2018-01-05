@@ -13,12 +13,21 @@ const mapDispatchToProps = {
   authenticate
 };
 
-class LoginScreen extends Component {
+class Login extends Component {
   async componentDidMount() {
     const code = await OAuth.callback();
 
     if (code) {
       this.props.authenticate({ code });
+    }
+  }
+
+  /**
+   * After the user gets signed in, redirect.
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentUser.data) {
+      this.props.navigation.navigate('Main');
     }
   }
 
@@ -39,14 +48,19 @@ class LoginScreen extends Component {
   }
 }
 
-LoginScreen.propTypes = {
+Login.propTypes = {
   authenticate: PropTypes.func.isRequired,
 
   currentUser: PropTypes.shape({
-    name: PropTypes.string,
-    sub: PropTypes.string,
-    accessToken: PropTypes.string
-  })
+    loading: PropTypes.bool.isRequired,
+    data: PropTypes.shape({
+      accessToken: PropTypes.string
+    })
+  }).isRequired,
+
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired
+  }).isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

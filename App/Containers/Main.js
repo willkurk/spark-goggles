@@ -9,9 +9,9 @@ import {
   hangupPhone
 } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
-import styles from './Styles/MainScreenStyles';
+import styles from './Styles/MainStyles';
 
-class MainScreen extends Component {
+class Main extends Component {
   handlePermissions = () => {
     this.props.requestPermissions();
   };
@@ -73,8 +73,7 @@ class MainScreen extends Component {
   }
 }
 
-MainScreen.propTypes = {
-  authenticate: PropTypes.func.isRequired,
+Main.propTypes = {
   registerPhone: PropTypes.func.isRequired,
   requestPermissions: PropTypes.func.isRequired,
   dialPhone: PropTypes.func.isRequired,
@@ -106,4 +105,4 @@ const mapDispatchToProps = {
   hangupPhone
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
