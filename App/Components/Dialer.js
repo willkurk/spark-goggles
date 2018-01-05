@@ -8,7 +8,7 @@ class Dialer extends Component {
   };
 
   handleChange = address => {
-    this.stateState({ address });
+    this.setState({ address });
   };
 
   handleCall = () => {
