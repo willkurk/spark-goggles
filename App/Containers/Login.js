@@ -22,15 +22,6 @@ class Login extends Component {
     }
   }
 
-  /**
-   * After the user gets signed in, redirect.
-   */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser.data) {
-      this.props.navigation.navigate('Main');
-    }
-  }
-
   handleLogin = () => {
     OAuth.redirect();
   };
