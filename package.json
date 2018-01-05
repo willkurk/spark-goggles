@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "ciscospark": "^1.23.2",
     "lodash": "^4.17.4",
     "prop-types": "^15.6.0",
     "react": "16.0.0",
