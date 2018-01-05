@@ -17,15 +17,11 @@ test('set', () => {
 });
 
 test('authenticate', () => {
-  const name = 'Rick';
-  const sub = 'ross';
+  const code = '123456789';
 
-  expect(authenticate({ name, sub })).toEqual({
+  expect(authenticate({ code })).toEqual({
     type: AUTHENTICATE,
-    payload: {
-      name,
-      sub
-    }
+    payload: { code }
   });
 });
 
