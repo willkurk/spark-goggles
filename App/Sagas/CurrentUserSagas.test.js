@@ -1,4 +1,5 @@
 import { call, put } from 'redux-saga/effects';
+import { NavigationActions } from 'react-navigation';
 import FixtureApi from '../../App/Services/FixtureApi';
 import { authenticate } from './CurrentUserSagas';
 import { set } from '../Redux/CurrentUser';
@@ -10,7 +11,6 @@ test('authenticate', () => {
   const saga = authenticate(FixtureApi, { payload: { code } });
 
   expect(saga.next().value).toEqual(put(set({ data: null, loading: true })));
-
   expect(saga.next().value).toEqual(call(FixtureApi.authenticate, code));
 
   expect(saga.next(accessToken).value).toEqual(
@@ -22,6 +22,10 @@ test('authenticate', () => {
         }
       })
     )
+  );
+
+  expect(saga.next().value).toEqual(
+    put(NavigationActions.navigate({ routeName: 'Main' }))
   );
 });
 
