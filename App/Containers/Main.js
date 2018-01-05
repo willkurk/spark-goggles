@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { ScrollView, Text, Button, View } from 'react-native';
+import { TextInput, ScrollView, Text, Button, View } from 'react-native';
 import { connect } from 'react-redux';
 import {
   registerPhone,
@@ -12,13 +12,17 @@ import VideoView from '../Components/VideoView';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
+  state = {
+    address: 'thomas@promptworks.com'
+  };
+
   handlePermissions = () => {
     this.props.requestPermissions();
   };
 
   handleCall = () => {
     this.props.dialPhone({
-      address: 'ray@promptworks.com',
+      address: 'thomas@promptworks.com',
       localView: 'localView',
       remoteView: 'remoteView'
     });
@@ -46,9 +50,19 @@ class Main extends Component {
               />
             )}
 
-            {this.props.phone.permissionsGranted && (
-              <Button title="Make a call" onPress={this.handleCall} />
-            )}
+            {this.props.phone.permissionsGranted && [
+              <TextInput
+                key="address"
+                onChangeText={address => this.setState({ address })}
+                value={this.state.address}
+              />,
+
+              <Button
+                key="call"
+                title="Make a call"
+                onPress={this.handleCall}
+              />
+            ]}
 
             {this.props.phone.call.connected && (
               <Button title="Hangup call" onPress={this.handleHangup} />
