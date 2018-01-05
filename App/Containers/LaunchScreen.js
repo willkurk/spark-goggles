@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { ScrollView, Text, Button, View } from 'react-native';
 import { connect } from 'react-redux';
-import { authenticate } from '../Redux/CurrentUser';
 import {
   registerPhone,
   requestPermissions,
@@ -13,13 +12,6 @@ import VideoView from '../Components/VideoView';
 import styles from './Styles/LaunchScreenStyles';
 
 class LaunchScreen extends Component {
-  handleAuthenticate = () => {
-    this.props.authenticate({
-      name: 'Rick',
-      sub: 'ricky'
-    });
-  };
-
   handlePermissions = () => {
     this.props.requestPermissions();
   };
@@ -37,9 +29,6 @@ class LaunchScreen extends Component {
   };
 
   render() {
-    const { currentUser } = this.props;
-    const accessToken = currentUser.data && currentUser.data.accessToken;
-
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
@@ -48,11 +37,7 @@ class LaunchScreen extends Component {
               {JSON.stringify(this.props.phone)}
             </Text>
 
-            <Button title="Authenticate" onPress={this.handleAuthenticate} />
-
-            {accessToken && (
-              <Button title="Register" onPress={this.props.registerPhone} />
-            )}
+            <Button title="Register" onPress={this.props.registerPhone} />
 
             {this.props.phone.registration.complete && (
               <Button
@@ -107,22 +92,14 @@ LaunchScreen.propTypes = {
       connected: PropTypes.bool.isRequired,
       outgoing: PropTypes.bool.isRequired
     }).isRequired
-  }).isRequired,
-
-  currentUser: PropTypes.shape({
-    name: PropTypes.string,
-    sub: PropTypes.string,
-    accessToken: PropTypes.string
-  })
+  }).isRequired
 };
 
-const mapStateToProps = ({ currentUser, phone }) => ({
-  currentUser,
+const mapStateToProps = ({ phone }) => ({
   phone
 });
 
 const mapDispatchToProps = {
-  authenticate,
   registerPhone,
   requestPermissions,
   dialPhone,
