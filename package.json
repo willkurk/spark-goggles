@@ -12,14 +12,14 @@
     "updateSnapshot": "jest --updateSnapshot",
     "coverage": "jest --coverage && open coverage/lcov-report/index.html || xdg-open coverage/lcov-report/index.html",
     "android": "react-native run-android",
-    "android:emulator": "$ANDROID_HOME/tools/emulator @SparkGoggles",
+    "android:emulator": "$ANDROID_HOME/tools/emulator @SparkGoggles -wipe-data",
     "android:build": "cd android && ./gradlew assembleRelease",
     "android:install": "cd android && ./gradlew assembleRelease && ./gradlew installRelease",
     "android:hockeyapp": "cd android && ./gradlew assembleRelease && puck -submit=auto app/build/outputs/apk/app-release.apk",
     "android:devices": "$ANDROID_HOME/platform-tools/adb devices",
     "android:logcat": "$ANDROID_HOME/platform-tools/adb logcat *:S ReactNative:V ReactNativeJS:V",
     "android:shake": "$ANDROID_HOME/platform-tools/adb devices | grep '\\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} $ANDROID_HOME/platform-tools/adb -s {} shell input keyevent 82",
-    "android:emulator:create": "$ANDROID_HOME/tools/bin/sdkmanager 'platform-tools' 'emulator' 'system-images;android-23;google_apis;x86' && $ANDROID_HOME/tools/bin/avdmanager -v create avd --force --abi x86 --device 'Nexus 5X' --name SparkGoggles -k 'system-images;android-23;google_apis;x86'",
+    "android:emulator:create": "$ANDROID_HOME/tools/bin/sdkmanager 'platform-tools' 'emulator' 'system-images;android-23;google_apis;x86' && $ANDROID_HOME/tools/bin/avdmanager -v create avd --force --abi x86 --device 'Nexus 5X' --name SparkGoggles -k 'system-images;android-23;google_apis;x86' && echo 'hw.keyboard=yes' >> ~/.android/avd/SparkGoggles.avd/config.ini",
     "storybook": "storybook start -p 7007",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -28,7 +28,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "ciscospark": "^1.23.2",
-    "promise-retry": "^1.1.1",
+    "lodash": "^4.17.4",
     "prop-types": "^15.6.0",
     "react": "16.0.0",
     "react-native": "0.50.4",
@@ -81,7 +81,10 @@
     "setupFiles": [
       "<rootDir>/Tests/Setup"
     ],
-    "preset": "react-native"
+    "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-navigation)"
+    ]
   },
   "config": {},
   "standard": {

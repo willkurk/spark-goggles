@@ -1,5 +1,3 @@
-import axios from 'axios';
-import promiseRetry from 'promise-retry';
 import {
   NativeModules,
   PermissionsAndroid,
@@ -16,15 +14,6 @@ const PHONE_EVENTS = [
 ];
 
 const create = () => {
-  const api = axios.create({
-    baseURL: 'https://7s6pizsaij.execute-api.us-west-2.amazonaws.com/dev/jwt'
-  });
-
-  const generateGuestToken = async (name, sub) => {
-    const response = await api.post('/', { name, sub });
-    return response.data.token;
-  };
-
   const requestPermission = async name => {
     const granted = await PermissionsAndroid.request(name);
 
@@ -51,34 +40,12 @@ const create = () => {
     });
   };
 
-  const exchangeGuestToken = jwt => {
-    return promiseRetry(
-      (retry, number) => {
-        return Phone.authenticate(jwt)
-          .catch(error => {
-            console.warn(
-              `Failed to exchangeGuestToken ${number} times.`,
-              error
-            );
-
-            throw error;
-          })
-          .catch(retry);
-      },
-      {
-        retries: 5,
-        minTimeout: 500
-      }
-    );
-  };
-
   return {
-    generateGuestToken,
     requestPermission,
     dialPhone,
     addPhoneListener,
     removePhoneListener,
-    exchangeGuestToken,
+    authenticate: Phone.authenticate,
     registerPhone: Phone.register,
     hangupPhone: Phone.hangup
   };

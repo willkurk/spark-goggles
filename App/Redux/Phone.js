@@ -1,3 +1,5 @@
+import { merge } from 'lodash';
+
 export const UPDATE_REGISTRATION = 'phone/UPDATE_REGISTRATION';
 export const UPDATE_PERMISSIONS = 'phone/UPDATE_PERMISSIONS';
 export const UPDATE_CALL = 'phone/UPDATE_CALL';
@@ -41,7 +43,7 @@ export const hangupPhone = () => ({
 
 const INITIAL_STATE = {
   registration: { complete: false, loading: false },
-  call: { connected: false, outgoing: false },
+  call: { connected: false, outgoing: false, address: null },
   permissionsGranted: false
 };
 
@@ -50,7 +52,7 @@ export function reducer(state = INITIAL_STATE, action) {
     case UPDATE_REGISTRATION:
     case UPDATE_PERMISSIONS:
     case UPDATE_CALL:
-      return { ...state, ...action.payload };
+      return merge({}, state, action.payload);
 
     default:
       return state;

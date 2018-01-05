@@ -9,11 +9,10 @@ export const set = ({ data, loading }) => ({
   }
 });
 
-export const authenticate = ({ name, sub }) => ({
+export const authenticate = ({ code }) => ({
   type: AUTHENTICATE,
   payload: {
-    name,
-    sub
+    code
   }
 });
 

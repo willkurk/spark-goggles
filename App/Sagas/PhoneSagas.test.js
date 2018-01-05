@@ -80,7 +80,7 @@ test('dialPhone', () => {
   });
 
   expect(saga.next().value).toEqual(
-    put(updateCall({ outgoing: true, connected: false }))
+    put(updateCall({ address, outgoing: true, connected: false }))
   );
 
   expect(saga.next().value).toEqual(
@@ -121,7 +121,7 @@ test('observePhone', () => {
   expect(saga.next(channel).value).toEqual(take(channel));
 
   expect(saga.next({ type: 'phone:disconnected' }).value).toEqual(
-    put(updateCall({ outgoing: false, connected: false }))
+    put(updateCall({ outgoing: false, connected: false, address: null }))
   );
 
   saga.return(); // this generator contains a while loop. abort it.
