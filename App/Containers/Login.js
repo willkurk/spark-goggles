@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { WebView, View } from 'react-native';
+import { WebView } from 'react-native';
 import { authenticate } from '../Redux/CurrentUser';
 import OAuth from '../Services/OAuth';
 import styles from './Styles/LoginStyles';
