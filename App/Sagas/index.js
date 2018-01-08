@@ -8,11 +8,13 @@ import DebugConfig from '../Config/DebugConfig';
 
 import * as Login from '../Redux/Login';
 import * as Phone from '../Redux/Phone';
+import * as Messages from '../Redux/Messages';
 
 /* ------------- Sagas ------------- */
 
 import * as LoginSagas from './LoginSagas';
 import * as PhoneSagas from './PhoneSagas';
+import * as MessageSagas from './MessageSagas';
 
 /* ------------- API ------------- */
 
@@ -36,6 +38,12 @@ export default function* root() {
     takeLatest(Phone.REQUEST_PERMISSIONS, PhoneSagas.requestPermissions, api),
     takeLatest(Phone.REGISTER_PHONE, PhoneSagas.registerPhone, api),
     takeLatest(Phone.DIAL_PHONE, PhoneSagas.dialPhone, api),
-    takeLatest(Phone.HANGUP_PHONE, PhoneSagas.hangupPhone, api)
+    takeLatest(Phone.HANGUP_PHONE, PhoneSagas.hangupPhone, api),
+
+    /**
+     * Messages
+     */
+    fork(MessageSagas.pollMessages, api),
+    takeLatest(Messages.START_POLLING, MessageSagas.startPollingMessages, api)
   ]);
 }
