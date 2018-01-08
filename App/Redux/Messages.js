@@ -7,6 +7,13 @@ const INITIAL_STATE = {
   data: []
 };
 
+export const startPollingMessages = ({ address, exploratoryMessage }) => ({
+  type: START_POLLING,
+  payload: { address, exploratoryMessage }
+});
+
+export const stopPollingMessages = () => setRoomId(null);
+
 export const setRoomId = roomId => ({
   type: SET_ROOM_ID,
   payload: { roomId }

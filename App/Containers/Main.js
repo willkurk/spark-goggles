@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Button, View } from 'react-native';
 import { connect } from 'react-redux';
+import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
   registerPhone,
   requestPermissions,
@@ -25,10 +26,16 @@ class Main extends Component {
       localView: 'localView',
       remoteView: 'remoteView'
     });
+
+    this.props.startPollingMessages({
+      address,
+      exploratoryMessage: 'Hello!'
+    });
   };
 
   handleHangup = () => {
     this.props.hangupPhone();
+    this.props.stopPollingMessages();
   };
 
   render() {
@@ -63,6 +70,8 @@ Main.propTypes = {
   requestPermissions: PropTypes.func.isRequired,
   dialPhone: PropTypes.func.isRequired,
   hangupPhone: PropTypes.func.isRequired,
+  startPollingMessages: PropTypes.func.isRequired,
+  stopPollingMessages: PropTypes.func.isRequired,
 
   phone: PropTypes.shape({
     permissionsGranted: PropTypes.bool.isRequired,
@@ -87,7 +96,9 @@ const mapDispatchToProps = {
   registerPhone,
   requestPermissions,
   dialPhone,
-  hangupPhone
+  hangupPhone,
+  startPollingMessages,
+  stopPollingMessages
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

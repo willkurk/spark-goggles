@@ -12,7 +12,7 @@ export function* startPollingMessages(api, { payload }) {
   const accessToken = yield select(getAccessToken);
 
   const { data } = yield call(api.sendMessage, accessToken, {
-    text: 'Hello',
+    text: payload.exploratoryMessage,
     toPersonEmail: payload.address
   });
 
