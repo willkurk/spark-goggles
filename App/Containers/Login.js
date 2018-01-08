@@ -33,7 +33,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  error: PropTypes.object, // eslint-disable-line
+  error: PropTypes.string,
   loading: PropTypes.bool.isRequired,
   authenticate: PropTypes.func.isRequired
 };

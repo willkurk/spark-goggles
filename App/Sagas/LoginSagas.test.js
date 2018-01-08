@@ -1,55 +1,60 @@
 import { call, put } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
-import FixtureApi from '../Services/FixtureApi';
-import { authenticate, refreshToken } from './LoginSagas';
-import { set } from '../Redux/Login';
+import api from '../Services/FixtureApi';
+import { authenticate } from './LoginSagas';
+import { grantAccess, revokeAccess } from '../Redux/Login';
 
 const code = '1234567890';
-const accessToken = '0987654321';
 
-test('authenticate', () => {
-  const saga = authenticate(FixtureApi, { payload: { code } });
+const oauth = {
+  callback: () => Promise.resolve(code)
+};
 
-  expect(saga.next().value).toEqual(put(set({ data: null, loading: true })));
-  expect(saga.next().value).toEqual(call(FixtureApi.authenticate, code));
+describe('authenticate', () => {
+  let saga;
 
-  expect(saga.next(accessToken).value).toEqual(
-    put(
-      set({
-        loading: false,
-        data: {
-          accessToken
-        }
-      })
-    )
-  );
+  beforeEach(() => {
+    saga = authenticate(api, oauth);
+  });
 
-  expect(saga.next().value).toEqual(
-    put(NavigationActions.navigate({ routeName: 'Main' }))
-  );
-});
+  test('when already authenticated', () => {
+    expect(saga.next().value).toEqual(call(api.getAccessToken));
+    expect(saga.next().value).toEqual(put(grantAccess()));
+    expect(saga.next().value).toEqual(
+      put(NavigationActions.navigate({ routeName: 'Main' }))
+    );
+  });
 
-test('authenticate failure', () => {
-  const saga = authenticate(FixtureApi, { payload: { code } });
+  describe('oauth', () => {
+    beforeEach(() => {
+      expect(saga.next().value).toEqual(call(api.getAccessToken));
 
-  saga.next();
-  saga.next();
+      expect(saga.throw(new Error('Not authenticated')).value).toEqual(
+        call(oauth.callback)
+      );
+    });
 
-  expect(saga.throw(new Error('whoops')).value).toEqual(
-    put(set({ loading: false, data: null }))
-  );
-});
+    test('when successful', () => {
+      expect(saga.next(code).value).toEqual(call(api.authenticate, code));
+      expect(saga.next().value).toEqual(put(grantAccess()));
+      expect(saga.next().value).toEqual(
+        put(NavigationActions.navigate({ routeName: 'Main' }))
+      );
+    });
 
-test('refreshToken', () => {
-  const saga = refreshToken(FixtureApi);
+    test('when redirect contains an error param', () => {
+      const error = new Error('Bad things happened.');
+      expect(saga.throw(error).value).toEqual(put(revokeAccess(error.message)));
+    });
 
-  expect(saga.next().value).toEqual(call(FixtureApi.getAccessToken));
+    test('when code is invalid', () => {
+      const error = new Error('Invalid code');
+      expect(saga.next(code).value).toEqual(call(api.authenticate, code));
+      expect(saga.throw(error).value).toEqual(put(revokeAccess(error.message)));
+    });
 
-  expect(saga.next(accessToken).value).toEqual(
-    put(set({ loading: false, data: { accessToken } }))
-  );
-
-  expect(saga.next().value).toEqual(
-    put(NavigationActions.navigate({ routeName: 'Main' }))
-  );
+    test('when code is not present', () => {
+      expect(saga.next(undefined).done).toBeTruthy();
+    });
+  });
 });

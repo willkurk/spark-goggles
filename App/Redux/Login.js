@@ -7,18 +7,13 @@ export const authenticate = () => ({
 });
 
 export const grantAccess = () => ({
-  type: GRANT_ACCESS,
-  payload: {
-    error: null,
-    loading: false
-  }
+  type: GRANT_ACCESS
 });
 
-export const revokeAccess = (error = null) => ({
+export const revokeAccess = error => ({
   type: REVOKE_ACCESS,
   payload: {
-    error: error,
-    loading: false
+    error: error
   }
 });
 
@@ -30,11 +25,13 @@ const INITIAL_STATE = {
 export function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case AUTHENTICATE:
-      return { ...INITIAL_STATE, loading: true };
+      return { error: null, loading: true };
 
     case GRANT_ACCESS:
+      return { error: null, loading: false };
+
     case REVOKE_ACCESS:
-      return { ...state, ...action.payload };
+      return { error: action.payload.error, loading: false };
 
     default:
       return state;

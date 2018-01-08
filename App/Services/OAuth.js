@@ -25,11 +25,11 @@ const checkAuthorization = value => {
   }
 
   if (redirectUri.protocol !== location.protocol) {
-    throw new Error('Invalid redirect protocol.');
+    return;
   }
 
   if (redirectUri.host !== location.host) {
-    throw new Error('Invalid redirect host.');
+    return;
   }
 
   return params.code;

@@ -1,11 +1,11 @@
 import {
   reducer,
-  set,
   authenticate,
-  refreshToken,
-  SET,
+  grantAccess,
+  revokeAccess,
   AUTHENTICATE,
-  REFRESH_TOKEN
+  GRANT_ACCESS,
+  REVOKE_ACCESS
 } from './Login';
 
 const user = {
@@ -14,45 +14,51 @@ const user = {
   token: '12456789'
 };
 
-test('set', () => {
-  expect(set({ data: user, loading: false })).toEqual({
-    type: SET,
+test('authenticate', () => {
+  expect(authenticate()).toEqual({
+    type: AUTHENTICATE
+  });
+});
+
+test('grantAccess', () => {
+  expect(grantAccess()).toEqual({
+    type: GRANT_ACCESS
+  });
+});
+
+test('revokeAccess', () => {
+  expect(revokeAccess('Ahh!')).toEqual({
+    type: REVOKE_ACCESS,
     payload: {
-      data: user,
-      loading: false
+      error: 'Ahh!'
     }
   });
 });
 
-test('authenticate', () => {
-  const code = '123456789';
-
-  expect(authenticate({ code })).toEqual({
-    type: AUTHENTICATE,
-    payload: { code }
-  });
-});
-
-test('refreshToken', () => {
-  expect(refreshToken()).toEqual({
-    type: REFRESH_TOKEN
-  });
-});
-
 describe('reducer', () => {
-  let state;
-
-  beforeEach(() => {
-    state = reducer(undefined, { type: 'foobar' });
-  });
-
   test('initial state', () => {
-    expect(state).toEqual({ data: null, loading: false });
+    expect(reducer(undefined, {})).toEqual({ error: null, loading: false });
   });
 
-  test('set', () => {
-    expect(reducer(state, set({ data: user, loading: false }))).toEqual({
-      data: user,
+  test('authenticate', () => {
+    expect(reducer({ error: 'foo', loading: false }, authenticate())).toEqual({
+      error: null,
+      loading: true
+    });
+  });
+
+  test('grantAccess', () => {
+    expect(reducer({ error: 'foo', loading: true }, grantAccess())).toEqual({
+      error: null,
+      loading: false
+    });
+  });
+
+  test('revokeAccess', () => {
+    expect(
+      reducer({ error: 'foo', loading: true }, revokeAccess('bar'))
+    ).toEqual({
+      error: 'bar',
       loading: false
     });
   });

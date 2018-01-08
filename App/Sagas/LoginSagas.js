@@ -17,18 +17,16 @@ export function* authenticate(api, oauth) {
      * Spark redirected back to our app with an authorization code. If
      * we have an authorization code, we can use it to get an access token.
      */
-    const code = yield call(oauth.callback);
-
-    if (!code) {
-      return;
-    }
-
     try {
-      yield call(api.authenticate, code);
-      yield put(grantAccess());
-      yield put(NavigationActions.navigate({ routeName: 'Main' }));
+      const code = yield call(oauth.callback);
+
+      if (code) {
+        yield call(api.authenticate, code);
+        yield put(grantAccess());
+        yield put(NavigationActions.navigate({ routeName: 'Main' }));
+      }
     } catch (error) {
-      yield put(revokeAccess(error));
+      yield put(revokeAccess(error.message));
     }
   }
 }
