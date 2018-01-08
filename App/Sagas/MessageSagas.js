@@ -24,7 +24,7 @@ const messageFilter = existing => {
 
   return message => {
     // Skip messages that don't have files
-    if (!message.files && !message.files.length) {
+    if (!message.files || !message.files.length) {
       return false;
     }
 
