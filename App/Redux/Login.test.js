@@ -8,12 +8,6 @@ import {
   REVOKE_ACCESS
 } from './Login';
 
-const user = {
-  name: 'Rick',
-  sub: 'ross',
-  token: '12456789'
-};
-
 test('authenticate', () => {
   expect(authenticate()).toEqual({
     type: AUTHENTICATE
