@@ -7,13 +7,15 @@ import rootSaga from '../Sagas/';
 import { reducer as nav } from './NavigationRedux';
 import { reducer as login } from './Login';
 import { reducer as phone } from './Phone';
+import { reducer as messages } from './Messages';
 
 /* ------------- Assemble The Reducers ------------- */
 
 export const reducers = combineReducers({
   login,
   nav,
-  phone
+  phone,
+  messages
 });
 
 export default () => {
