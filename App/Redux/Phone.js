@@ -43,7 +43,7 @@ export const hangupPhone = () => ({
 
 const INITIAL_STATE = {
   registration: { complete: false, loading: false },
-  call: { connected: false, outgoing: false, address: null },
+  call: { connected: null, outgoing: false, address: null },
   permissionsGranted: false
 };
 

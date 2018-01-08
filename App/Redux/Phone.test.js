@@ -39,7 +39,7 @@ test('updatePermissions', () => {
 
 test('updateCall', () => {
   const call = {
-    connected: false,
+    connected: null,
     outgoing: true
   };
 
@@ -90,7 +90,7 @@ describe('reducer', () => {
   test('initial state', () => {
     expect(state).toEqual({
       call: {
-        connected: false,
+        connected: null,
         outgoing: false,
         address: null
       },
@@ -122,11 +122,11 @@ describe('reducer', () => {
   test('updateCall', () => {
     const nextState = reducer(
       state,
-      updateCall({ address: 'foo@bar.com', connected: false, outgoing: true })
+      updateCall({ address: 'foo@bar.com', connected: null, outgoing: true })
     );
 
     expect(nextState).toMatchObject({
-      call: { address: 'foo@bar.com', connected: false, outgoing: true }
+      call: { address: 'foo@bar.com', connected: null, outgoing: true }
     });
 
     expect(

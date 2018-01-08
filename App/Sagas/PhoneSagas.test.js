@@ -80,7 +80,7 @@ test('dialPhone', () => {
   });
 
   expect(saga.next().value).toEqual(
-    put(updateCall({ address, outgoing: true, connected: false }))
+    put(updateCall({ address, outgoing: true, connected: null }))
   );
 
   expect(saga.next().value).toEqual(
@@ -97,11 +97,13 @@ test('dialPhone failure', () => {
   saga.next();
 
   expect(saga.throw(new Error('Whoops!')).value).toEqual(
-    put(updateCall({ outgoing: false, connected: false }))
+    put(updateCall({ outgoing: false, connected: null }))
   );
 });
 
 test('observePhone', () => {
+  Date.now = jest.fn(() => 1515449329114);
+
   const saga = observePhone(FixtureApi);
 
   const channel = eventChannel(_emit => {
@@ -115,13 +117,13 @@ test('observePhone', () => {
   expect(saga.next(channel).value).toEqual(take(channel));
 
   expect(saga.next({ type: 'phone:connected' }).value).toEqual(
-    put(updateCall({ outgoing: false, connected: true }))
+    put(updateCall({ outgoing: false, connected: new Date(Date.now()) }))
   );
 
   expect(saga.next(channel).value).toEqual(take(channel));
 
   expect(saga.next({ type: 'phone:disconnected' }).value).toEqual(
-    put(updateCall({ outgoing: false, connected: false, address: null }))
+    put(updateCall({ outgoing: false, connected: null, address: null }))
   );
 
   saga.return(); // this generator contains a while loop. abort it.

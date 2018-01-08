@@ -40,12 +40,14 @@ export function* observePhone(api) {
 
     switch (event.type) {
       case 'phone:connected':
-        yield put(updateCall({ outgoing: false, connected: true }));
+        yield put(
+          updateCall({ outgoing: false, connected: new Date(Date.now()) })
+        );
         break;
 
       case 'phone:disconnected':
         yield put(
-          updateCall({ outgoing: false, connected: false, address: null })
+          updateCall({ outgoing: false, connected: null, address: null })
         );
         break;
 
@@ -77,13 +79,13 @@ export function* requestPermissions(api) {
  */
 export function* dialPhone(api, { payload }) {
   yield put(
-    updateCall({ outgoing: true, connected: false, address: payload.address })
+    updateCall({ outgoing: true, connected: null, address: payload.address })
   );
 
   try {
     yield call(api.dialPhone, payload);
   } catch (err) {
-    yield put(updateCall({ outgoing: false, connected: false }));
+    yield put(updateCall({ outgoing: false, connected: null }));
   }
 }
 
