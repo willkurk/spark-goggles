@@ -39,6 +39,8 @@ class Main extends Component {
   };
 
   render() {
+    console.log('RENDER', this.props);
+
     const { call } = this.props.phone;
 
     return (
@@ -73,6 +75,11 @@ Main.propTypes = {
   startPollingMessages: PropTypes.func.isRequired,
   stopPollingMessages: PropTypes.func.isRequired,
 
+  messages: PropTypes.shape({
+    roomId: PropTypes.string,
+    data: PropTypes.array
+  }),
+
   phone: PropTypes.shape({
     permissionsGranted: PropTypes.bool.isRequired,
 
@@ -88,8 +95,9 @@ Main.propTypes = {
   }).isRequired
 };
 
-const mapStateToProps = ({ phone }) => ({
-  phone
+const mapStateToProps = ({ phone, messages }) => ({
+  phone,
+  messages
 });
 
 const mapDispatchToProps = {
