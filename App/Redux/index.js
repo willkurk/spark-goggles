@@ -5,7 +5,7 @@ import rootSaga from '../Sagas/';
 /* ------------- Import our reducers ---------- */
 
 import { reducer as nav } from './NavigationRedux';
-import { reducer as currentUser } from './CurrentUser';
+import { reducer as currentUser } from './Login';
 import { reducer as phone } from './Phone';
 
 /* ------------- Assemble The Reducers ------------- */

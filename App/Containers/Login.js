@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Text, View, Button } from 'react-native';
-import { authenticate } from '../Redux/CurrentUser';
+import { authenticate } from '../Redux/Login';
 import OAuth from '../Services/OAuth';
 import Loading from '../Components/Loading';
 import styles from './Styles/LoginStyles';

@@ -1,8 +1,8 @@
 import { call, put } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
-import FixtureApi from '../../App/Services/FixtureApi';
-import { authenticate, refreshToken } from './CurrentUserSagas';
-import { set } from '../Redux/CurrentUser';
+import FixtureApi from '../Services/FixtureApi';
+import { authenticate, refreshToken } from './LoginSagas';
+import { set } from '../Redux/Login';
 
 const code = '1234567890';
 const accessToken = '0987654321';

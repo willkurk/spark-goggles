@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
-import { grantAccess, revokeAccess } from '../Redux/CurrentUser';
+import { grantAccess, revokeAccess } from '../Redux/Login';
 
 export function* authenticate(api, oauth) {
   try {

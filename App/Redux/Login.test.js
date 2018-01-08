@@ -6,7 +6,7 @@ import {
   SET,
   AUTHENTICATE,
   REFRESH_TOKEN
-} from './CurrentUser';
+} from './Login';
 
 const user = {
   name: 'Rick',
