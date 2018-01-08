@@ -1,7 +1,6 @@
 import { delay } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { appendMessages, setRoomId } from '../Redux/Messages';
-import { getAccessToken } from '../Redux/CurrentUser';
 
 export function* startPollingMessages(api, { payload }) {
   /**
@@ -9,7 +8,7 @@ export function* startPollingMessages(api, { payload }) {
    * room ID for the 1 on 1 video chat we're in. Easiest way to do that
    * is to send a DM and get the roomId back in the response.
    */
-  const accessToken = yield select(getAccessToken);
+  const accessToken = yield call(api.getAccessToken);
 
   const { data } = yield call(api.sendMessage, accessToken, {
     text: payload.exploratoryMessage,
@@ -38,11 +37,10 @@ const messageFilter = existing => {
 };
 
 export function* pollMessages(api) {
+  const accessToken = yield call(api.getAccessToken);
+
   while (true) {
-    const current = yield select(state => ({
-      ...state.messages,
-      accessToken: getAccessToken(state)
-    }));
+    const current = yield select(state => state.messages);
 
     if (!current.roomId) {
       // If the roomId isn't set, then we'll skip this iteration.
@@ -50,7 +48,7 @@ export function* pollMessages(api) {
       continue;
     }
 
-    const { data } = yield call(api.getMessages, current.accessToken, {
+    const { data } = yield call(api.getMessages, accessToken, {
       roomId: current.roomId
     });
 

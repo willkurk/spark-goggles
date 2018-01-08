@@ -1,24 +1,26 @@
 import { delay } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
-import { getAccessToken } from '../Redux/CurrentUser';
+import { call, put } from 'redux-saga/effects';
 import { setRoomId, appendMessages } from '../Redux/Messages';
 import { startPollingMessages, pollMessages } from './MessageSagas';
-import FixtureApi from '../Services/FixtureApi';
+import api from '../Services/FixtureApi';
 
 const roomId = 'abc-def-ghi';
 const address = 'user@example.com';
 const accessToken = '1234567890';
 
 test('startPollingMessages', () => {
-  const saga = startPollingMessages(FixtureApi, {
-    payload: { address }
+  const saga = startPollingMessages(api, {
+    payload: {
+      address,
+      exploratoryMessage: 'hi'
+    }
   });
 
-  expect(saga.next().value).toEqual(select(getAccessToken));
+  expect(saga.next().value).toEqual(call(api.getAccessToken));
 
   expect(saga.next(accessToken).value).toEqual(
-    call(FixtureApi.sendMessage, accessToken, {
-      text: 'Hello',
+    call(api.sendMessage, accessToken, {
+      text: 'hi',
       toPersonEmail: address
     })
   );
@@ -28,9 +30,11 @@ test('startPollingMessages', () => {
 
 describe('pollMessages', () => {
   test('when the roomId is null', () => {
-    const saga = pollMessages(FixtureApi);
+    const saga = pollMessages(api);
 
-    expect(saga.next().value).toMatchObject({
+    expect(saga.next().value).toEqual(call(api.getAccessToken));
+
+    expect(saga.next(accessToken).value).toMatchObject({
       SELECT: { args: [] }
     });
 
@@ -58,14 +62,16 @@ describe('pollMessages', () => {
       }
     };
 
-    const saga = pollMessages(FixtureApi);
+    const saga = pollMessages(api);
 
-    expect(saga.next().value).toMatchObject({
+    expect(saga.next().value).toEqual(call(api.getAccessToken));
+
+    expect(saga.next(accessToken).value).toMatchObject({
       SELECT: { args: [] }
     });
 
     expect(saga.next(current).value).toEqual(
-      call(FixtureApi.getMessages, accessToken, { roomId })
+      call(api.getMessages, accessToken, { roomId })
     );
 
     expect(saga.next(response).value).toEqual(
