@@ -41,6 +41,21 @@ class Main extends Component {
   render() {
     const { call } = this.props.phone;
 
+    const goodMessages = this.props.messages.data.filter(message => {
+      if (!message.files || !message.files.length) {
+        return false;
+      }
+
+      if (new Date(message.created) < call.connected) {
+        return false;
+      }
+
+      return true;
+    });
+
+    console.log('All:', this.props.messages.data);
+    console.log('Current:', goodMessages);
+
     return (
       <View style={styles.container}>
         <View
@@ -87,7 +102,7 @@ Main.propTypes = {
     }).isRequired,
 
     call: PropTypes.shape({
-      connected: PropTypes.bool.isRequired,
+      connected: PropTypes.instanceOf(Date),
       outgoing: PropTypes.bool.isRequired
     }).isRequired
   }).isRequired
