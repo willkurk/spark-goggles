@@ -7,7 +7,7 @@ import OAuth from '../Services/OAuth';
 import Loading from '../Components/Loading';
 import styles from './Styles/LoginStyles';
 
-const mapStateToProps = state => state.currentUser;
+const mapStateToProps = state => state.login;
 const mapDispatchToProps = { authenticate };
 
 class Login extends Component {
