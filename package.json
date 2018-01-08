@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && npm cache clean --force",
+    "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf node_modules && yarn",
     "clean:android": "cd android/ && ./gradlew clean && cd .. && react-native run-android",
     "clean:all": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && npm i",
     "test": "jest",

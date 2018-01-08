@@ -1,4 +1,8 @@
 export default {
+  getAccessToken() {
+    return Promise.resolve('0987654321');
+  },
+
   authenticate(_code) {
     return Promise.resolve('0987654321');
   },

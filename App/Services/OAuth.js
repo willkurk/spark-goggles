@@ -12,7 +12,7 @@ const generateRedirectURL = state => {
     state
   });
 
-  return `${Config.SPARK_ENDPOINT}?${query}`;
+  return `${Config.SPARK_ENDPOINT}/authorize?${query}`;
 };
 
 const checkAuthorization = value => {
@@ -21,18 +21,18 @@ const checkAuthorization = value => {
   const params = querystring.parse(location.query);
 
   if (params.error) {
-    return { error: params.error };
+    throw new Error(params.error);
   }
 
   if (redirectUri.protocol !== location.protocol) {
-    return {};
+    return;
   }
 
   if (redirectUri.host !== location.host) {
-    return {};
+    return;
   }
 
-  return { code: params.code };
+  return params.code;
 };
 
 const redirect = () => {
@@ -43,7 +43,7 @@ const callback = async () => {
   const initialURL = await Linking.getInitialURL();
 
   if (!initialURL) {
-    return {};
+    return;
   }
 
   return checkAuthorization(initialURL);

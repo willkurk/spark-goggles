@@ -1,16 +1,17 @@
 import { takeLatest, all, fork } from 'redux-saga/effects';
 import Api from '../Services/Api';
+import OAuth from '../Services/OAuth';
 import FixtureApi from '../Services/FixtureApi';
 import DebugConfig from '../Config/DebugConfig';
 
 /* ------------- Types ------------- */
 
-import * as CurrentUser from '../Redux/CurrentUser';
+import * as Login from '../Redux/Login';
 import * as Phone from '../Redux/Phone';
 
 /* ------------- Sagas ------------- */
 
-import * as CurrentUserSagas from './CurrentUserSagas';
+import * as LoginSagas from './LoginSagas';
 import * as PhoneSagas from './PhoneSagas';
 
 /* ------------- API ------------- */
@@ -24,9 +25,9 @@ const api = DebugConfig.useFixtures ? FixtureApi : Api.create();
 export default function* root() {
   yield all([
     /**
-     * Current user
+     * Login
      */
-    takeLatest(CurrentUser.AUTHENTICATE, CurrentUserSagas.authenticate, api),
+    takeLatest(Login.AUTHENTICATE, LoginSagas.authenticate, api, OAuth),
 
     /**
      * Phone

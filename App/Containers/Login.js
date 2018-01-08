@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Button } from 'react-native';
-import { authenticate } from '../Redux/CurrentUser';
+import { Text, View, Button } from 'react-native';
+import { authenticate } from '../Redux/Login';
 import OAuth from '../Services/OAuth';
+import Loading from '../Components/Loading';
 import styles from './Styles/LoginStyles';
 
-const mapDispatchToProps = {
-  authenticate
-};
+const mapStateToProps = state => state.currentUser;
+const mapDispatchToProps = { authenticate };
 
 class Login extends Component {
-  async componentDidMount() {
-    const auth = await OAuth.callback();
-
-    if (auth.code) {
-      this.props.authenticate({ code: auth.code });
-    }
-
-    if (auth.error) {
-      console.error(auth.error);
-    }
+  componentDidMount() {
+    this.props.authenticate();
   }
 
   render() {
+    if (!this.props.loading) {
+      return <Loading text="Loading..." />;
+    }
+
+    if (this.props.error) {
+      return <Text style={styles.error}>{this.props.error}</Text>;
+    }
+
     return (
       <View style={styles.container}>
         <Button title="Login" onPress={() => OAuth.redirect()} />
@@ -33,11 +33,9 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  authenticate: PropTypes.func.isRequired,
-
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired
-  }).isRequired
+  error: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  authenticate: PropTypes.func.isRequired
 };
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

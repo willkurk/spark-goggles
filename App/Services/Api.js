@@ -46,6 +46,7 @@ const create = () => {
     addPhoneListener,
     removePhoneListener,
     authenticate: Phone.authenticate,
+    getAccessToken: Phone.getAccessToken,
     registerPhone: Phone.register,
     hangupPhone: Phone.hangup
   };
