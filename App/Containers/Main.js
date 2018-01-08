@@ -39,8 +39,6 @@ class Main extends Component {
   };
 
   render() {
-    console.log('RENDER', this.props);
-
     const { call } = this.props.phone;
 
     return (

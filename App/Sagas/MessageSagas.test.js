@@ -46,9 +46,9 @@ describe('pollMessages', () => {
   });
 
   test('recurring with roomId', () => {
-    const one = { id: '1', files: ['foo'] };
-    const two = { id: '2', files: [] };
-    const three = { id: '3', files: ['bar'] };
+    const one = { id: '1' };
+    const two = { id: '2' };
+    const three = { id: '3' };
 
     const current = {
       roomId,
@@ -75,7 +75,7 @@ describe('pollMessages', () => {
     );
 
     expect(saga.next(response).value).toEqual(
-      put(appendMessages({ data: [three] }))
+      put(appendMessages({ data: [two, three] }))
     );
 
     expect(saga.next().value).toEqual(call(delay, 7000));

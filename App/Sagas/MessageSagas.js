@@ -20,20 +20,7 @@ export function* startPollingMessages(api, { payload }) {
 
 const messageFilter = existing => {
   const ids = existing.map(message => message.id);
-
-  return message => {
-    // Skip messages that don't have files
-    if (!message.files || !message.files.length) {
-      return false;
-    }
-
-    // Skip messages that are already in state.
-    if (ids.includes(message.id)) {
-      return false;
-    }
-
-    return true;
-  };
+  return message => !ids.includes(message.id);
 };
 
 export function* pollMessages(api) {
