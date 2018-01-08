@@ -62,16 +62,16 @@ const create = () => {
     buildClient(accessToken).get(buildQuery('/messages', params));
 
   return {
-    requestPermission,
-    dialPhone,
     addPhoneListener,
-    removePhoneListener,
-    sendMessage,
-    getMessages,
     authenticate: Phone.authenticate,
     getAccessToken: Phone.getAccessToken,
+    dialPhone,
+    getMessages,
+    hangupPhone: Phone.hangup,
     registerPhone: Phone.register,
-    hangupPhone: Phone.hangup
+    removePhoneListener,
+    requestPermission,
+    sendMessage
   };
 };
 
