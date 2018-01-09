@@ -40,18 +40,27 @@ export function* observePhone(api) {
     const event = yield take(channel);
 
     switch (event.type) {
-      case 'phone:connected':
+      case 'phone:connected': {
         yield put(
           updateCall({ outgoing: false, connected: new Date(Date.now()) })
         );
-        break;
 
-      case 'phone:disconnected':
+        const address = yield select(state => state.phone.call.address);
+
+        yield put(
+          startPollingMessages({ exploratoryMessage: 'Hello', address })
+        );
+
+        break;
+      }
+
+      case 'phone:disconnected': {
         yield put(
           updateCall({ outgoing: false, connected: null, address: null })
         );
         yield put(stopPollingMessages());
         break;
+      }
 
       default:
         break;

@@ -26,11 +26,6 @@ class Main extends Component {
       localView: 'localView',
       remoteView: 'remoteView'
     });
-
-    this.props.startPollingMessages({
-      address,
-      exploratoryMessage: 'Hello!'
-    });
   };
 
   handleHangup = () => {
