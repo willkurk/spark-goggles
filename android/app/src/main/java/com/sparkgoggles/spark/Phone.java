@@ -44,7 +44,6 @@ public class Phone extends ReactContextBaseJavaModule {
 
     public Phone(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
-        events = reactApplicationContext.getJSModule(RCTDeviceEventEmitter.class);
     }
 
     @Override
@@ -52,6 +51,7 @@ public class Phone extends ReactContextBaseJavaModule {
         Activity activity = getCurrentActivity();
         Application application = activity.getApplication();
 
+        events = getReactApplicationContext().getJSModule(RCTDeviceEventEmitter.class);
         authenticator = new OAuthAuthenticator(clientId, clientSecret, scope, redirectUri);
         spark = new Spark(application, authenticator);
     }
