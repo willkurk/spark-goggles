@@ -39,6 +39,8 @@ export default function* root() {
     takeLatest(Phone.REGISTER_PHONE, PhoneSagas.registerPhone, api),
     takeLatest(Phone.DIAL_PHONE, PhoneSagas.dialPhone, api),
     takeLatest(Phone.HANGUP_PHONE, PhoneSagas.hangupPhone, api),
+    takeLatest(Phone.ACCEPT_INCOMING_CALL, PhoneSagas.acceptIncomingCall, api),
+    takeLatest(Phone.REJECT_INCOMING_CALL, PhoneSagas.rejectIncomingCall, api),
 
     /**
      * Messages

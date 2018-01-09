@@ -111,3 +111,19 @@ export function* hangupPhone(api) {
     // nothing?
   }
 }
+
+export function* acceptIncomingCall(api) {
+  try {
+    yield call(api.acceptIncomingCall);
+  } catch (err) {
+    yield put(callDisconnected());
+  }
+}
+
+export function* rejectIncomingCall(api) {
+  try {
+    yield call(api.rejectIncomingCall);
+  } catch (err) {
+    yield put(callDisconnected());
+  }
+}
