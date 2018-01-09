@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import { Text, Button, View, Image } from 'react-native';
 import Camera from 'react-native-camera';
+=======
+import { Button, View, Image } from 'react-native';
+>>>>>>> Extract camera component. This is basically broken, yo
 import { connect } from 'react-redux';
 import { sendMessage } from '../Redux/Messages';
 import {
@@ -15,9 +19,14 @@ import {
 import VideoView from '../Components/VideoView';
 import Dialer from '../Components/Dialer';
 import Loading from '../Components/Loading';
+import Camera from '../Components/Camera';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
+  state = {
+    isTakingSnapshot: false
+  };
+
   componentDidMount() {
     this.props.registerPhone();
     this.props.requestPermissions();
@@ -38,22 +47,12 @@ class Main extends Component {
     });
   };
 
-  handleCameraRef = camera => {
-    this.camera = camera;
-  };
-
-  handleSendImage = async () => {
-    try {
-      const picture = await this.camera.capture({ metadata: {} });
-
-      this.props.sendMessage({
-        text: 'Hi there',
-        toPersonEmail: 'thomas@promptworks.com',
-        files: [picture.path]
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  handleSendImage = picture => {
+    this.props.sendMessage({
+      text: 'Here is what I see...',
+      toPersonEmail: this.props.phone.call.address,
+      files: [picture.path]
+    });
   };
 
   render() {
