@@ -15,7 +15,8 @@ import {
   registerPhoneSuccess,
   registerPhoneError,
   updatePermissions,
-  updateCall
+  callConnected,
+  callDisconnected
 } from '../Redux/Phone';
 
 import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
@@ -89,12 +90,13 @@ test('dialPhone failure', () => {
   saga.next();
 
   expect(saga.throw(new Error('Whoops!')).value).toEqual(
-    put(updateCall({ outgoing: false, connected: null }))
+    put(callDisconnected())
   );
 });
 
 test('observePhone', () => {
-  Date.now = jest.fn(() => 1515449329114);
+  const now = Date.now();
+  Date.now = jest.fn(() => now);
 
   const saga = observePhone(FixtureApi);
 
@@ -109,7 +111,7 @@ test('observePhone', () => {
   expect(saga.next(channel).value).toEqual(take(channel));
 
   expect(saga.next({ type: 'phone:connected' }).value).toEqual(
-    put(updateCall({ outgoing: false, connected: new Date(Date.now()) }))
+    put(callConnected())
   );
   expect(saga.next().value).toMatchObject({ SELECT: { args: [] } });
 
@@ -125,7 +127,7 @@ test('observePhone', () => {
   expect(saga.next(channel).value).toEqual(take(channel));
 
   expect(saga.next({ type: 'phone:disconnected' }).value).toEqual(
-    put(updateCall({ outgoing: false, connected: null, address: null }))
+    put(callDisconnected())
   );
 
   expect(saga.next().value).toEqual(put(stopPollingMessages()));

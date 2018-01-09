@@ -4,9 +4,10 @@ import { PermissionsAndroid } from 'react-native';
 import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
   updatePermissions,
-  updateCall,
   registerPhoneSuccess,
-  registerPhoneError
+  registerPhoneError,
+  callConnected,
+  callDisconnected
 } from '../Redux/Phone';
 
 /**
@@ -40,9 +41,7 @@ export function* observePhone(api) {
 
     switch (event.type) {
       case 'phone:connected': {
-        yield put(
-          updateCall({ outgoing: false, connected: new Date(Date.now()) })
-        );
+        yield put(callConnected());
 
         const address = yield select(state => state.phone.call.address);
 
@@ -54,9 +53,7 @@ export function* observePhone(api) {
       }
 
       case 'phone:disconnected': {
-        yield put(
-          updateCall({ outgoing: false, connected: null, address: null })
-        );
+        yield put(callDisconnected());
         yield put(stopPollingMessages());
         break;
       }
@@ -91,7 +88,7 @@ export function* dialPhone(api, { payload }) {
   try {
     yield call(api.dialPhone, payload);
   } catch (err) {
-    yield put(updateCall({ outgoing: false, connected: null }));
+    yield put(callDisconnected());
   }
 }
 
