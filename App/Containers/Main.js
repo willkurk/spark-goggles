@@ -72,18 +72,24 @@ class Main extends Component {
         {call.incoming && (
           <View style={{ flex: 1 }}>
             <Loading text={`${call.address} is calling...`} />
-            <Button title="Answer" onPress={this.handleAcceptCall} />
+            <Button
+              title="Answer"
+              onPress={this.handleAcceptCall}
+              style={{ marginBottom: 10 }}
+            />
             <Button title="Reject" onPress={this.props.rejectIncomingCall} />
           </View>
         )}
 
         {call.outgoing && <Loading text={`Calling ${call.address}...`} />}
 
-        {call.connected || call.outgoing ? (
+        {(call.connected || call.outgoing) && (
           <Button title="Hangup call" onPress={this.props.hangupPhone} />
-        ) : (
-          <Dialer onCall={this.handleCall} />
         )}
+
+        {!call.connected &&
+          !call.incoming &&
+          !call.outgoing && <Dialer onCall={this.handleCall} />}
       </View>
     );
   }

@@ -164,8 +164,11 @@ public class Phone extends ReactContextBaseJavaModule {
                 if (result.isSuccessful()) {
                     activeCall = incomingCall;
                     incomingCall = null;
+                    events.emit("phone:connected", Person.getOther(activeCall));
                     promise.resolve(true);
                 } else {
+                    events.emit("phone:disconnected", Person.getOther(incomingCall));
+                    incomingCall = null;
                     promise.reject(E_ANSWER_ERROR, result.getError().toString());
                 }
             }
@@ -177,6 +180,8 @@ public class Phone extends ReactContextBaseJavaModule {
         incomingCall.reject(new CompletionHandler<Void>() {
             @Override
             public void onComplete(Result<Void> result) {
+                events.emit("phone:disconnected", Person.getOther(incomingCall));
+
                 if (result.isSuccessful()) {
                     incomingCall = null;
                     promise.resolve(true);

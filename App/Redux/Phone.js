@@ -68,7 +68,8 @@ export const hangupPhone = () => ({
 export const acceptIncomingCall = ({ localView, remoteView }) => ({
   type: ACCEPT_INCOMING_CALL,
   payload: {
-    call: { localView, remoteView }
+    localView,
+    remoteView
   }
 });
 

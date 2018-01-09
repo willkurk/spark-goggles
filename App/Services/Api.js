@@ -35,6 +35,10 @@ const create = () => {
     return Phone.dial(address, localView, remoteView);
   };
 
+  const acceptIncomingCall = async ({ localView, remoteView }) => {
+    return Phone.answerIncomingCall(localView, remoteView);
+  };
+
   const addPhoneListener = callback => {
     PHONE_EVENTS.forEach(eventName => {
       DeviceEventEmitter.addListener(eventName, payload => {
@@ -73,7 +77,7 @@ const create = () => {
     buildClient(accessToken).get(buildQuery('/messages', params));
 
   return {
-    acceptIncomingCall: Phone.acceptIncomingCall,
+    acceptIncomingCall,
     addPhoneListener,
     authenticate: Phone.authenticate,
     getAccessToken: Phone.getAccessToken,

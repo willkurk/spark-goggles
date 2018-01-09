@@ -1,5 +1,5 @@
 export default {
-  acceptIncomingCall(_localView, _remoteView) {
+  acceptIncomingCall({ _localView, _remoteView }) {
     return Promise.resolve(true);
   },
 
