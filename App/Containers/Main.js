@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Button, View, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
   registerPhone,
   requestPermissions,
   dialPhone,
-  hangupPhone
+  hangupPhone,
+  acceptIncomingCall,
+  rejectIncomingCall
 } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
 import Dialer from '../Components/Dialer';
@@ -28,8 +29,11 @@ class Main extends Component {
     });
   };
 
-  handleHangup = () => {
-    this.props.hangupPhone();
+  handleAcceptCall = () => {
+    this.props.acceptIncomingCall({
+      localView: 'localView',
+      remoteView: 'remoteView'
+    });
   };
 
   render() {
@@ -59,18 +63,26 @@ class Main extends Component {
           <VideoView style={styles.remoteView} nativeID="remoteView" />
         </View>
 
-        {call.outgoing && <Loading text={`Calling ${call.address}...`} />}
-
-        {call.connected || call.outgoing ? (
-          <Button title="Hangup call" onPress={this.handleHangup} />
-        ) : (
-          <Dialer onCall={this.handleCall} />
-        )}
-
         {messages.map(message =>
           message.files.map(file => (
             <Image style={{ flex: 1 }} source={file} key={file.uri} />
           ))
+        )}
+
+        {call.incoming && (
+          <View style={{ flex: 1 }}>
+            <Loading text={`${call.address} is calling...`} />
+            <Button title="Answer" onPress={this.handleAcceptCall} />
+            <Button title="Reject" onPress={this.props.rejectIncomingCall} />
+          </View>
+        )}
+
+        {call.outgoing && <Loading text={`Calling ${call.address}...`} />}
+
+        {call.connected || call.outgoing ? (
+          <Button title="Hangup call" onPress={this.props.hangupPhone} />
+        ) : (
+          <Dialer onCall={this.handleCall} />
         )}
       </View>
     );
@@ -80,10 +92,12 @@ class Main extends Component {
 Main.propTypes = {
   registerPhone: PropTypes.func.isRequired,
   requestPermissions: PropTypes.func.isRequired,
+
   dialPhone: PropTypes.func.isRequired,
   hangupPhone: PropTypes.func.isRequired,
-  startPollingMessages: PropTypes.func.isRequired,
-  stopPollingMessages: PropTypes.func.isRequired,
+
+  acceptIncomingCall: PropTypes.func.isRequired,
+  rejectIncomingCall: PropTypes.func.isRequired,
 
   messages: PropTypes.shape({
     roomId: PropTypes.string,
@@ -100,7 +114,9 @@ Main.propTypes = {
 
     call: PropTypes.shape({
       connected: PropTypes.instanceOf(Date),
-      outgoing: PropTypes.bool.isRequired
+      outgoing: PropTypes.bool.isRequired,
+      incoming: PropTypes.bool.isRequired,
+      address: PropTypes.string
     }).isRequired
   }).isRequired
 };
@@ -115,8 +131,8 @@ const mapDispatchToProps = {
   requestPermissions,
   dialPhone,
   hangupPhone,
-  startPollingMessages,
-  stopPollingMessages
+  acceptIncomingCall,
+  rejectIncomingCall
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
