@@ -1,32 +1,24 @@
 import {
-  updateRegistration,
   updatePermissions,
-  updateCall,
   requestPermissions,
   registerPhone,
+  registerPhoneSuccess,
+  registerPhoneError,
   dialPhone,
   hangupPhone,
+  callConnected,
+  callDisconnected,
   reducer,
-  UPDATE_REGISTRATION,
   UPDATE_PERMISSIONS,
-  UPDATE_CALL,
   REQUEST_PERMISSIONS,
   REGISTER_PHONE,
+  REGISTER_PHONE_SUCCESS,
+  REGISTER_PHONE_ERROR,
   DIAL_PHONE,
-  HANGUP_PHONE
+  HANGUP_PHONE,
+  CALL_CONNECTED,
+  CALL_DISCONNECTED
 } from './Phone';
-
-test('updateRegistration', () => {
-  expect(updateRegistration({ loading: true, complete: false })).toEqual({
-    type: UPDATE_REGISTRATION,
-    payload: {
-      registration: {
-        loading: true,
-        complete: false
-      }
-    }
-  });
-});
 
 test('updatePermissions', () => {
   expect(updatePermissions(true)).toEqual({
@@ -34,18 +26,6 @@ test('updatePermissions', () => {
     payload: {
       permissionsGranted: true
     }
-  });
-});
-
-test('updateCall', () => {
-  const call = {
-    connected: false,
-    outgoing: true
-  };
-
-  expect(updateCall(call)).toEqual({
-    type: UPDATE_CALL,
-    payload: { call }
   });
 });
 
@@ -57,7 +37,37 @@ test('requestPermissions', () => {
 
 test('registerPhone', () => {
   expect(registerPhone()).toEqual({
-    type: REGISTER_PHONE
+    type: REGISTER_PHONE,
+    payload: {
+      registration: {
+        loading: true,
+        complete: false
+      }
+    }
+  });
+});
+
+test('registerPhoneSuccess', () => {
+  expect(registerPhoneSuccess()).toEqual({
+    type: REGISTER_PHONE_SUCCESS,
+    payload: {
+      registration: {
+        loading: false,
+        complete: true
+      }
+    }
+  });
+});
+
+test('registerPhoneError', () => {
+  expect(registerPhoneError()).toEqual({
+    type: REGISTER_PHONE_ERROR,
+    payload: {
+      registration: {
+        loading: false,
+        complete: false
+      }
+    }
   });
 });
 
@@ -80,6 +90,34 @@ test('hangupPhone', () => {
   });
 });
 
+test('callConnected', () => {
+  const now = Date.now();
+  Date.now = jest.fn(() => now);
+
+  expect(callConnected()).toEqual({
+    type: CALL_CONNECTED,
+    payload: {
+      call: {
+        connected: new Date(Date.now()),
+        outgoing: false
+      }
+    }
+  });
+});
+
+test('callDisconnected', () => {
+  expect(callDisconnected()).toEqual({
+    type: CALL_DISCONNECTED,
+    payload: {
+      call: {
+        connected: null,
+        address: null,
+        outgoing: false
+      }
+    }
+  });
+});
+
 describe('reducer', () => {
   let state;
 
@@ -90,7 +128,7 @@ describe('reducer', () => {
   test('initial state', () => {
     expect(state).toEqual({
       call: {
-        connected: false,
+        connected: null,
         outgoing: false,
         address: null
       },
@@ -102,12 +140,28 @@ describe('reducer', () => {
     });
   });
 
-  test('updateRegistration', () => {
-    expect(
-      reducer(state, updateRegistration({ loading: true, complete: false }))
-    ).toMatchObject({
+  test('registerPhone', () => {
+    expect(reducer(state, registerPhone())).toMatchObject({
       registration: {
         loading: true,
+        complete: false
+      }
+    });
+  });
+
+  test('registerPhoneSuccess', () => {
+    expect(reducer(state, registerPhoneSuccess())).toMatchObject({
+      registration: {
+        loading: false,
+        complete: true
+      }
+    });
+  });
+
+  test('registerPhoneError', () => {
+    expect(reducer(state, registerPhoneError())).toMatchObject({
+      registration: {
+        loading: false,
         complete: false
       }
     });
@@ -119,20 +173,47 @@ describe('reducer', () => {
     });
   });
 
-  test('updateCall', () => {
+  test('dialPhone', () => {
+    const address = 'user@example.com';
+
+    expect(reducer(state, dialPhone({ address }))).toMatchObject({
+      call: { address, connected: null, outgoing: true }
+    });
+  });
+
+  test('callConnected', () => {
+    const now = Date.now();
+    Date.now = jest.fn(() => now);
+
     const nextState = reducer(
-      state,
-      updateCall({ address: 'foo@bar.com', connected: false, outgoing: true })
+      { ...state, call: { ...state.call, address: 'foo@bar.com' } },
+      callConnected()
     );
 
     expect(nextState).toMatchObject({
-      call: { address: 'foo@bar.com', connected: false, outgoing: true }
+      call: {
+        address: 'foo@bar.com',
+        connected: new Date(Date.now()),
+        outgoing: false
+      }
     });
+  });
 
-    expect(
-      reducer(nextState, updateCall({ connected: true, outgoing: false }))
-    ).toMatchObject({
-      call: { address: 'foo@bar.com', connected: true, outgoing: false }
+  test('callDisconnected', () => {
+    const nextState = reducer(
+      {
+        ...state,
+        call: { ...state.call, address: 'foo@bar.com', connected: new Date() }
+      },
+      callDisconnected()
+    );
+
+    expect(nextState).toMatchObject({
+      call: {
+        address: null,
+        connected: null,
+        outgoing: false
+      }
     });
   });
 });

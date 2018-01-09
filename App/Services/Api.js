@@ -1,3 +1,6 @@
+import axios from 'axios';
+import Config from 'react-native-config';
+import querystring from 'querystring';
 import {
   NativeModules,
   PermissionsAndroid,
@@ -12,6 +15,10 @@ const PHONE_EVENTS = [
   'phone:disconnected',
   'phone:media-changed'
 ];
+
+const buildQuery = (url, params) => {
+  return `${url}?${querystring.stringify(params)}`;
+};
 
 const create = () => {
   const requestPermission = async name => {
@@ -40,15 +47,31 @@ const create = () => {
     });
   };
 
+  const buildClient = token =>
+    axios.create({
+      baseURL: Config.SPARK_ENDPOINT,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+  const sendMessage = (accessToken, params) =>
+    buildClient(accessToken).post('/messages', params);
+
+  const getMessages = (accessToken, params) =>
+    buildClient(accessToken).get(buildQuery('/messages', params));
+
   return {
-    requestPermission,
-    dialPhone,
     addPhoneListener,
-    removePhoneListener,
     authenticate: Phone.authenticate,
     getAccessToken: Phone.getAccessToken,
+    dialPhone,
+    getMessages,
+    hangupPhone: Phone.hangup,
     registerPhone: Phone.register,
-    hangupPhone: Phone.hangup
+    removePhoneListener,
+    requestPermission,
+    sendMessage
   };
 };
 

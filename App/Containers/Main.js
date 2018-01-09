@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Button, View } from 'react-native';
+import { Button, View, Image } from 'react-native';
 import { connect } from 'react-redux';
+import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
   registerPhone,
   requestPermissions,
@@ -34,6 +35,18 @@ class Main extends Component {
   render() {
     const { call } = this.props.phone;
 
+    const messages = this.props.messages.data.filter(message => {
+      if (!message.files || !message.files.length) {
+        return false;
+      }
+
+      if (new Date(message.created) < call.connected) {
+        return false;
+      }
+
+      return true;
+    });
+
     return (
       <View style={styles.container}>
         <View
@@ -53,6 +66,12 @@ class Main extends Component {
         ) : (
           <Dialer onCall={this.handleCall} />
         )}
+
+        {messages.map(message =>
+          message.files.map(file => (
+            <Image style={{ flex: 1 }} source={file} key={file.uri} />
+          ))
+        )}
       </View>
     );
   }
@@ -63,6 +82,13 @@ Main.propTypes = {
   requestPermissions: PropTypes.func.isRequired,
   dialPhone: PropTypes.func.isRequired,
   hangupPhone: PropTypes.func.isRequired,
+  startPollingMessages: PropTypes.func.isRequired,
+  stopPollingMessages: PropTypes.func.isRequired,
+
+  messages: PropTypes.shape({
+    roomId: PropTypes.string,
+    data: PropTypes.array
+  }),
 
   phone: PropTypes.shape({
     permissionsGranted: PropTypes.bool.isRequired,
@@ -73,21 +99,24 @@ Main.propTypes = {
     }).isRequired,
 
     call: PropTypes.shape({
-      connected: PropTypes.bool.isRequired,
+      connected: PropTypes.instanceOf(Date),
       outgoing: PropTypes.bool.isRequired
     }).isRequired
   }).isRequired
 };
 
-const mapStateToProps = ({ phone }) => ({
-  phone
+const mapStateToProps = ({ phone, messages }) => ({
+  phone,
+  messages
 });
 
 const mapDispatchToProps = {
   registerPhone,
   requestPermissions,
   dialPhone,
-  hangupPhone
+  hangupPhone,
+  startPollingMessages,
+  stopPollingMessages
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

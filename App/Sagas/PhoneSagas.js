@@ -1,10 +1,13 @@
 import { eventChannel } from 'redux-saga';
-import { call, put, take } from 'redux-saga/effects';
+import { call, put, take, select } from 'redux-saga/effects';
 import { PermissionsAndroid } from 'react-native';
+import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
-  updateRegistration,
   updatePermissions,
-  updateCall
+  registerPhoneSuccess,
+  registerPhoneError,
+  callConnected,
+  callDisconnected
 } from '../Redux/Phone';
 
 /**
@@ -12,13 +15,11 @@ import {
  * I think this is basically just establishing a websocket connection.
  */
 export function* registerPhone(api) {
-  yield put(updateRegistration({ loading: true, complete: false }));
-
   try {
     yield call(api.registerPhone);
-    yield put(updateRegistration({ loading: false, complete: true }));
+    yield put(registerPhoneSuccess());
   } catch (err) {
-    yield put(updateRegistration({ loading: false, complete: false }));
+    yield put(registerPhoneError());
   }
 }
 
@@ -39,15 +40,23 @@ export function* observePhone(api) {
     const event = yield take(channel);
 
     switch (event.type) {
-      case 'phone:connected':
-        yield put(updateCall({ outgoing: false, connected: true }));
-        break;
+      case 'phone:connected': {
+        yield put(callConnected());
 
-      case 'phone:disconnected':
+        const address = yield select(state => state.phone.call.address);
+
         yield put(
-          updateCall({ outgoing: false, connected: false, address: null })
+          startPollingMessages({ exploratoryMessage: 'Hello', address })
         );
+
         break;
+      }
+
+      case 'phone:disconnected': {
+        yield put(callDisconnected());
+        yield put(stopPollingMessages());
+        break;
+      }
 
       default:
         break;
@@ -76,14 +85,10 @@ export function* requestPermissions(api) {
  * we'll find out that the call has been accepted.
  */
 export function* dialPhone(api, { payload }) {
-  yield put(
-    updateCall({ outgoing: true, connected: false, address: payload.address })
-  );
-
   try {
     yield call(api.dialPhone, payload);
   } catch (err) {
-    yield put(updateCall({ outgoing: false, connected: false }));
+    yield put(callDisconnected());
   }
 }
 
