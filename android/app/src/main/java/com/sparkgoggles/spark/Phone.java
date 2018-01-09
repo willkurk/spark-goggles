@@ -10,11 +10,13 @@ import com.ciscospark.androidsdk.Spark;
 import com.ciscospark.androidsdk.auth.OAuthAuthenticator;
 import com.ciscospark.androidsdk.phone.Call;
 import com.ciscospark.androidsdk.phone.MediaOption;
+import com.ciscospark.androidsdk.phone.Phone.IncomingCallListener;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.sparkgoggles.BuildConfig;
 
@@ -26,6 +28,8 @@ public class Phone extends ReactContextBaseJavaModule {
     private final String E_DIAL_ERROR = "E_DIAL_ERROR";
     private final String E_HANGUP_ERROR = "E_HANGUP_ERROR";
     private final String E_AUTHENTICATION_ERROR = "E_AUTHENTICATION_ERROR";
+    private final String E_ANSWER_ERROR = "E_ANSWER_ERROR";
+    private final String E_REJECT_ERROR = "E_REJECT_ERROR";
 
     private final String clientId = BuildConfig.SPARK_CLIENT_ID;
     private final String clientSecret = BuildConfig.SPARK_CLIENT_SECRET;
@@ -33,11 +37,14 @@ public class Phone extends ReactContextBaseJavaModule {
     private final String redirectUri = BuildConfig.SPARK_REDIRECT_URI;
 
     private Call activeCall;
+    private Call incomingCall;
     private Spark spark;
     private OAuthAuthenticator authenticator;
+    private RCTDeviceEventEmitter events;
 
     public Phone(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
+        events = reactApplicationContext.getJSModule(RCTDeviceEventEmitter.class);
     }
 
     @Override
@@ -92,6 +99,7 @@ public class Phone extends ReactContextBaseJavaModule {
             @Override
             public void onComplete(Result<Void> result) {
                 if (result.isSuccessful()) {
+                    setupIncomingCallListener();
                     promise.resolve(true);
                 } else {
                     promise.reject(E_REGISTER_ERROR, result.getError().toString());
@@ -107,12 +115,7 @@ public class Phone extends ReactContextBaseJavaModule {
             return;
         }
 
-        View localView = findViewById(localViewId);
-        View remoteView = findViewById(remoteViewId);
-
-        MediaOption mediaOption = MediaOption.audioVideo(localView, remoteView);
-
-        spark.phone().dial(address, mediaOption, new CompletionHandler<Call>() {
+        spark.phone().dial(address, getMediaOption(localViewId, remoteViewId), new CompletionHandler<Call>() {
             @Override
             public void onComplete(Result<Call> result) {
                 if (result.isSuccessful()) {
@@ -148,6 +151,47 @@ public class Phone extends ReactContextBaseJavaModule {
         });
     }
 
+    @ReactMethod
+    public void answerIncomingCall(String localViewId, String remoteViewId, final Promise promise) {
+        incomingCall.answer(getMediaOption(localViewId, remoteViewId), new CompletionHandler<Void>() {
+            @Override
+            public void onComplete(Result<Void> result) {
+                if (result.isSuccessful()) {
+                    activeCall = incomingCall;
+                    incomingCall = null;
+                    promise.resolve(true);
+                } else {
+                    promise.reject(E_ANSWER_ERROR, result.getError().toString());
+                }
+            }
+        });
+    }
+
+    @ReactMethod
+    public void rejectIncomingCall(final Promise promise) {
+        incomingCall.reject(new CompletionHandler<Void>() {
+            @Override
+            public void onComplete(Result<Void> result) {
+                if (result.isSuccessful()) {
+                    incomingCall = null;
+                    promise.resolve(true);
+                } else {
+                    promise.reject(E_REJECT_ERROR, result.getError().toString());
+                }
+            }
+        });
+    }
+
+    private void setupIncomingCallListener() {
+        spark.phone().setIncomingCallListener(new IncomingCallListener() {
+            @Override
+            public void onIncomingCall(Call call) {
+                incomingCall = call;
+                events.emit("phone:incoming", Person.getOther(call));
+            }
+        });
+    }
+
     private Call getActiveCall() {
         if (activeCall == null) {
             return null;
@@ -166,8 +210,14 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     private void setActiveCall(Call call) {
-        call.setObserver(new PhoneObserver(getReactApplicationContext()));
+        call.setObserver(new PhoneObserver(events));
         activeCall = call;
+    }
+
+    private MediaOption getMediaOption(String localViewId, String remoteViewId) {
+        View localView = findViewById(localViewId);
+        View remoteView = findViewById(remoteViewId);
+        return MediaOption.audioVideo(localView, remoteView);
     }
 
     private View findViewById(String nativeId) {
