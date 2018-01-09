@@ -11,6 +11,7 @@ const { Phone } = NativeModules;
 
 const PHONE_EVENTS = [
   'phone:ringing',
+  'phone:incoming',
   'phone:connected',
   'phone:disconnected',
   'phone:media-changed'
@@ -62,6 +63,7 @@ const create = () => {
     buildClient(accessToken).get(buildQuery('/messages', params));
 
   return {
+    acceptIncomingCall: Phone.acceptIncomingCall,
     addPhoneListener,
     authenticate: Phone.authenticate,
     getAccessToken: Phone.getAccessToken,
@@ -69,6 +71,7 @@ const create = () => {
     getMessages,
     hangupPhone: Phone.hangup,
     registerPhone: Phone.register,
+    rejectIncomingCall: Phone.rejectIncomingCall,
     removePhoneListener,
     requestPermission,
     sendMessage

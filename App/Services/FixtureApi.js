@@ -1,6 +1,6 @@
 export default {
-  getAccessToken() {
-    return Promise.resolve('0987654321');
+  acceptIncomingCall(_localView, _remoteView) {
+    return Promise.resolve(true);
   },
 
   addPhoneListener() {
@@ -13,6 +13,10 @@ export default {
 
   dialPhone() {
     return Promise.resolve(true);
+  },
+
+  getAccessToken() {
+    return Promise.resolve('0987654321');
   },
 
   getMessages() {
@@ -28,6 +32,10 @@ export default {
   },
 
   registerPhone() {
+    return Promise.resolve(true);
+  },
+
+  rejectIncomingCall() {
     return Promise.resolve(true);
   },
 
