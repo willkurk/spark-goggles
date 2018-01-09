@@ -1,11 +1,12 @@
 import { eventChannel } from 'redux-saga';
-import { call, put, take } from 'redux-saga/effects';
+import { call, put, take, select } from 'redux-saga/effects';
 import { PermissionsAndroid } from 'react-native';
-import { stopPollingMessages } from '../Redux/Messages';
+import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
-  updateRegistration,
   updatePermissions,
-  updateCall
+  updateCall,
+  registerPhoneSuccess,
+  registerPhoneError
 } from '../Redux/Phone';
 
 /**
@@ -13,13 +14,11 @@ import {
  * I think this is basically just establishing a websocket connection.
  */
 export function* registerPhone(api) {
-  yield put(updateRegistration({ loading: true, complete: false }));
-
   try {
     yield call(api.registerPhone);
-    yield put(updateRegistration({ loading: false, complete: true }));
+    yield put(registerPhoneSuccess());
   } catch (err) {
-    yield put(updateRegistration({ loading: false, complete: false }));
+    yield put(registerPhoneError());
   }
 }
 
@@ -89,10 +88,6 @@ export function* requestPermissions(api) {
  * we'll find out that the call has been accepted.
  */
 export function* dialPhone(api, { payload }) {
-  yield put(
-    updateCall({ outgoing: true, connected: null, address: payload.address })
-  );
-
   try {
     yield call(api.dialPhone, payload);
   } catch (err) {

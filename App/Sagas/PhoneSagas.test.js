@@ -12,12 +12,13 @@ import {
 } from './PhoneSagas';
 
 import {
-  updateRegistration,
+  registerPhoneSuccess,
+  registerPhoneError,
   updatePermissions,
   updateCall
 } from '../Redux/Phone';
 
-import { stopPollingMessages } from '../Redux/Messages';
+import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 
 const address = 'meatloaf';
 const localView = 'localView';
@@ -26,15 +27,9 @@ const remoteView = 'remoteView';
 test('registerPhone', () => {
   const saga = registerPhone(FixtureApi);
 
-  expect(saga.next().value).toEqual(
-    put(updateRegistration({ loading: true, complete: false }))
-  );
-
   expect(saga.next().value).toEqual(call(FixtureApi.registerPhone));
 
-  expect(saga.next().value).toEqual(
-    put(updateRegistration({ loading: false, complete: true }))
-  );
+  expect(saga.next().value).toEqual(put(registerPhoneSuccess()));
 });
 
 test('registerPhone failure', () => {
@@ -44,7 +39,7 @@ test('registerPhone failure', () => {
   saga.next();
 
   expect(saga.throw(new Error('my error')).value).toEqual(
-    put(updateRegistration({ loading: false, complete: false }))
+    put(registerPhoneError())
   );
 
   expect(saga.next().done).toBeTruthy();
@@ -82,10 +77,6 @@ test('dialPhone', () => {
   });
 
   expect(saga.next().value).toEqual(
-    put(updateCall({ address, outgoing: true, connected: null }))
-  );
-
-  expect(saga.next().value).toEqual(
     call(FixtureApi.dialPhone, { address, localView, remoteView })
   );
 });
@@ -95,7 +86,6 @@ test('dialPhone failure', () => {
     payload: { address, localView, remoteView }
   });
 
-  saga.next();
   saga.next();
 
   expect(saga.throw(new Error('Whoops!')).value).toEqual(
@@ -120,6 +110,16 @@ test('observePhone', () => {
 
   expect(saga.next({ type: 'phone:connected' }).value).toEqual(
     put(updateCall({ outgoing: false, connected: new Date(Date.now()) }))
+  );
+  expect(saga.next().value).toMatchObject({ SELECT: { args: [] } });
+
+  expect(saga.next(address).value).toEqual(
+    put(
+      startPollingMessages({
+        exploratoryMessage: 'Hello',
+        address
+      })
+    )
   );
 
   expect(saga.next(channel).value).toEqual(take(channel));

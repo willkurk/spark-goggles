@@ -1,32 +1,22 @@
 import {
-  updateRegistration,
   updatePermissions,
   updateCall,
   requestPermissions,
   registerPhone,
+  registerPhoneSuccess,
+  registerPhoneError,
   dialPhone,
   hangupPhone,
   reducer,
-  UPDATE_REGISTRATION,
   UPDATE_PERMISSIONS,
   UPDATE_CALL,
   REQUEST_PERMISSIONS,
   REGISTER_PHONE,
+  REGISTER_PHONE_SUCCESS,
+  REGISTER_PHONE_ERROR,
   DIAL_PHONE,
   HANGUP_PHONE
 } from './Phone';
-
-test('updateRegistration', () => {
-  expect(updateRegistration({ loading: true, complete: false })).toEqual({
-    type: UPDATE_REGISTRATION,
-    payload: {
-      registration: {
-        loading: true,
-        complete: false
-      }
-    }
-  });
-});
 
 test('updatePermissions', () => {
   expect(updatePermissions(true)).toEqual({
@@ -57,7 +47,37 @@ test('requestPermissions', () => {
 
 test('registerPhone', () => {
   expect(registerPhone()).toEqual({
-    type: REGISTER_PHONE
+    type: REGISTER_PHONE,
+    payload: {
+      registration: {
+        loading: true,
+        complete: false
+      }
+    }
+  });
+});
+
+test('registerPhoneSuccess', () => {
+  expect(registerPhoneSuccess()).toEqual({
+    type: REGISTER_PHONE_SUCCESS,
+    payload: {
+      registration: {
+        loading: false,
+        complete: true
+      }
+    }
+  });
+});
+
+test('registerPhoneError', () => {
+  expect(registerPhoneError()).toEqual({
+    type: REGISTER_PHONE_ERROR,
+    payload: {
+      registration: {
+        loading: false,
+        complete: false
+      }
+    }
   });
 });
 
@@ -102,12 +122,28 @@ describe('reducer', () => {
     });
   });
 
-  test('updateRegistration', () => {
-    expect(
-      reducer(state, updateRegistration({ loading: true, complete: false }))
-    ).toMatchObject({
+  test('registerPhone', () => {
+    expect(reducer(state, registerPhone())).toMatchObject({
       registration: {
         loading: true,
+        complete: false
+      }
+    });
+  });
+
+  test('registerPhoneSuccess', () => {
+    expect(reducer(state, registerPhoneSuccess())).toMatchObject({
+      registration: {
+        loading: false,
+        complete: true
+      }
+    });
+  });
+
+  test('registerPhoneError', () => {
+    expect(reducer(state, registerPhoneError())).toMatchObject({
+      registration: {
+        loading: false,
         complete: false
       }
     });
@@ -116,6 +152,14 @@ describe('reducer', () => {
   test('updatePermissions', () => {
     expect(reducer(state, updatePermissions(true))).toMatchObject({
       permissionsGranted: true
+    });
+  });
+
+  test('dialPhone', () => {
+    const address = 'user@example.com';
+
+    expect(reducer(state, dialPhone({ address }))).toMatchObject({
+      call: { address, connected: null, outgoing: true }
     });
   });
 
