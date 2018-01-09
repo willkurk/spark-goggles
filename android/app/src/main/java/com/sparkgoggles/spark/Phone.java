@@ -83,6 +83,7 @@ public class Phone extends ReactContextBaseJavaModule {
     private void getAccessToken(final Promise promise) {
         if (!authenticator.isAuthorized()) {
             promise.resolve(null);
+            return;
         }
 
         authenticator.getToken(new CompletionHandler<String>() {
