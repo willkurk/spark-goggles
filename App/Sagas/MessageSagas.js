@@ -2,6 +2,11 @@ import { delay } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { appendMessages, setRoomId } from '../Redux/Messages';
 
+export function* sendMessage(api, { payload }) {
+  const accessToken = yield call(api.getAccessToken);
+  yield call(api.sendMessage, accessToken, payload);
+}
+
 export function* startPollingMessages(api, { payload }) {
   /**
    * At this point, we just have an email address. We need to find the

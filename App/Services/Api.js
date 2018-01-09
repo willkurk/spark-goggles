@@ -70,8 +70,23 @@ const create = () => {
       }
     });
 
-  const sendMessage = (accessToken, params) =>
-    buildClient(accessToken).post('/messages', params);
+  const sendMessage = (accessToken, { files, ...params }) => {
+    const form = new FormData();
+
+    Object.keys(params).forEach(key => {
+      form.append(key, params[key]);
+    });
+
+    (files || []).forEach(uri => {
+      form.append('files', {
+        uri,
+        type: 'image/jpeg',
+        name: `${Date.now()}.jpeg`
+      });
+    });
+
+    return buildClient(accessToken).post('/messages', form);
+  };
 
   const getMessages = (accessToken, params) =>
     buildClient(accessToken).get(buildQuery('/messages', params));

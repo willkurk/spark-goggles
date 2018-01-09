@@ -46,6 +46,7 @@ export default function* root() {
      * Messages
      */
     fork(MessageSagas.pollMessages, api),
-    takeLatest(Messages.START_POLLING, MessageSagas.startPollingMessages, api)
+    takeLatest(Messages.START_POLLING, MessageSagas.startPollingMessages, api),
+    takeLatest(Messages.SEND_MESSAGE, MessageSagas.sendMessage, api)
   ]);
 }

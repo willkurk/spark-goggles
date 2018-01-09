@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Text, Button, View, Image } from 'react-native';
+import Camera from 'react-native-camera';
 import { connect } from 'react-redux';
+import { sendMessage } from '../Redux/Messages';
 import {
   registerPhone,
   requestPermissions,
@@ -16,7 +18,7 @@ import Loading from '../Components/Loading';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
-  async componentDidMount() {
+  componentDidMount() {
     this.props.registerPhone();
     this.props.requestPermissions();
   }
@@ -34,6 +36,24 @@ class Main extends Component {
       localView: 'localView',
       remoteView: 'remoteView'
     });
+  };
+
+  handleCameraRef = camera => {
+    this.camera = camera;
+  };
+
+  handleSendImage = async () => {
+    try {
+      const picture = await this.camera.capture({ metadata: {} });
+
+      this.props.sendMessage({
+        text: 'Hi there',
+        toPersonEmail: 'thomas@promptworks.com',
+        files: [picture.path]
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   render() {
@@ -120,6 +140,8 @@ Main.propTypes = {
   acceptIncomingCall: PropTypes.func.isRequired,
   rejectIncomingCall: PropTypes.func.isRequired,
 
+  sendMessage: PropTypes.func.isRequired,
+
   messages: PropTypes.shape({
     roomId: PropTypes.string,
     data: PropTypes.array
@@ -155,7 +177,8 @@ const mapDispatchToProps = {
   dialPhone,
   hangupPhone,
   acceptIncomingCall,
-  rejectIncomingCall
+  rejectIncomingCall,
+  sendMessage
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
