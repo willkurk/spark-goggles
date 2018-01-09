@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Config from 'react-native-config';
+import Reactotron from 'reactotron-react-native';
 import querystring from 'querystring';
 import {
   NativeModules,
@@ -36,8 +37,17 @@ const create = () => {
 
   const addPhoneListener = callback => {
     PHONE_EVENTS.forEach(eventName => {
-      DeviceEventEmitter.addListener(eventName, _event => {
-        callback({ type: eventName });
+      DeviceEventEmitter.addListener(eventName, payload => {
+        Reactotron.display({
+          name: 'PHONE',
+          preview: eventName,
+          value: {
+            type: eventName,
+            payload
+          }
+        });
+
+        callback({ type: eventName, payload });
       });
     });
   };
