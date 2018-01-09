@@ -40,10 +40,7 @@ describe('pollMessages', () => {
     });
 
     expect(saga.next({ roomId: null }).value).toEqual(call(delay, 7000));
-
-    expect(saga.next().value).toMatchObject({
-      SELECT: { args: [] }
-    });
+    expect(saga.next().value).toEqual(call(api.getAccessToken));
   });
 
   test('recurring with roomId', () => {
@@ -92,9 +89,6 @@ describe('pollMessages', () => {
     );
 
     expect(saga.next().value).toEqual(call(delay, 7000));
-
-    expect(saga.next().value).toMatchObject({
-      SELECT: { args: [] }
-    });
+    expect(saga.next().value).toEqual(call(api.getAccessToken));
   });
 });

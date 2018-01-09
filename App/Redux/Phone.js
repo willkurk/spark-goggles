@@ -111,7 +111,7 @@ export const callIncoming = ({ address }) => ({
 
 const INITIAL_STATE = {
   registration: { complete: false, loading: false },
-  call: { connected: null, outgoing: false, address: null },
+  call: { connected: null, outgoing: false, incoming: false, address: null },
   permissionsGranted: false
 };
 
