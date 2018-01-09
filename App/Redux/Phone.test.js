@@ -6,8 +6,11 @@ import {
   registerPhoneError,
   dialPhone,
   hangupPhone,
+  acceptIncomingCall,
+  rejectIncomingCall,
   callConnected,
   callDisconnected,
+  callIncoming,
   reducer,
   UPDATE_PERMISSIONS,
   REQUEST_PERMISSIONS,
@@ -16,8 +19,11 @@ import {
   REGISTER_PHONE_ERROR,
   DIAL_PHONE,
   HANGUP_PHONE,
+  ACCEPT_INCOMING_CALL,
+  REJECT_INCOMING_CALL,
   CALL_CONNECTED,
-  CALL_DISCONNECTED
+  CALL_DISCONNECTED,
+  CALL_INCOMING
 } from './Phone';
 
 test('updatePermissions', () => {
@@ -90,6 +96,24 @@ test('hangupPhone', () => {
   });
 });
 
+test('acceptIncomingCall', () => {
+  const localView = 'localView';
+  const remoteView = 'remoteView';
+
+  expect(acceptIncomingCall({ localView, remoteView })).toEqual({
+    type: ACCEPT_INCOMING_CALL,
+    payload: {
+      call: { localView, remoteView }
+    }
+  });
+});
+
+test('rejectIncomingCall', () => {
+  expect(rejectIncomingCall()).toEqual({
+    type: REJECT_INCOMING_CALL
+  });
+});
+
 test('callConnected', () => {
   const now = Date.now();
   Date.now = jest.fn(() => now);
@@ -99,7 +123,8 @@ test('callConnected', () => {
     payload: {
       call: {
         connected: new Date(Date.now()),
-        outgoing: false
+        outgoing: false,
+        incoming: false
       }
     }
   });
@@ -112,7 +137,22 @@ test('callDisconnected', () => {
       call: {
         connected: null,
         address: null,
-        outgoing: false
+        outgoing: false,
+        incoming: false
+      }
+    }
+  });
+});
+
+test('callIncoming', () => {
+  const address = 'user@example.com';
+
+  expect(callIncoming({ address })).toEqual({
+    type: CALL_INCOMING,
+    payload: {
+      call: {
+        address,
+        incoming: true
       }
     }
   });
@@ -130,6 +170,7 @@ describe('reducer', () => {
       call: {
         connected: null,
         outgoing: false,
+        incoming: false,
         address: null
       },
       registration: {
@@ -213,6 +254,17 @@ describe('reducer', () => {
         address: null,
         connected: null,
         outgoing: false
+      }
+    });
+  });
+
+  test('callIncoming', () => {
+    const address = 'user@example.com';
+
+    expect(reducer(state, callIncoming({ address }))).toMatchObject({
+      call: {
+        address,
+        incoming: true
       }
     });
   });

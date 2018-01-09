@@ -110,10 +110,9 @@ test('observePhone', () => {
 
   expect(saga.next(channel).value).toEqual(take(channel));
 
-  expect(saga.next({ type: 'phone:connected' }).value).toEqual(
-    put(callConnected())
-  );
-  expect(saga.next().value).toMatchObject({ SELECT: { args: [] } });
+  expect(
+    saga.next({ type: 'phone:connected', payload: { email: address } }).value
+  ).toEqual(put(callConnected()));
 
   expect(saga.next(address).value).toEqual(
     put(

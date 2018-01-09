@@ -1,5 +1,5 @@
 import { eventChannel } from 'redux-saga';
-import { call, put, take, select } from 'redux-saga/effects';
+import { call, put, take } from 'redux-saga/effects';
 import { PermissionsAndroid } from 'react-native';
 import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
@@ -7,7 +7,8 @@ import {
   registerPhoneSuccess,
   registerPhoneError,
   callConnected,
-  callDisconnected
+  callDisconnected,
+  callIncoming
 } from '../Redux/Phone';
 
 /**
@@ -37,24 +38,32 @@ export function* observePhone(api) {
   const channel = yield call(createChannel);
 
   while (true) {
-    const event = yield take(channel);
+    const action = yield take(channel);
 
-    switch (event.type) {
+    switch (action.type) {
       case 'phone:connected': {
         yield put(callConnected());
-
-        const address = yield select(state => state.phone.call.address);
-
         yield put(
-          startPollingMessages({ exploratoryMessage: 'Hello', address })
+          startPollingMessages({
+            exploratoryMessage: 'Hello',
+            address: action.payload.email
+          })
         );
-
         break;
       }
 
       case 'phone:disconnected': {
         yield put(callDisconnected());
         yield put(stopPollingMessages());
+        break;
+      }
+
+      case 'phone:incoming': {
+        yield put(
+          callIncoming({
+            address: action.payload.email
+          })
+        );
         break;
       }
 
@@ -100,5 +109,21 @@ export function* hangupPhone(api) {
     yield call(api.hangupPhone);
   } catch (err) {
     // nothing?
+  }
+}
+
+export function* acceptIncomingCall(api) {
+  try {
+    yield call(api.acceptIncomingCall);
+  } catch (err) {
+    yield put(callDisconnected());
+  }
+}
+
+export function* rejectIncomingCall(api) {
+  try {
+    yield call(api.rejectIncomingCall);
+  } catch (err) {
+    yield put(callDisconnected());
   }
 }
