@@ -24,13 +24,15 @@ const messageFilter = existing => {
 };
 
 export function* pollMessages(api) {
-  const accessToken = yield call(api.getAccessToken);
-
   while (true) {
+    const accessToken = yield call(api.getAccessToken);
     const current = yield select(state => state.messages);
 
-    if (!current.roomId) {
-      // If the roomId isn't set, then we'll skip this iteration.
+    /**
+     * If we don't have an access token or the roomId is not set,
+     * we'll skip this iteration and move on.
+     */
+    if (!accessToken || !current.roomId) {
       yield call(delay, 7000);
       continue;
     }
