@@ -1,6 +1,7 @@
 import { eventChannel } from 'redux-saga';
 import { call, put, take } from 'redux-saga/effects';
 import { PermissionsAndroid } from 'react-native';
+import { stopPollingMessages } from '../Redux/Messages';
 import {
   updateRegistration,
   updatePermissions,
@@ -49,6 +50,7 @@ export function* observePhone(api) {
         yield put(
           updateCall({ outgoing: false, connected: null, address: null })
         );
+        yield put(stopPollingMessages());
         break;
 
       default:

@@ -7,6 +7,7 @@ import api from '../Services/FixtureApi';
 const roomId = 'abc-def-ghi';
 const address = 'user@example.com';
 const accessToken = '1234567890';
+const testFile = 'testFile.tif';
 
 test('startPollingMessages', () => {
   const saga = startPollingMessages(api, {
@@ -46,9 +47,21 @@ describe('pollMessages', () => {
   });
 
   test('recurring with roomId', () => {
-    const one = { id: '1' };
-    const two = { id: '2' };
-    const three = { id: '3' };
+    const one = { id: '1', files: [] };
+    const two = { id: '2', files: [testFile] };
+    const three = { id: '3', files: [] };
+
+    const postTwo = {
+      ...two,
+      files: [
+        {
+          uri: testFile,
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      ]
+    };
 
     const current = {
       roomId,
@@ -75,7 +88,7 @@ describe('pollMessages', () => {
     );
 
     expect(saga.next(response).value).toEqual(
-      put(appendMessages({ data: [two, three] }))
+      put(appendMessages({ data: [postTwo, three] }))
     );
 
     expect(saga.next().value).toEqual(call(delay, 7000));

@@ -39,7 +39,17 @@ export function* pollMessages(api) {
       roomId: current.roomId
     });
 
-    const newMessages = data.items.filter(messageFilter(current.data));
+    const newMessages = data.items
+      .filter(messageFilter(current.data))
+      .map(message => ({
+        ...message,
+        files: (message.files || []).map(file => ({
+          uri: file,
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }))
+      }));
 
     if (newMessages.length) {
       yield put(appendMessages({ data: newMessages }));

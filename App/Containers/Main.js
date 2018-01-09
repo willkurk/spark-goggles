@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Button, View } from 'react-native';
+import { Button, View, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
@@ -35,13 +35,12 @@ class Main extends Component {
 
   handleHangup = () => {
     this.props.hangupPhone();
-    this.props.stopPollingMessages();
   };
 
   render() {
     const { call } = this.props.phone;
 
-    const goodMessages = this.props.messages.data.filter(message => {
+    const messages = this.props.messages.data.filter(message => {
       if (!message.files || !message.files.length) {
         return false;
       }
@@ -52,9 +51,6 @@ class Main extends Component {
 
       return true;
     });
-
-    console.log('All:', this.props.messages.data);
-    console.log('Current:', goodMessages);
 
     return (
       <View style={styles.container}>
@@ -74,6 +70,12 @@ class Main extends Component {
           <Button title="Hangup call" onPress={this.handleHangup} />
         ) : (
           <Dialer onCall={this.handleCall} />
+        )}
+
+        {messages.map(message =>
+          message.files.map(file => (
+            <Image style={{ flex: 1 }} source={file} key={file.uri} />
+          ))
         )}
       </View>
     );

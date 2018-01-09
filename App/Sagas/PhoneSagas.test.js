@@ -17,6 +17,8 @@ import {
   updateCall
 } from '../Redux/Phone';
 
+import { stopPollingMessages } from '../Redux/Messages';
+
 const address = 'meatloaf';
 const localView = 'localView';
 const remoteView = 'remoteView';
@@ -125,6 +127,8 @@ test('observePhone', () => {
   expect(saga.next({ type: 'phone:disconnected' }).value).toEqual(
     put(updateCall({ outgoing: false, connected: null, address: null }))
   );
+
+  expect(saga.next().value).toEqual(put(stopPollingMessages()));
 
   saga.return(); // this generator contains a while loop. abort it.
 });
