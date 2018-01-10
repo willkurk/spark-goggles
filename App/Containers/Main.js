@@ -15,14 +15,9 @@ import {
 import VideoView from '../Components/VideoView';
 import Dialer from '../Components/Dialer';
 import Loading from '../Components/Loading';
-import Camera from '../Components/Camera';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
-  state = {
-    isTakingSnapshot: false
-  };
-
   componentDidMount() {
     this.props.registerPhone();
     this.props.requestPermissions();
@@ -54,7 +49,6 @@ class Main extends Component {
   };
 
   render() {
-    const { isTakingSnapshot } = this.state;
     const { call, registration } = this.props.phone;
 
     const messages = this.props.messages.data.filter(message => {
@@ -116,14 +110,13 @@ class Main extends Component {
             <Loading text={`Calling ${call.person.email}...`} />
           )}
 
-        {call.connected &&
-          !isTakingSnapshot && (
-            <Button
-              title="Send Snapshot"
-              style={{ marginTop: 10, marginBottom: 10 }}
-              onPress={this.props.takeSnapshot}
-            />
-          )}
+        {call.connected && (
+          <Button
+            title="Send Snapshot"
+            style={{ marginTop: 10, marginBottom: 10 }}
+            onPress={this.props.takeSnapshot}
+          />
+        )}
 
         {(call.connected || (call.ringing && !call.person.isInitiator)) && (
           <Button title="Hangup call" onPress={this.props.hangupPhone} />

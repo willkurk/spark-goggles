@@ -209,21 +209,6 @@ public class Phone extends ReactContextBaseJavaModule {
         });
     }
 
-    @ReactMethod
-    public void setSendingVideo(boolean value) {
-        Call call = getActiveCall();
-
-        if (call != null) {
-            call.setSendingVideo(value);
-
-            if (value) {
-                FacingMode mode = call.getFacingMode();
-                call.setFacingMode(mode == FacingMode.USER ? FacingMode.ENVIROMENT : FacingMode.USER);
-                call.setFacingMode(mode);
-            }
-        }
-    }
-
     private void setupIncomingCallListener() {
         spark.phone().setIncomingCallListener(new IncomingCallListener() {
             @Override
