@@ -66,6 +66,10 @@ class Main extends Component {
         return false;
       }
 
+      if (message.personEmail !== call.person.email) {
+        return false;
+      }
+
       return true;
     });
 
