@@ -16,7 +16,8 @@ import {
   registerPhoneError,
   updatePermissions,
   callConnected,
-  callDisconnected
+  callDisconnected,
+  callRinging
 } from '../Redux/Phone';
 
 import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
@@ -35,13 +36,12 @@ test('registerPhone', () => {
 
 test('registerPhone failure', () => {
   const saga = registerPhone(FixtureApi);
+  const error = new Error('my error');
 
   saga.next();
   saga.next();
 
-  expect(saga.throw(new Error('my error')).value).toEqual(
-    put(registerPhoneError())
-  );
+  expect(saga.throw(error).value).toEqual(put(registerPhoneError(error)));
 
   expect(saga.next().done).toBeTruthy();
 });
@@ -94,48 +94,65 @@ test('dialPhone failure', () => {
   );
 });
 
-test('observePhone', () => {
-  const now = Date.now();
-  Date.now = jest.fn(() => now);
-
-  const saga = observePhone(FixtureApi);
-
-  const channel = eventChannel(_emit => {
-    return () => null;
-  });
-
-  expect(saga.next().value).toMatchObject({
-    CALL: { args: [] }
-  });
-
-  expect(saga.next(channel).value).toEqual(take(channel));
-
-  expect(
-    saga.next({ type: 'phone:connected', payload: { email: address } }).value
-  ).toEqual(put(callConnected()));
-
-  expect(saga.next(address).value).toEqual(
-    put(
-      startPollingMessages({
-        exploratoryMessage: 'Hello',
-        address
-      })
-    )
-  );
-
-  expect(saga.next(channel).value).toEqual(take(channel));
-
-  expect(saga.next({ type: 'phone:disconnected' }).value).toEqual(
-    put(callDisconnected())
-  );
-
-  expect(saga.next().value).toEqual(put(stopPollingMessages()));
-
-  saga.return(); // this generator contains a while loop. abort it.
-});
-
 test('hangupPhone', () => {
   const saga = hangupPhone(FixtureApi);
 
   expect(saga.next().value).toEqual(call(FixtureApi.hangupPhone));
+});
+
+describe('observePhone', () => {
+  const from = { email: 'from@example.com' };
+  const to = { email: 'to@example.com' };
+
+  let saga;
+  let channel;
+
+  beforeEach(() => {
+    const now = Date.now();
+    Date.now = jest.fn(() => now);
+
+    saga = observePhone(FixtureApi);
+    channel = eventChannel(_emit => {
+      return () => null;
+    });
+
+    saga.next(); // create the channel
+    expect(saga.next(channel).value).toEqual(take(channel));
+  });
+
+  test('phone:connected', () => {
+    const action = {
+      type: 'phone:connected',
+      payload: { from, to, direction: 'INCOMING' }
+    };
+
+    expect(saga.next(action).value).toEqual(put(callConnected()));
+    expect(saga.next().value).toEqual(
+      put(
+        startPollingMessages({
+          exploratoryMessage: 'Hello',
+          address: from.email
+        })
+      )
+    );
+  });
+
+  test('phone:disconnected', () => {
+    const action = {
+      type: 'phone:disconnected',
+      payload: { from, to, direction: 'INCOMING' }
+    };
+
+    expect(saga.next(action).value).toEqual(put(callDisconnected()));
+    expect(saga.next().value).toEqual(put(stopPollingMessages()));
+  });
+
+  test('phone:ringing', () => {
+    const action = {
+      type: 'phone:ringing',
+      payload: { from, to, direction: 'INCOMING' }
+    };
+
+    expect(saga.next(action).value).toEqual(put(callRinging({ person: from })));
+  });
 });
