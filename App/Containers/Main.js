@@ -1,11 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { Text, Button, View, Image } from 'react-native';
-import Camera from 'react-native-camera';
-=======
-import { Button, View, Image } from 'react-native';
->>>>>>> Extract camera component. This is basically broken, yo
 import { connect } from 'react-redux';
 import { sendMessage } from '../Redux/Messages';
 import {
@@ -50,7 +45,7 @@ class Main extends Component {
   handleSendImage = picture => {
     this.props.sendMessage({
       text: 'Here is what I see...',
-      toPersonEmail: this.props.phone.call.address,
+      toPersonEmail: this.props.phone.call.person.email,
       files: [picture.path]
     });
   };
@@ -80,6 +75,17 @@ class Main extends Component {
 
     if (!registration.complete) {
       return <Loading text="Registering your device..." />;
+    }
+
+    if (this.state.isTakingSnapshot && call.connected) {
+      return [
+        <Camera key="camera" onSnapshot={this.handleSendImage} />,
+        <Button
+          key="no-camera"
+          title="Back"
+          onPress={() => this.setState({ isTakingSnapshot: false })}
+        />
+      ];
     }
 
     return (
@@ -117,6 +123,14 @@ class Main extends Component {
           !call.person.isInitiator && (
             <Loading text={`Calling ${call.person.email}...`} />
           )}
+
+        {call.connected && (
+          <Button
+            title="Snapshot mode"
+            style={{ marginTop: 10, marginBottom: 10 }}
+            onPress={() => this.setState({ isTakingSnapshot: true })}
+          />
+        )}
 
         {(call.connected || (call.ringing && !call.person.isInitiator)) && (
           <Button title="Hangup call" onPress={this.props.hangupPhone} />
