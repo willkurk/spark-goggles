@@ -1,5 +1,5 @@
 import { eventChannel } from 'redux-saga';
-import { call, put, take } from 'redux-saga/effects';
+import { call, put, take, select } from 'redux-saga/effects';
 import { PermissionsAndroid } from 'react-native';
 import {
   startPollingMessages,
@@ -80,11 +80,13 @@ export function* observePhone(api) {
       }
 
       case 'phone:snapshot': {
-        console.log('sending snapshot:', action.payload);
+        const toPersonEmail = yield select(
+          state => state.phone.call.person.email
+        );
+
         yield put(
           sendMessage({
-            toPersonEmail: 'ray@promptworks.com',
-            text: 'Do you see what I see?',
+            toPersonEmail,
             files: [action.payload]
           })
         );
