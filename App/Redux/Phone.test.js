@@ -10,7 +10,7 @@ import {
   rejectIncomingCall,
   callConnected,
   callDisconnected,
-  callIncoming,
+  callRinging,
   reducer,
   UPDATE_PERMISSIONS,
   REQUEST_PERMISSIONS,
@@ -23,8 +23,13 @@ import {
   REJECT_INCOMING_CALL,
   CALL_CONNECTED,
   CALL_DISCONNECTED,
-  CALL_INCOMING
+  CALL_RINGING
 } from './Phone';
+
+const person = {
+  email: 'user@example.com',
+  isInitiator: true
+};
 
 test('updatePermissions', () => {
   expect(updatePermissions(true)).toEqual({
@@ -47,7 +52,8 @@ test('registerPhone', () => {
     payload: {
       registration: {
         loading: true,
-        complete: false
+        complete: false,
+        error: null
       }
     }
   });
@@ -102,9 +108,7 @@ test('acceptIncomingCall', () => {
 
   expect(acceptIncomingCall({ localView, remoteView })).toEqual({
     type: ACCEPT_INCOMING_CALL,
-    payload: {
-      call: { localView, remoteView }
-    }
+    payload: { localView, remoteView }
   });
 });
 
@@ -123,8 +127,7 @@ test('callConnected', () => {
     payload: {
       call: {
         connected: new Date(Date.now()),
-        outgoing: false,
-        incoming: false
+        ringing: false
       }
     }
   });
@@ -136,23 +139,20 @@ test('callDisconnected', () => {
     payload: {
       call: {
         connected: null,
-        address: null,
-        outgoing: false,
-        incoming: false
+        person: null,
+        ringing: false
       }
     }
   });
 });
 
-test('callIncoming', () => {
-  const address = 'user@example.com';
-
-  expect(callIncoming({ address })).toEqual({
-    type: CALL_INCOMING,
+test('callRinging', () => {
+  expect(callRinging({ person })).toEqual({
+    type: CALL_RINGING,
     payload: {
       call: {
-        address,
-        incoming: true
+        person,
+        ringing: true
       }
     }
   });
@@ -169,13 +169,13 @@ describe('reducer', () => {
     expect(state).toEqual({
       call: {
         connected: null,
-        outgoing: false,
-        incoming: false,
-        address: null
+        ringing: false,
+        person: null
       },
       registration: {
         loading: false,
-        complete: false
+        complete: false,
+        error: null
       },
       permissionsGranted: false
     });
@@ -214,28 +214,20 @@ describe('reducer', () => {
     });
   });
 
-  test('dialPhone', () => {
-    const address = 'user@example.com';
-
-    expect(reducer(state, dialPhone({ address }))).toMatchObject({
-      call: { address, connected: null, outgoing: true }
-    });
-  });
-
   test('callConnected', () => {
     const now = Date.now();
     Date.now = jest.fn(() => now);
 
     const nextState = reducer(
-      { ...state, call: { ...state.call, address: 'foo@bar.com' } },
+      { ...state, call: { ...state.call, person, ringing: true } },
       callConnected()
     );
 
     expect(nextState).toMatchObject({
       call: {
-        address: 'foo@bar.com',
+        person,
         connected: new Date(Date.now()),
-        outgoing: false
+        ringing: false
       }
     });
   });
@@ -244,27 +236,26 @@ describe('reducer', () => {
     const nextState = reducer(
       {
         ...state,
-        call: { ...state.call, address: 'foo@bar.com', connected: new Date() }
+        call: { ...state.call, person, connected: new Date() }
       },
       callDisconnected()
     );
 
     expect(nextState).toMatchObject({
       call: {
-        address: null,
+        person: null,
         connected: null,
-        outgoing: false
+        ringing: false
       }
     });
   });
 
-  test('callIncoming', () => {
-    const address = 'user@example.com';
-
-    expect(reducer(state, callIncoming({ address }))).toMatchObject({
+  test('callRinging', () => {
+    expect(reducer(state, callRinging({ person }))).toMatchObject({
       call: {
-        address,
-        incoming: true
+        person,
+        ringing: true,
+        connected: null
       }
     });
   });
