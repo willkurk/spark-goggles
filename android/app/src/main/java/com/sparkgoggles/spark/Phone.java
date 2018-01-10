@@ -2,6 +2,7 @@ package com.sparkgoggles.spark;
 
 import android.app.Activity;
 import android.app.Application;
+import android.util.Log;
 import android.view.View;
 
 import com.ciscospark.androidsdk.CompletionHandler;
@@ -124,7 +125,9 @@ public class Phone extends ReactContextBaseJavaModule {
             @Override
             public void onComplete(Result<Call> result) {
                 if (result.isSuccessful()) {
-                    setActiveCall(result.getData());
+                    Call call = result.getData();
+                    call.setObserver(new PhoneObserver(events));
+                    activeCall = call;
                     promise.resolve(true);
                 } else {
                     promise.reject(E_DIAL_ERROR, result.getError().toString());
@@ -135,18 +138,18 @@ public class Phone extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void hangup(final Promise promise) {
-        Call activeCall = getActiveCall();
+        Call call = getActiveCall();
 
-        if (activeCall == null) {
+        if (call == null) {
             promise.resolve(true);
             return;
         }
 
-        activeCall.hangup(new CompletionHandler<Void>() {
+        call.hangup(new CompletionHandler<Void>() {
             @Override
             public void onComplete(Result<Void> result) {
                 if (result.isSuccessful()) {
-                    clearActiveCall();
+                    activeCall = null;
                     promise.resolve(true);
                 } else {
                     promise.reject(E_HANGUP_ERROR, result.getError().toString());
@@ -162,7 +165,7 @@ public class Phone extends ReactContextBaseJavaModule {
             @Override
             public void onComplete(Result<Void> result) {
                 if (result.isSuccessful()) {
-                    setActiveCall(incomingCall);
+                    activeCall = incomingCall;
                     incomingCall = null;
                     promise.resolve(true);
                 } else {
@@ -180,9 +183,9 @@ public class Phone extends ReactContextBaseJavaModule {
             @Override
             public void onComplete(Result<Void> result) {
                 events.emit("phone:disconnected", CallSerializer.serialize(incomingCall));
+                incomingCall = null;
 
                 if (result.isSuccessful()) {
-                    incomingCall = null;
                     promise.resolve(true);
                 } else {
                     promise.reject(E_REJECT_ERROR, result.getError().toString());
@@ -194,17 +197,18 @@ public class Phone extends ReactContextBaseJavaModule {
     private void setupIncomingCallListener() {
         spark.phone().setIncomingCallListener(new IncomingCallListener() {
             @Override
-            public void onIncomingCall(Call call) {
-                acknowledgeIncomingCall(call);
-            }
-        });
-    }
-
-    private void acknowledgeIncomingCall(final Call call) {
-        call.acknowledge(new CompletionHandler<Void>() {
-            @Override
-            public void onComplete(Result<Void> result) {
+            public void onIncomingCall(final Call call) {
                 incomingCall = call;
+
+                Log.d("Phone", "Call incoming");
+                call.setObserver(new PhoneObserver(events));
+
+                call.acknowledge(new CompletionHandler<Void>() {
+                    @Override
+                    public void onComplete(Result<Void> result) {
+                        Log.d("Phone", "Call acknowledged");
+                    }
+                });
             }
         });
     }
@@ -215,20 +219,11 @@ public class Phone extends ReactContextBaseJavaModule {
         }
 
         if (activeCall.getStatus() == Call.CallStatus.DISCONNECTED) {
-            clearActiveCall();
+            activeCall = null;
             return null;
         }
 
         return activeCall;
-    }
-
-    private void clearActiveCall() {
-        activeCall = null;
-    }
-
-    private void setActiveCall(Call call) {
-        call.setObserver(new PhoneObserver(events));
-        activeCall = call;
     }
 
     private MediaOption getMediaOption(String localViewId, String remoteViewId) {

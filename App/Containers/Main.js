@@ -84,7 +84,7 @@ class Main extends Component {
         {call.ringing &&
           call.person.isInitiator && (
             <View style={{ flex: 1 }}>
-              <Loading text={`${call.person.address} is calling...`} />
+              <Loading text={`${call.person.email} is calling...`} />
               <Button
                 title="Answer"
                 onPress={this.handleAcceptCall}
@@ -99,7 +99,7 @@ class Main extends Component {
             <Loading text={`Calling ${call.person.email}...`} />
           )}
 
-        {(call.connected || call.ringing) && (
+        {(call.connected || (call.ringing && !call.person.isInitiator)) && (
           <Button title="Hangup call" onPress={this.props.hangupPhone} />
         )}
 
