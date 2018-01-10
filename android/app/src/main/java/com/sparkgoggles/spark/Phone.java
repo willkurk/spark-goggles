@@ -12,6 +12,7 @@ import com.ciscospark.androidsdk.auth.OAuthAuthenticator;
 import com.ciscospark.androidsdk.phone.Call;
 import com.ciscospark.androidsdk.phone.MediaOption;
 import com.ciscospark.androidsdk.phone.Phone.IncomingCallListener;
+import com.ciscospark.androidsdk.phone.Phone.FacingMode;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -199,6 +200,21 @@ public class Phone extends ReactContextBaseJavaModule {
                 }
             }
         });
+    }
+
+    @ReactMethod
+    public void setSendingVideo(boolean value) {
+        Call call = getActiveCall();
+
+        if (call != null) {
+            call.setSendingVideo(value);
+
+            if (value) {
+                FacingMode mode = call.getFacingMode();
+                call.setFacingMode(mode == FacingMode.USER ? FacingMode.ENVIROMENT : FacingMode.USER);
+                call.setFacingMode(mode);
+            }
+        }
     }
 
     private void setupIncomingCallListener() {

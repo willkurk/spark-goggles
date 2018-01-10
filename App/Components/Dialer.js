@@ -4,7 +4,7 @@ import { View, TextInput, Button } from 'react-native';
 
 class Dialer extends Component {
   state = {
-    address: 'thomas@promptworks.com'
+    address: 'ray@promptworks.com'
   };
 
   handleChange = address => {

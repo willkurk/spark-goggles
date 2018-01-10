@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-native';
+import { NativeModules, Button } from 'react-native';
 import { default as NativeCamera, constants } from 'react-native-camera';
 
 class Camera extends Component {
+  componentDidMount() {
+    NativeModules.Phone.setSendingVideo(false);
+  }
+
+  componentWillUnmount() {
+    NativeModules.Phone.setSendingVideo(true);
+  }
+
   handleRef = camera => {
     this.camera = camera;
   };
@@ -18,15 +26,15 @@ class Camera extends Component {
   };
 
   render() {
-    return (
+    return [
       <NativeCamera
-        style={{ flex: 1 }}
+        key="camera"
+        style={{ display: 'none' }}
         ref={this.handleRef}
         aspect={constants.Aspect.fill}
-      >
-        <Button title="Snapshot!" onPress={this.handlePress} />
-      </NativeCamera>
-    );
+      />,
+      <Button key="button" title="Snapshot!" onPress={this.handlePress} />
+    ];
   }
 }
 

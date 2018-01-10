@@ -51,6 +51,7 @@ class Main extends Component {
   };
 
   render() {
+    const { isTakingSnapshot } = this.state;
     const { call, registration } = this.props.phone;
 
     const messages = this.props.messages.data.filter(message => {
@@ -77,25 +78,9 @@ class Main extends Component {
       return <Loading text="Registering your device..." />;
     }
 
-    if (this.state.isTakingSnapshot && call.connected) {
-      return [
-        <Camera key="camera" onSnapshot={this.handleSendImage} />,
-        <Button
-          key="no-camera"
-          title="Back"
-          onPress={() => this.setState({ isTakingSnapshot: false })}
-        />
-      ];
-    }
-
     return (
       <View style={styles.container}>
-        <View
-          style={{
-            flex: 1,
-            display: call.connected ? 'flex' : 'none'
-          }}
-        >
+        <View style={{ flex: 1, display: call.connected ? 'flex' : 'none' }}>
           <VideoView style={styles.localView} nativeID="localView" />
           <VideoView style={styles.remoteView} nativeID="remoteView" />
         </View>
@@ -124,13 +109,24 @@ class Main extends Component {
             <Loading text={`Calling ${call.person.email}...`} />
           )}
 
-        {call.connected && (
+        {call.connected &&
+          !isTakingSnapshot && (
+            <Button
+              title="Snapshot mode"
+              style={{ marginTop: 10, marginBottom: 10 }}
+              onPress={() => this.setState({ isTakingSnapshot: true })}
+            />
+          )}
+
+        {isTakingSnapshot && [
+          <Camera key="camera" onSnapshot={this.handleSendImage} />,
           <Button
-            title="Snapshot mode"
+            key="exit-snapshot"
+            title="Exit snapshot mode"
             style={{ marginTop: 10, marginBottom: 10 }}
-            onPress={() => this.setState({ isTakingSnapshot: true })}
+            onPress={() => this.setState({ isTakingSnapshot: false })}
           />
-        )}
+        ]}
 
         {(call.connected || (call.ringing && !call.person.isInitiator)) && (
           <Button title="Hangup call" onPress={this.props.hangupPhone} />
