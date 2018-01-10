@@ -73,6 +73,7 @@ public class Phone extends ReactContextBaseJavaModule {
                     if (result.isSuccessful()) {
                         getAccessToken(promise);
                     } else {
+                        Log.w("Phone", "An error occurred during authentication");
                         promise.reject(E_AUTHENTICATION_ERROR, result.getError().toString());
                     }
                 }
@@ -93,6 +94,7 @@ public class Phone extends ReactContextBaseJavaModule {
                 if (result.isSuccessful()) {
                     promise.resolve(result.getData());
                 } else {
+                    Log.w("Phone", "An error occurred while getting the token");
                     promise.reject(E_AUTHENTICATION_ERROR, result.getError().toString());
                 }
             }
@@ -108,6 +110,7 @@ public class Phone extends ReactContextBaseJavaModule {
                     setupIncomingCallListener();
                     promise.resolve(true);
                 } else {
+                    Log.w("Phone", "An error occurred when registering");
                     promise.reject(E_REGISTER_ERROR, result.getError().toString());
                 }
             }
@@ -130,6 +133,7 @@ public class Phone extends ReactContextBaseJavaModule {
                     activeCall = call;
                     promise.resolve(true);
                 } else {
+                    Log.w("Phone", "An error occurred when dialing up the call");
                     promise.reject(E_DIAL_ERROR, result.getError().toString());
                 }
             }
@@ -152,6 +156,7 @@ public class Phone extends ReactContextBaseJavaModule {
                     activeCall = null;
                     promise.resolve(true);
                 } else {
+                    Log.w("Phone", "An error occurred when hanging up the call");
                     promise.reject(E_HANGUP_ERROR, result.getError().toString());
                 }
 
@@ -169,6 +174,7 @@ public class Phone extends ReactContextBaseJavaModule {
                     incomingCall = null;
                     promise.resolve(true);
                 } else {
+                    Log.w("Phone", "An error occurred when accepting the call");
                     events.emit("phone:disconnected", CallSerializer.serialize(incomingCall));
                     incomingCall = null;
                     promise.reject(E_ANSWER_ERROR, result.getError().toString());
@@ -188,6 +194,7 @@ public class Phone extends ReactContextBaseJavaModule {
                 if (result.isSuccessful()) {
                     promise.resolve(true);
                 } else {
+                    Log.w("Phone", "An error occurred when rejecting the call");
                     promise.reject(E_REJECT_ERROR, result.getError().toString());
                 }
             }
@@ -203,6 +210,7 @@ public class Phone extends ReactContextBaseJavaModule {
                 Log.d("Phone", "Call incoming");
                 call.setObserver(new PhoneObserver(events));
 
+                // This puts the call in the ringing state.
                 call.acknowledge(new CompletionHandler<Void>() {
                     @Override
                     public void onComplete(Result<Void> result) {
