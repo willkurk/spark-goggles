@@ -12,6 +12,21 @@ import {
 } from '../Redux/Phone';
 
 /**
+ * Find the person who initiated the call.
+ */
+const getInitiator = ({ payload }) => {
+  if (payload.to.isInitiator) {
+    return payload.to;
+  }
+
+  if (payload.from.isInitiator) {
+    return payload.from;
+  }
+
+  throw new Error('Call does not have an initiator?');
+};
+
+/**
  * Spark requires us to register the phone in order to make/receive calls.
  * I think this is basically just establishing a websocket connection.
  */
@@ -20,7 +35,7 @@ export function* registerPhone(api) {
     yield call(api.registerPhone);
     yield put(registerPhoneSuccess());
   } catch (err) {
-    yield put(registerPhoneError());
+    yield put(registerPhoneError(err));
   }
 }
 

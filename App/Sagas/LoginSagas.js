@@ -8,7 +8,12 @@ export function* authenticate(api, oauth) {
      * First, we'll check if the user's access token is already set in the
      * SDK. The SDK will handle refreshes too, which is handy.
      */
-    yield call(api.getAccessToken);
+    const accessToken = yield call(api.getAccessToken);
+
+    if (!accessToken) {
+      throw new Error('Unauthenticated.');
+    }
+
     yield put(grantAccess());
     yield put(NavigationActions.navigate({ routeName: 'Main' }));
   } catch (_error) {
