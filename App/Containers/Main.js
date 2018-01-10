@@ -38,16 +38,6 @@ class Main extends Component {
     });
   };
 
-  handleSendImage = picture => {
-    console.log('Sending image:', picture.path);
-
-    this.props.sendMessage({
-      text: 'Here is what I see...',
-      toPersonEmail: this.props.phone.call.person.email,
-      files: [picture.path]
-    });
-  };
-
   render() {
     const { call, registration } = this.props.phone;
 
@@ -60,7 +50,7 @@ class Main extends Component {
         return false;
       }
 
-      if (message.personEmail !== call.person.email) {
+      if (!call.person || message.personEmail !== call.person.email) {
         return false;
       }
 
