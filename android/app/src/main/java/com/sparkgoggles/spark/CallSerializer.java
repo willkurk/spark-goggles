@@ -10,6 +10,7 @@ public class CallSerializer {
         WritableMap map = new WritableNativeMap();
         map.putMap("to", serializeMember(call.getTo()));
         map.putMap("from", serializeMember(call.getFrom()));
+        map.putString("direction", call.getDirection().name());
         return map;
     }
 

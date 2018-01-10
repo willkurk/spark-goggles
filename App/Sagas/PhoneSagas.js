@@ -8,22 +8,19 @@ import {
   registerPhoneError,
   callConnected,
   callDisconnected,
-  callIncoming
+  callRinging
 } from '../Redux/Phone';
 
-/**
- * Find the person who initiated the call.
- */
-const getInitiator = ({ payload }) => {
-  if (payload.to.isInitiator) {
-    return payload.to;
+const getPerson = ({ from, to, direction }) => {
+  if (direction === 'INCOMING') {
+    return from;
   }
 
-  if (payload.from.isInitiator) {
-    return payload.from;
+  if (direction === 'OUTGOING') {
+    return to;
   }
 
-  throw new Error('Call does not have an initiator?');
+  throw new Error("This call data is weird and I don't know what to do.");
 };
 
 /**
@@ -61,7 +58,7 @@ export function* observePhone(api) {
         yield put(
           startPollingMessages({
             exploratoryMessage: 'Hello',
-            address: getInitiator(action).email
+            address: getPerson(action.payload).email
           })
         );
         break;
@@ -73,12 +70,8 @@ export function* observePhone(api) {
         break;
       }
 
-      case 'phone:incoming': {
-        yield put(
-          callIncoming({
-            address: action.payload.from.email
-          })
-        );
+      case 'phone:ringing': {
+        yield put(callRinging({ person: getPerson(action.payload) }));
         break;
       }
 

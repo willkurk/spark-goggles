@@ -81,27 +81,30 @@ class Main extends Component {
           ))
         )}
 
-        {call.incoming && (
-          <View style={{ flex: 1 }}>
-            <Loading text={`${call.address} is calling...`} />
-            <Button
-              title="Answer"
-              onPress={this.handleAcceptCall}
-              style={{ marginBottom: 10 }}
-            />
-            <Button title="Reject" onPress={this.props.rejectIncomingCall} />
-          </View>
-        )}
+        {call.ringing &&
+          call.person.isInitiator && (
+            <View style={{ flex: 1 }}>
+              <Loading text={`${call.person.address} is calling...`} />
+              <Button
+                title="Answer"
+                onPress={this.handleAcceptCall}
+                style={{ marginBottom: 10 }}
+              />
+              <Button title="Reject" onPress={this.props.rejectIncomingCall} />
+            </View>
+          )}
 
-        {call.outgoing && <Loading text={`Calling ${call.address}...`} />}
+        {call.ringing &&
+          !call.person.isInitiator && (
+            <Loading text={`Calling ${call.person.email}...`} />
+          )}
 
-        {(call.connected || call.outgoing) && (
+        {(call.connected || call.ringing) && (
           <Button title="Hangup call" onPress={this.props.hangupPhone} />
         )}
 
         {!call.connected &&
-          !call.incoming &&
-          !call.outgoing && <Dialer onCall={this.handleCall} />}
+          !call.ringing && <Dialer onCall={this.handleCall} />}
       </View>
     );
   }
@@ -131,10 +134,12 @@ Main.propTypes = {
     }).isRequired,
 
     call: PropTypes.shape({
+      ringing: PropTypes.bool.isRequired,
       connected: PropTypes.instanceOf(Date),
-      outgoing: PropTypes.bool.isRequired,
-      incoming: PropTypes.bool.isRequired,
-      address: PropTypes.string
+      person: PropTypes.shape({
+        email: PropTypes.string.isRequired,
+        isInitiator: PropTypes.bool.isRequired
+      })
     }).isRequired
   }).isRequired
 };

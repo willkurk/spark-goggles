@@ -195,8 +195,16 @@ public class Phone extends ReactContextBaseJavaModule {
         spark.phone().setIncomingCallListener(new IncomingCallListener() {
             @Override
             public void onIncomingCall(Call call) {
+                acknowledgeIncomingCall(call);
+            }
+        });
+    }
+
+    private void acknowledgeIncomingCall(final Call call) {
+        call.acknowledge(new CompletionHandler<Void>() {
+            @Override
+            public void onComplete(Result<Void> result) {
                 incomingCall = call;
-                events.emit("phone:incoming", CallSerializer.serialize(call));
             }
         });
     }

@@ -15,7 +15,7 @@ export const REJECT_INCOMING_CALL = 'phone/REJECT_INCOMING_CALL';
 
 export const CALL_CONNECTED = 'phone/CALL_CONNECTED';
 export const CALL_DISCONNECTED = 'phone/CALL_DISCONNECTED';
-export const CALL_INCOMING = 'phone/CALL_INCOMING';
+export const CALL_RINGING = 'phone/CALL_RINGING';
 
 export const updatePermissions = permissionsGranted => ({
   type: UPDATE_PERMISSIONS,
@@ -83,8 +83,7 @@ export const callConnected = () => ({
   type: CALL_CONNECTED,
   payload: {
     call: {
-      incoming: false,
-      outgoing: false,
+      ringing: false,
       connected: new Date(Date.now())
     }
   }
@@ -94,27 +93,26 @@ export const callDisconnected = () => ({
   type: CALL_DISCONNECTED,
   payload: {
     call: {
-      incoming: false,
-      outgoing: false,
+      ringing: false,
       connected: null,
-      address: null
+      person: null
     }
   }
 });
 
-export const callIncoming = ({ address }) => ({
-  type: CALL_INCOMING,
+export const callRinging = ({ person }) => ({
+  type: CALL_RINGING,
   payload: {
     call: {
-      address,
-      incoming: true
+      ringing: true,
+      person
     }
   }
 });
 
 const INITIAL_STATE = {
   registration: { error: null, complete: false, loading: false },
-  call: { connected: null, outgoing: false, incoming: false, address: null },
+  call: { connected: null, ringing: false, person: null },
   permissionsGranted: false
 };
 
@@ -126,17 +124,8 @@ export function reducer(state = INITIAL_STATE, action) {
     case UPDATE_PERMISSIONS:
     case CALL_CONNECTED:
     case CALL_DISCONNECTED:
-    case CALL_INCOMING:
+    case CALL_RINGING:
       return merge({}, state, action.payload);
-
-    case DIAL_PHONE:
-      return merge({}, state, {
-        call: {
-          outgoing: true,
-          connected: null,
-          address: action.payload.address
-        }
-      });
 
     default:
       return state;
