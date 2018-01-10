@@ -9,7 +9,8 @@ import {
   dialPhone,
   hangupPhone,
   acceptIncomingCall,
-  rejectIncomingCall
+  rejectIncomingCall,
+  takeSnapshot
 } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
 import Dialer from '../Components/Dialer';
@@ -43,6 +44,8 @@ class Main extends Component {
   };
 
   handleSendImage = picture => {
+    console.log('Sending image:', picture.path);
+
     this.props.sendMessage({
       text: 'Here is what I see...',
       toPersonEmail: this.props.phone.call.person.email,
@@ -81,7 +84,7 @@ class Main extends Component {
     return (
       <View style={styles.container}>
         <View style={{ flex: 1, display: call.connected ? 'flex' : 'none' }}>
-          <VideoView style={styles.localView} nativeID="localView" />
+          <VideoView style={styles.localView} nativeID="localView" snapshot />
           <VideoView style={styles.remoteView} nativeID="remoteView" />
         </View>
 
@@ -112,21 +115,11 @@ class Main extends Component {
         {call.connected &&
           !isTakingSnapshot && (
             <Button
-              title="Snapshot mode"
+              title="Send Snapshot"
               style={{ marginTop: 10, marginBottom: 10 }}
-              onPress={() => this.setState({ isTakingSnapshot: true })}
+              onPress={this.props.takeSnapshot}
             />
           )}
-
-        {isTakingSnapshot && [
-          <Camera key="camera" onSnapshot={this.handleSendImage} />,
-          <Button
-            key="exit-snapshot"
-            title="Exit snapshot mode"
-            style={{ marginTop: 10, marginBottom: 10 }}
-            onPress={() => this.setState({ isTakingSnapshot: false })}
-          />
-        ]}
 
         {(call.connected || (call.ringing && !call.person.isInitiator)) && (
           <Button title="Hangup call" onPress={this.props.hangupPhone} />
@@ -150,6 +143,8 @@ Main.propTypes = {
   rejectIncomingCall: PropTypes.func.isRequired,
 
   sendMessage: PropTypes.func.isRequired,
+
+  takeSnapshot: PropTypes.func.isRequired,
 
   messages: PropTypes.shape({
     roomId: PropTypes.string,
@@ -187,7 +182,8 @@ const mapDispatchToProps = {
   hangupPhone,
   acceptIncomingCall,
   rejectIncomingCall,
-  sendMessage
+  sendMessage,
+  takeSnapshot
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

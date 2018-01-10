@@ -17,8 +17,11 @@ class Camera extends Component {
   };
 
   handlePress = async () => {
+    console.log('Taking a picture!');
+
     try {
       const picture = await this.camera.capture({ metadata: {} });
+      console.log('Picture saved:', picture);
       this.props.onSnapshot(picture);
     } catch (error) {
       console.error('Camera failed:', error);

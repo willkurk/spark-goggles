@@ -18,6 +18,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.sparkgoggles.BuildConfig;
@@ -61,6 +62,12 @@ public class Phone extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return REACT_CLASS;
+    }
+
+    @ReactMethod
+    public void takeSnapshot(ReadableMap eventData) {
+        Log.d("Phone", "About to send snapshot");
+        EventService.emit("snapshot", eventData);
     }
 
     @ReactMethod

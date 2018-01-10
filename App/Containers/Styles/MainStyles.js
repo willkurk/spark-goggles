@@ -5,7 +5,9 @@ export default StyleSheet.create({
   ...ApplicationStyles.screen,
 
   localView: {
-    display: 'none'
+    // flex: 1
+    width: 1,
+    height: 1
   },
 
   remoteView: {

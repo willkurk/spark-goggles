@@ -15,7 +15,8 @@ const PHONE_EVENTS = [
   'phone:incoming',
   'phone:connected',
   'phone:disconnected',
-  'phone:media-changed'
+  'phone:media-changed',
+  'phone:snapshot'
 ];
 
 const buildQuery = (url, params) => {
@@ -88,6 +89,11 @@ const create = () => {
     return buildClient(accessToken).post('/messages', form);
   };
 
+  const takeSnapshot = () => {
+    console.log('calling Phone.emitEvent');
+    Phone.takeSnapshot({});
+  };
+
   const getMessages = (accessToken, params) =>
     buildClient(accessToken).get(buildQuery('/messages', params));
 
@@ -103,7 +109,8 @@ const create = () => {
     rejectIncomingCall: Phone.rejectIncomingCall,
     removePhoneListener,
     requestPermission,
-    sendMessage
+    sendMessage,
+    takeSnapshot
   };
 };
 
