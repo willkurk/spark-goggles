@@ -5,6 +5,7 @@ import { authenticate } from './LoginSagas';
 import { grantAccess, revokeAccess } from '../Redux/Login';
 
 const code = '1234567890';
+const accessToken = '0987654321';
 
 const oauth = {
   callback: () => Promise.resolve(code)
@@ -19,7 +20,7 @@ describe('authenticate', () => {
 
   test('when already authenticated', () => {
     expect(saga.next().value).toEqual(call(api.getAccessToken));
-    expect(saga.next().value).toEqual(put(grantAccess()));
+    expect(saga.next(accessToken).value).toEqual(put(grantAccess()));
     expect(saga.next().value).toEqual(
       put(NavigationActions.navigate({ routeName: 'Main' }))
     );
@@ -28,10 +29,7 @@ describe('authenticate', () => {
   describe('oauth', () => {
     beforeEach(() => {
       expect(saga.next().value).toEqual(call(api.getAccessToken));
-
-      expect(saga.throw(new Error('Not authenticated')).value).toEqual(
-        call(oauth.callback)
-      );
+      expect(saga.next(null).value).toEqual(call(oauth.callback));
     });
 
     test('when successful', () => {
