@@ -162,12 +162,11 @@ public class Phone extends ReactContextBaseJavaModule {
             @Override
             public void onComplete(Result<Void> result) {
                 if (result.isSuccessful()) {
-                    activeCall = incomingCall;
+                    setActiveCall(incomingCall);
                     incomingCall = null;
-                    events.emit("phone:connected", Person.getOther(activeCall));
                     promise.resolve(true);
                 } else {
-                    events.emit("phone:disconnected", Person.getOther(incomingCall));
+                    events.emit("phone:disconnected", CallSerializer.serialize(incomingCall));
                     incomingCall = null;
                     promise.reject(E_ANSWER_ERROR, result.getError().toString());
                 }
@@ -180,7 +179,7 @@ public class Phone extends ReactContextBaseJavaModule {
         incomingCall.reject(new CompletionHandler<Void>() {
             @Override
             public void onComplete(Result<Void> result) {
-                events.emit("phone:disconnected", Person.getOther(incomingCall));
+                events.emit("phone:disconnected", CallSerializer.serialize(incomingCall));
 
                 if (result.isSuccessful()) {
                     incomingCall = null;
@@ -197,7 +196,7 @@ public class Phone extends ReactContextBaseJavaModule {
             @Override
             public void onIncomingCall(Call call) {
                 incomingCall = call;
-                events.emit("phone:incoming", Person.getOther(call));
+                events.emit("phone:incoming", CallSerializer.serialize(call));
             }
         });
     }

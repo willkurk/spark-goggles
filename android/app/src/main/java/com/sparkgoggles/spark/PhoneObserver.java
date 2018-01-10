@@ -13,21 +13,21 @@ public class PhoneObserver implements CallObserver {
 
     @Override
     public void onRinging(Call call) {
-        events.emit("phone:ringing", Person.getOther(call));
+        events.emit("phone:ringing", CallSerializer.serialize(call));
     }
 
     @Override
     public void onConnected(Call call) {
-        events.emit("phone:connected", Person.getOther(call));
+        events.emit("phone:connected", CallSerializer.serialize(call));
     }
 
     @Override
     public void onDisconnected(CallDisconnectedEvent event) {
-        events.emit("phone:disconnected", Person.getOther(event.getCall()));
+        events.emit("phone:disconnected", CallSerializer.serialize(event.getCall()));
     }
 
     @Override
     public void onMediaChanged(MediaChangedEvent event) {
-        events.emit("phone:media-changed", Person.getOther(event.getCall()));
+        events.emit("phone:media-changed", CallSerializer.serialize(event.getCall()));
     }
 }

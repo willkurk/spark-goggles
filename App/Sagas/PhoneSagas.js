@@ -61,7 +61,7 @@ export function* observePhone(api) {
         yield put(
           startPollingMessages({
             exploratoryMessage: 'Hello',
-            address: action.payload.email
+            address: getInitiator(action).email
           })
         );
         break;
@@ -76,7 +76,7 @@ export function* observePhone(api) {
       case 'phone:incoming': {
         yield put(
           callIncoming({
-            address: action.payload.email
+            address: action.payload.from.email
           })
         );
         break;
