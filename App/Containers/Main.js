@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Button, View, Image } from 'react-native';
+import { Text, Button, View, Image } from 'react-native';
 import { connect } from 'react-redux';
 import {
   registerPhone,
@@ -37,7 +37,7 @@ class Main extends Component {
   };
 
   render() {
-    const { call } = this.props.phone;
+    const { call, registration } = this.props.phone;
 
     const messages = this.props.messages.data.filter(message => {
       if (!message.files || !message.files.length) {
@@ -50,6 +50,18 @@ class Main extends Component {
 
       return true;
     });
+
+    if (registration.error) {
+      return (
+        <Text style={{ flex: 1, color: 'red' }}>
+          Failed to register: {JSON.stringify(registration.error)}
+        </Text>
+      );
+    }
+
+    if (!registration.complete) {
+      return <Loading text="Registering your device..." />;
+    }
 
     return (
       <View style={styles.container}>

@@ -31,7 +31,8 @@ export const registerPhone = () => ({
   payload: {
     registration: {
       loading: true,
-      complete: false
+      complete: false,
+      error: null
     }
   }
 });
@@ -46,12 +47,13 @@ export const registerPhoneSuccess = () => ({
   }
 });
 
-export const registerPhoneError = () => ({
+export const registerPhoneError = error => ({
   type: REGISTER_PHONE_ERROR,
   payload: {
     registration: {
       loading: false,
-      complete: false
+      complete: false,
+      error
     }
   }
 });
@@ -111,7 +113,7 @@ export const callIncoming = ({ address }) => ({
 });
 
 const INITIAL_STATE = {
-  registration: { complete: false, loading: false },
+  registration: { error: null, complete: false, loading: false },
   call: { connected: null, outgoing: false, incoming: false, address: null },
   permissionsGranted: false
 };
