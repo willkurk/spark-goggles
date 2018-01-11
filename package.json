@@ -19,7 +19,6 @@
     "android:logcat": "$ANDROID_HOME/platform-tools/adb logcat *:S ReactNative:V ReactNativeJS:V",
     "android:shake": "$ANDROID_HOME/platform-tools/adb devices | grep '\\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} $ANDROID_HOME/platform-tools/adb -s {} shell input keyevent 82",
     "android:emulator:create": "script/create-device",
-    "storybook": "storybook start -p 7007",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepush": "eslint ."
@@ -37,18 +36,12 @@
     "redux-saga": "^0.16.0"
   },
   "devDependencies": {
-    "@storybook/addon-storyshots": "^3.2.16",
-    "@storybook/addons": "^3.2.16",
-    "@storybook/channels": "^3.2.16",
-    "@storybook/react-native": "^3.2.16",
     "babel-core": "6.26.0",
     "babel-eslint": "^8.1.2",
     "babel-jest": "22.0.4",
     "babel-plugin-ignite-ignore-reactotron": "^0.3.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react-native": "^3.0.2",
-    "enzyme": "^3.2.0",
-    "enzyme-adapter-react-16": "^1.1.0",
     "eslint": "^4.14.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-promptworks": "^1.0.0",
@@ -58,8 +51,6 @@
     "eslint-plugin-react": "^7.5.1",
     "husky": "^0.14.3",
     "identity-obj-proxy": "^3.0.0",
-    "ignite-ir-boilerplate": "^2.3.1",
-    "ignite-standard": "^1.0.0",
     "jest": "22.0.4",
     "prettier": "^1.9.2",
     "react-dom": "16.0.0",
@@ -70,15 +61,11 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "<rootDir>/Tests/Setup.js"
+      "/node_modules/"
     ],
     "moduleNameMapper": {
       "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "identity-obj-proxy"
     },
-    "setupFiles": [
-      "<rootDir>/Tests/Setup"
-    ],
     "preset": "react-native",
     "transformIgnorePatterns": [
       "node_modules/(?!(jest-)?react-native|react-navigation)"
