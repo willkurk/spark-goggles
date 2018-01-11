@@ -51,5 +51,9 @@ export default {
     return Promise.resolve({
       data: { roomId: 'abcdefg' }
     });
+  },
+
+  takeSnapshot() {
+    return Promise.resolve(true);
   }
 };
