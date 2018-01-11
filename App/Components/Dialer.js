@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, TextInput, Button } from 'react-native';
+import Config from 'react-native-config';
 
 class Dialer extends Component {
   state = {
-    address: 'thomas@promptworks.com'
+    address: Config.DEFAULT_DIAL_ADDRESS || ''
   };
 
   handleChange = address => {
