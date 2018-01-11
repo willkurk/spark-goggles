@@ -89,11 +89,6 @@ const create = () => {
     return buildClient(accessToken).post('/messages', form);
   };
 
-  const takeSnapshot = nativeID => {
-    console.log(`Phone.takeSnapshot('${nativeID}')`);
-    Phone.takeSnapshot(nativeID);
-  };
-
   const getMessages = (accessToken, params) =>
     buildClient(accessToken).get(buildQuery('/messages', params));
 
@@ -110,7 +105,7 @@ const create = () => {
     removePhoneListener,
     requestPermission,
     sendMessage,
-    takeSnapshot
+    takeSnapshot: Phone.takeSnapshot
   };
 };
 
