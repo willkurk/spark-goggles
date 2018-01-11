@@ -71,3 +71,24 @@ The `.env` file is ignored by git keeping those secrets out of your repo.
 If you add a package that contains Java or ObjC code, you'll need to link it. To do so, you'll simply run `yarn react-native link`.
 
 After linking, you'll want to re-build the app entirely: `yarn android`.
+
+## :shipit: Generating a release
+
+First, you'll need a `.keystore` file. To generate this file, you can run `yarn keytool`. Answer each question, and don't forget the passwords you've chosen!
+
+After running this script, you should find a file called `android/app/spark-goggles.keystore`. If you plan to release the app to Google Play, you'll want to make sure that you don't lose this file.
+
+Next, you'll need to configure a few build variables. You'll need to drop the following configuration in `~/.gradle/gradle.properties`:
+
+```
+SPARK_GOGGLES_RELEASE_STORE_FILE=spark-goggles.keystore
+SPARK_GOGGLES_RELEASE_KEY_ALIAS=spark-goggles
+SPARK_GOGGLES_RELEASE_STORE_PASSWORD=*****
+SPARK_GOGGLES_RELEASE_KEY_PASSWORD=*****
+```
+
+Finally, to build an `.apk` file, you can run `yarn android:build`. This will generate `android/app/build/outputs/apk/app-release.apk`.
+
+For more information, consult the [React Native documentation](https://facebook.github.io/react-native/docs/signed-apk-android.html).
+
+**NOTE: It is imperative that you don't commit the .keystore file or any passwords.
