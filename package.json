@@ -9,7 +9,7 @@
     "test:watch": "jest --watch",
     "updateSnapshot": "jest --updateSnapshot",
     "coverage": "jest --coverage && open coverage/lcov-report/index.html || xdg-open coverage/lcov-report/index.html",
-    "android": "adb reverse tcp:9090 tcp:9090 && react-native run-android",
+    "android": "$ANDROID_HOME/platform-tools/adb reverse tcp:9090 tcp:9090 && react-native run-android",
     "android:clean": "cd android/ && ./gradlew clean && cd ..",
     "android:emulator": "$ANDROID_HOME/tools/emulator @SparkGoggles -wipe-data",
     "android:build": "cd android && ./gradlew assembleRelease",
