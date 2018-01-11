@@ -12,13 +12,11 @@ import com.ciscospark.androidsdk.auth.OAuthAuthenticator;
 import com.ciscospark.androidsdk.phone.Call;
 import com.ciscospark.androidsdk.phone.MediaOption;
 import com.ciscospark.androidsdk.phone.Phone.IncomingCallListener;
-import com.ciscospark.androidsdk.phone.Phone.FacingMode;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.sparkgoggles.BuildConfig;
@@ -65,9 +63,10 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void takeSnapshot(ReadableMap eventData) {
-        Log.d("Phone", "About to send snapshot");
-        EventService.emit("snapshot", eventData);
+    public void takeSnapshot(String nativeId) {
+        Log.d("Phone", "About to capture snapshot");
+        VideoView view = (VideoView) findViewById(nativeId);
+        view.takeSnapshot();
     }
 
     @ReactMethod

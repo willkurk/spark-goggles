@@ -1,11 +1,7 @@
 import { eventChannel } from 'redux-saga';
-import { call, put, take, select } from 'redux-saga/effects';
+import { call, put, take } from 'redux-saga/effects';
 import { PermissionsAndroid } from 'react-native';
-import {
-  startPollingMessages,
-  stopPollingMessages,
-  sendMessage
-} from '../Redux/Messages';
+import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
   updatePermissions,
   registerPhoneSuccess,
@@ -79,21 +75,6 @@ export function* observePhone(api) {
         break;
       }
 
-      case 'phone:snapshot': {
-        const toPersonEmail = yield select(
-          state => state.phone.call.person.email
-        );
-
-        yield put(
-          sendMessage({
-            toPersonEmail,
-            text: 'Do you see what I see?',
-            files: [action.payload]
-          })
-        );
-        break;
-      }
-
       default:
         break;
     }
@@ -147,6 +128,6 @@ export function* rejectIncomingCall(api) {
   yield call(api.rejectIncomingCall);
 }
 
-export function* takeSnapshot(api) {
-  yield call(api.takeSnapshot);
+export function* takeSnapshot(api, { payload }) {
+  yield call(api.takeSnapshot, payload.nativeID);
 }

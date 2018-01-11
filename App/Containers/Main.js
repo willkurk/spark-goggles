@@ -38,6 +38,18 @@ class Main extends Component {
     });
   };
 
+  handleTriggerSnapshot = () => {
+    this.props.takeSnapshot('localView');
+  };
+
+  handleReceiveSnapshot = snapshot => {
+    this.props.sendMessage({
+      text: 'Do you see what I see?',
+      toPersonEmail: this.props.phone.call.person.email,
+      files: [snapshot.path]
+    });
+  };
+
   render() {
     const { call, registration } = this.props.phone;
 
@@ -72,7 +84,11 @@ class Main extends Component {
     return (
       <View style={styles.container}>
         <View style={{ flex: 1, display: call.connected ? 'flex' : 'none' }}>
-          <VideoView style={styles.localView} nativeID="localView" snapshot />
+          <VideoView
+            style={styles.localView}
+            nativeID="localView"
+            onSnapshot={this.handleReceiveSnapshot}
+          />
           <VideoView style={styles.remoteView} nativeID="remoteView" />
         </View>
 
@@ -104,7 +120,7 @@ class Main extends Component {
           <Button
             title="Send Snapshot"
             style={{ marginTop: 10, marginBottom: 10 }}
-            onPress={this.props.takeSnapshot}
+            onPress={this.handleTriggerSnapshot}
           />
         )}
 

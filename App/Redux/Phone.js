@@ -112,8 +112,11 @@ export const callRinging = ({ person }) => ({
   }
 });
 
-export const takeSnapshot = () => ({
-  type: TAKE_SNAPSHOT
+export const takeSnapshot = nativeID => ({
+  type: TAKE_SNAPSHOT,
+  payload: {
+    nativeID
+  }
 });
 
 const INITIAL_STATE = {
