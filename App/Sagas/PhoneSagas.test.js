@@ -8,7 +8,8 @@ import {
   registerPhone,
   requestPermissions,
   dialPhone,
-  hangupPhone
+  hangupPhone,
+  takeSnapshot
 } from './PhoneSagas';
 
 import {
@@ -155,4 +156,10 @@ describe('observePhone', () => {
 
     expect(saga.next(action).value).toEqual(put(callRinging({ person: from })));
   });
+});
+
+test('takeSnapshot', () => {
+  const saga = takeSnapshot(FixtureApi, { payload: { nativeID: localView } });
+
+  expect(saga.next().value).toEqual(call(FixtureApi.takeSnapshot, localView));
 });

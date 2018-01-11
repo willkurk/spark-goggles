@@ -2,13 +2,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Text, Button, View, Image } from 'react-native';
 import { connect } from 'react-redux';
+import { sendMessage } from '../Redux/Messages';
 import {
   registerPhone,
   requestPermissions,
   dialPhone,
   hangupPhone,
   acceptIncomingCall,
-  rejectIncomingCall
+  rejectIncomingCall,
+  takeSnapshot
 } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
 import Dialer from '../Components/Dialer';
@@ -16,7 +18,7 @@ import Loading from '../Components/Loading';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
-  async componentDidMount() {
+  componentDidMount() {
     this.props.registerPhone();
     this.props.requestPermissions();
   }
@@ -36,6 +38,22 @@ class Main extends Component {
     });
   };
 
+  handleTriggerSnapshot = () => {
+    this.props.takeSnapshot('localView');
+  };
+
+  handleReceiveSnapshot = snapshot => {
+    if (snapshot.error) {
+      throw new Error(snapshot.error);
+    }
+
+    this.props.sendMessage({
+      text: 'Do you see what I see?',
+      toPersonEmail: this.props.phone.call.person.email,
+      files: [snapshot.path]
+    });
+  };
+
   render() {
     const { call, registration } = this.props.phone;
 
@@ -45,6 +63,10 @@ class Main extends Component {
       }
 
       if (new Date(message.created) < call.connected) {
+        return false;
+      }
+
+      if (!call.person || message.personEmail !== call.person.email) {
         return false;
       }
 
@@ -65,13 +87,12 @@ class Main extends Component {
 
     return (
       <View style={styles.container}>
-        <View
-          style={{
-            flex: 1,
-            display: call.connected ? 'flex' : 'none'
-          }}
-        >
-          <VideoView style={styles.localView} nativeID="localView" />
+        <View style={{ flex: 1, display: call.connected ? 'flex' : 'none' }}>
+          <VideoView
+            style={styles.localView}
+            nativeID="localView"
+            onSnapshot={this.handleReceiveSnapshot}
+          />
           <VideoView style={styles.remoteView} nativeID="remoteView" />
         </View>
 
@@ -99,6 +120,14 @@ class Main extends Component {
             <Loading text={`Calling ${call.person.email}...`} />
           )}
 
+        {call.connected && (
+          <Button
+            title="Send Snapshot"
+            style={{ marginTop: 10, marginBottom: 10 }}
+            onPress={this.handleTriggerSnapshot}
+          />
+        )}
+
         {(call.connected || (call.ringing && !call.person.isInitiator)) && (
           <Button title="Hangup call" onPress={this.props.hangupPhone} />
         )}
@@ -119,6 +148,10 @@ Main.propTypes = {
 
   acceptIncomingCall: PropTypes.func.isRequired,
   rejectIncomingCall: PropTypes.func.isRequired,
+
+  sendMessage: PropTypes.func.isRequired,
+
+  takeSnapshot: PropTypes.func.isRequired,
 
   messages: PropTypes.shape({
     roomId: PropTypes.string,
@@ -155,7 +188,9 @@ const mapDispatchToProps = {
   dialPhone,
   hangupPhone,
   acceptIncomingCall,
-  rejectIncomingCall
+  rejectIncomingCall,
+  sendMessage,
+  takeSnapshot
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

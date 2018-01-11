@@ -127,3 +127,7 @@ export function* acceptIncomingCall(api, { payload }) {
 export function* rejectIncomingCall(api) {
   yield call(api.rejectIncomingCall);
 }
+
+export function* takeSnapshot(api, { payload }) {
+  yield call(api.takeSnapshot, payload.nativeID);
+}

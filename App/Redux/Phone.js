@@ -17,6 +17,8 @@ export const CALL_CONNECTED = 'phone/CALL_CONNECTED';
 export const CALL_DISCONNECTED = 'phone/CALL_DISCONNECTED';
 export const CALL_RINGING = 'phone/CALL_RINGING';
 
+export const TAKE_SNAPSHOT = 'phone/TAKE_SNAPSHOT';
+
 export const updatePermissions = permissionsGranted => ({
   type: UPDATE_PERMISSIONS,
   payload: { permissionsGranted }
@@ -107,6 +109,13 @@ export const callRinging = ({ person }) => ({
       ringing: true,
       person
     }
+  }
+});
+
+export const takeSnapshot = nativeID => ({
+  type: TAKE_SNAPSHOT,
+  payload: {
+    nativeID
   }
 });
 

@@ -63,6 +63,13 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void takeSnapshot(String nativeId) {
+        Log.d("Phone", "About to capture snapshot");
+        VideoView view = (VideoView) findViewById(nativeId);
+        view.takeSnapshot();
+    }
+
+    @ReactMethod
     public void authenticate(String code, final Promise promise) {
         if (authenticator.isAuthorized()) {
             getAccessToken(promise);

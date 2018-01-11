@@ -11,6 +11,7 @@ import {
   callConnected,
   callDisconnected,
   callRinging,
+  takeSnapshot,
   reducer,
   UPDATE_PERMISSIONS,
   REQUEST_PERMISSIONS,
@@ -23,7 +24,8 @@ import {
   REJECT_INCOMING_CALL,
   CALL_CONNECTED,
   CALL_DISCONNECTED,
-  CALL_RINGING
+  CALL_RINGING,
+  TAKE_SNAPSHOT
 } from './Phone';
 
 const person = {
@@ -256,6 +258,16 @@ describe('reducer', () => {
         person,
         ringing: true,
         connected: null
+      }
+    });
+  });
+
+  test('takeSnapshot', () => {
+    const localView = 'localView';
+    expect(takeSnapshot(localView)).toEqual({
+      type: TAKE_SNAPSHOT,
+      payload: {
+        nativeID: localView
       }
     });
   });

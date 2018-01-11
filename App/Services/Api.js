@@ -15,7 +15,8 @@ const PHONE_EVENTS = [
   'phone:incoming',
   'phone:connected',
   'phone:disconnected',
-  'phone:media-changed'
+  'phone:media-changed',
+  'phone:snapshot'
 ];
 
 const buildQuery = (url, params) => {
@@ -70,8 +71,23 @@ const create = () => {
       }
     });
 
-  const sendMessage = (accessToken, params) =>
-    buildClient(accessToken).post('/messages', params);
+  const sendMessage = (accessToken, { files, ...params }) => {
+    const form = new FormData();
+
+    Object.keys(params).forEach(key => {
+      form.append(key, params[key]);
+    });
+
+    (files || []).forEach(uri => {
+      form.append('files', {
+        uri,
+        type: 'image/jpeg',
+        name: `${Date.now()}.jpeg`
+      });
+    });
+
+    return buildClient(accessToken).post('/messages', form);
+  };
 
   const getMessages = (accessToken, params) =>
     buildClient(accessToken).get(buildQuery('/messages', params));
@@ -88,7 +104,8 @@ const create = () => {
     rejectIncomingCall: Phone.rejectIncomingCall,
     removePhoneListener,
     requestPermission,
-    sendMessage
+    sendMessage,
+    takeSnapshot: Phone.takeSnapshot
   };
 };
 
