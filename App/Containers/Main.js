@@ -43,6 +43,10 @@ class Main extends Component {
   };
 
   handleReceiveSnapshot = snapshot => {
+    if (snapshot.error) {
+      throw new Error(snapshot.error);
+    }
+
     this.props.sendMessage({
       text: 'Do you see what I see?',
       toPersonEmail: this.props.phone.call.person.email,
