@@ -4,19 +4,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+
 import com.webex.wseclient.WseSurfaceView;
+import com.webex.wseclient.grafika.GLRenderEntity;
+import com.webex.wseclient.grafika.RenderThread;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class VideoViewManager extends SimpleViewManager<WseSurfaceView> {
@@ -47,26 +47,30 @@ public class VideoViewManager extends SimpleViewManager<WseSurfaceView> {
             @Override
             public void onSnapshot(ReadableMap eventData) {
                 Log.d("VideoViewManager", "Event Service triggered snapshot");
-
-                view.saveFrame(new WseSurfaceView.FrameSaved() {
-                    @Override
-                    public void Done(Bitmap bitmap) {
-                        Log.d("VideoViewManager", "We have a bitmap!");
-                        writeFrameToFilesystem(reactContext, bitmap);
-                    }
-                });
+                takeSnapshot(view);
             }
         });
     }
 
-    private void writeFrameToFilesystem(ThemedReactContext reactContext, Bitmap bitmap) {
+    private void takeSnapshot(final WseSurfaceView view) {
+        GLRenderEntity gl = RenderThread.getInstance().getKernel().getRender();
+
+        gl.saveFrame(new WseSurfaceView.FrameSaved() {
+            @Override
+            public void Done(Bitmap bitmap) {
+                Log.d("VideoViewManager", "We saved a bitmap!");
+                writeFrameToFilesystem(bitmap);
+            }
+        });
+    }
+
+    private void writeFrameToFilesystem(Bitmap bitmap) {
         DeviceEventManagerModule.RCTDeviceEventEmitter events = reactContext.getJSModule(
                 DeviceEventManagerModule.RCTDeviceEventEmitter.class
         );
 
         Date now = new Date();
-        DateFormat dateFmt = new SimpleDateFormat("yyyymmddhhmmss");
-        String filename = dateFmt.format(now) + ".jpg";
+        String filename = now.getTime() + ".jpg";
         String filesDir = reactContext.getFilesDir().getAbsolutePath();
         String path = filesDir + "/" + filename;
 

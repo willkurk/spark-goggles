@@ -80,13 +80,13 @@ export function* observePhone(api) {
       }
 
       case 'phone:snapshot': {
-        // const toPersonEmail = yield select(
-        //   state => state.phone.call.person.email
-        // );
+        const toPersonEmail = yield select(
+          state => state.phone.call.person.email
+        );
 
         yield put(
           sendMessage({
-            toPersonEmail: 'thomas@promptworks.com',
+            toPersonEmail,
             text: 'Do you see what I see?',
             files: [action.payload]
           })
