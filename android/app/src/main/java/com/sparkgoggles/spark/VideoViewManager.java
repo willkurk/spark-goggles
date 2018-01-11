@@ -30,6 +30,7 @@ public class VideoViewManager extends SimpleViewManager<WseSurfaceView> {
 
     @Override
     protected WseSurfaceView createViewInstance(final ThemedReactContext reactContext) {
+        Log.d("VideoViewManager", "Instance created");
         this.reactContext = reactContext;
         return new WseSurfaceView(reactContext);
     }
