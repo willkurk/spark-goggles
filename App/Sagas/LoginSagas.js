@@ -2,6 +2,9 @@ import { call, put } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
 import { grantAccess, revokeAccess } from '../Redux/Login';
 
+const visitRegistration = () =>
+  NavigationActions.navigate({ routeName: 'DeviceRegistration' });
+
 export function* authenticate(api, oauth) {
   try {
     /**
@@ -15,7 +18,7 @@ export function* authenticate(api, oauth) {
     }
 
     yield put(grantAccess());
-    yield put(NavigationActions.navigate({ routeName: 'Main' }));
+    yield put(visitRegistration());
   } catch (_error) {
     /**
      * Okay, so the user isn't already authenticated. Now, we'll check if
@@ -28,7 +31,7 @@ export function* authenticate(api, oauth) {
       if (code) {
         yield call(api.authenticate, code);
         yield put(grantAccess());
-        yield put(NavigationActions.navigate({ routeName: 'Main' }));
+        yield put(visitRegistration());
       } else {
         yield put(revokeAccess(null));
       }

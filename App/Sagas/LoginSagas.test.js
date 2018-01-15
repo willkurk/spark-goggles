@@ -22,7 +22,7 @@ describe('authenticate', () => {
     expect(saga.next().value).toEqual(call(api.getAccessToken));
     expect(saga.next(accessToken).value).toEqual(put(grantAccess()));
     expect(saga.next().value).toEqual(
-      put(NavigationActions.navigate({ routeName: 'Main' }))
+      put(NavigationActions.navigate({ routeName: 'DeviceRegistration' }))
     );
   });
 
@@ -36,7 +36,7 @@ describe('authenticate', () => {
       expect(saga.next(code).value).toEqual(call(api.authenticate, code));
       expect(saga.next().value).toEqual(put(grantAccess()));
       expect(saga.next().value).toEqual(
-        put(NavigationActions.navigate({ routeName: 'Main' }))
+        put(NavigationActions.navigate({ routeName: 'DeviceRegistration' }))
       );
     });
 

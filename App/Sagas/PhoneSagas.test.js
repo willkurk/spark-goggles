@@ -1,5 +1,6 @@
 import { eventChannel } from 'redux-saga';
 import { PermissionsAndroid } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { call, put, take } from 'redux-saga/effects';
 import FixtureApi from '../../App/Services/FixtureApi';
 
@@ -41,6 +42,9 @@ test('registerPhone', () => {
 
   expect(saga.next().value).toEqual(call(FixtureApi.registerPhone));
   expect(saga.next().value).toEqual(put(registerPhoneSuccess()));
+  expect(saga.next().value).toEqual(
+    put(NavigationActions.navigate({ routeName: 'Main' }))
+  );
 });
 
 test('registerPhone spark registration failure', () => {

@@ -1,6 +1,7 @@
 import { eventChannel } from 'redux-saga';
 import { call, put, take } from 'redux-saga/effects';
 import { PermissionsAndroid } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
   registerPhoneSuccess,
@@ -41,6 +42,7 @@ export function* registerPhone(api) {
   try {
     yield call(api.registerPhone);
     yield put(registerPhoneSuccess());
+    yield put(NavigationActions.navigate({ routeName: 'Main' }));
   } catch (err) {
     yield put(registerPhoneError('Failed to register phone with Spark.'));
   }
