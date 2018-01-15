@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Text, Button, View, Image } from 'react-native';
+import { Text, Button, View } from 'react-native';
 import { connect } from 'react-redux';
+import SparkPropTypes from '../PropTypes';
 import { sendMessage } from '../Redux/Messages';
 import {
   registerPhone,
@@ -15,6 +16,7 @@ import {
 import VideoView from '../Components/VideoView';
 import Dialer from '../Components/Dialer';
 import Loading from '../Components/Loading';
+import ImageViewer from '../Components/ImageViewer';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
@@ -55,23 +57,8 @@ class Main extends Component {
   };
 
   render() {
-    const { call, registration } = this.props.phone;
-
-    const messages = this.props.messages.data.filter(message => {
-      if (!message.files || !message.files.length) {
-        return false;
-      }
-
-      if (new Date(message.created) < call.connected) {
-        return false;
-      }
-
-      if (!call.person || message.personEmail !== call.person.email) {
-        return false;
-      }
-
-      return true;
-    });
+    const { phone, messages } = this.props;
+    const { call, registration } = phone;
 
     if (registration.error) {
       return (
@@ -96,11 +83,7 @@ class Main extends Component {
           <VideoView style={styles.remoteView} nativeID="remoteView" />
         </View>
 
-        {messages.map(message =>
-          message.files.map(file => (
-            <Image style={{ flex: 1 }} source={file} key={file.uri} />
-          ))
-        )}
+        <ImageViewer call={call} messages={messages} />
 
         {call.ringing &&
           call.person.isInitiator && (
@@ -142,39 +125,14 @@ class Main extends Component {
 Main.propTypes = {
   registerPhone: PropTypes.func.isRequired,
   requestPermissions: PropTypes.func.isRequired,
-
   dialPhone: PropTypes.func.isRequired,
   hangupPhone: PropTypes.func.isRequired,
-
   acceptIncomingCall: PropTypes.func.isRequired,
   rejectIncomingCall: PropTypes.func.isRequired,
-
   sendMessage: PropTypes.func.isRequired,
-
   takeSnapshot: PropTypes.func.isRequired,
-
-  messages: PropTypes.shape({
-    roomId: PropTypes.string,
-    data: PropTypes.array
-  }),
-
-  phone: PropTypes.shape({
-    permissionsGranted: PropTypes.bool.isRequired,
-
-    registration: PropTypes.shape({
-      complete: PropTypes.bool.isRequired,
-      loading: PropTypes.bool.isRequired
-    }).isRequired,
-
-    call: PropTypes.shape({
-      ringing: PropTypes.bool.isRequired,
-      connected: PropTypes.instanceOf(Date),
-      person: PropTypes.shape({
-        email: PropTypes.string.isRequired,
-        isInitiator: PropTypes.bool
-      })
-    }).isRequired
-  }).isRequired
+  messages: SparkPropTypes.messages.isRequired,
+  phone: SparkPropTypes.phone.isRequired
 };
 
 const mapStateToProps = ({ phone, messages }) => ({
