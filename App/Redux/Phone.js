@@ -1,8 +1,5 @@
 import { merge } from 'lodash';
 
-export const REQUEST_PERMISSIONS = 'phone/REQUEST_PERMISSIONS';
-export const UPDATE_PERMISSIONS = 'phone/UPDATE_PERMISSIONS';
-
 export const REGISTER_PHONE = 'phone/REGISTER_PHONE';
 export const REGISTER_PHONE_SUCCESS = 'phone/REGISTER_PHONE_SUCCESS';
 export const REGISTER_PHONE_ERROR = 'phone/REGISTER_PHONE_ERROR';
@@ -18,15 +15,6 @@ export const CALL_DISCONNECTED = 'phone/CALL_DISCONNECTED';
 export const CALL_RINGING = 'phone/CALL_RINGING';
 
 export const TAKE_SNAPSHOT = 'phone/TAKE_SNAPSHOT';
-
-export const updatePermissions = permissionsGranted => ({
-  type: UPDATE_PERMISSIONS,
-  payload: { permissionsGranted }
-});
-
-export const requestPermissions = () => ({
-  type: REQUEST_PERMISSIONS
-});
 
 export const registerPhone = () => ({
   type: REGISTER_PHONE,
@@ -130,7 +118,6 @@ export function reducer(state = INITIAL_STATE, action) {
     case REGISTER_PHONE:
     case REGISTER_PHONE_SUCCESS:
     case REGISTER_PHONE_ERROR:
-    case UPDATE_PERMISSIONS:
     case CALL_CONNECTED:
     case CALL_DISCONNECTED:
     case CALL_RINGING:

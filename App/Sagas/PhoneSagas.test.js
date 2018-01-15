@@ -6,7 +6,6 @@ import FixtureApi from '../../App/Services/FixtureApi';
 import {
   observePhone,
   registerPhone,
-  requestPermissions,
   dialPhone,
   hangupPhone,
   takeSnapshot
@@ -15,7 +14,6 @@ import {
 import {
   registerPhoneSuccess,
   registerPhoneError,
-  updatePermissions,
   callConnected,
   callDisconnected,
   callRinging
@@ -30,26 +28,6 @@ const remoteView = 'remoteView';
 test('registerPhone', () => {
   const saga = registerPhone(FixtureApi);
 
-  expect(saga.next().value).toEqual(call(FixtureApi.registerPhone));
-
-  expect(saga.next().value).toEqual(put(registerPhoneSuccess()));
-});
-
-test('registerPhone failure', () => {
-  const saga = registerPhone(FixtureApi);
-  const error = new Error('my error');
-
-  saga.next();
-  saga.next();
-
-  expect(saga.throw(error).value).toEqual(put(registerPhoneError(error)));
-
-  expect(saga.next().done).toBeTruthy();
-});
-
-test('requestPermissions', () => {
-  const saga = requestPermissions(FixtureApi);
-
   expect(saga.next().value).toEqual(
     call(FixtureApi.requestPermission, PermissionsAndroid.PERMISSIONS.CAMERA)
   );
@@ -61,16 +39,37 @@ test('requestPermissions', () => {
     )
   );
 
-  expect(saga.next().value).toEqual(put(updatePermissions(true)));
+  expect(saga.next().value).toEqual(call(FixtureApi.registerPhone));
+  expect(saga.next().value).toEqual(put(registerPhoneSuccess()));
 });
 
-test('requestPermissions failure', () => {
-  const saga = requestPermissions(FixtureApi);
+test('registerPhone spark registration failure', () => {
+  const saga = registerPhone(FixtureApi);
+  const error = new Error('my error');
+
+  saga.next();
+  saga.next();
+  saga.next();
   saga.next();
 
-  expect(saga.throw(new Error('no cameras')).value).toEqual(
-    put(updatePermissions(false))
+  expect(saga.throw(error).value).toEqual(
+    put(registerPhoneError('Failed to register phone with Spark.'))
   );
+
+  expect(saga.next().done).toBeTruthy();
+});
+
+test('registerPhone permission failure', () => {
+  const saga = registerPhone(FixtureApi);
+  const error = new Error('my error');
+
+  saga.next();
+
+  expect(saga.throw(error).value).toEqual(
+    put(registerPhoneError('You did not accept the permissions.'))
+  );
+
+  expect(saga.next().done).toBeTruthy();
 });
 
 test('dialPhone', () => {

@@ -1,6 +1,4 @@
 import {
-  updatePermissions,
-  requestPermissions,
   registerPhone,
   registerPhoneSuccess,
   registerPhoneError,
@@ -13,8 +11,6 @@ import {
   callRinging,
   takeSnapshot,
   reducer,
-  UPDATE_PERMISSIONS,
-  REQUEST_PERMISSIONS,
   REGISTER_PHONE,
   REGISTER_PHONE_SUCCESS,
   REGISTER_PHONE_ERROR,
@@ -32,21 +28,6 @@ const person = {
   email: 'user@example.com',
   isInitiator: true
 };
-
-test('updatePermissions', () => {
-  expect(updatePermissions(true)).toEqual({
-    type: UPDATE_PERMISSIONS,
-    payload: {
-      permissionsGranted: true
-    }
-  });
-});
-
-test('requestPermissions', () => {
-  expect(requestPermissions()).toEqual({
-    type: REQUEST_PERMISSIONS
-  });
-});
 
 test('registerPhone', () => {
   expect(registerPhone()).toEqual({
@@ -207,12 +188,6 @@ describe('reducer', () => {
         loading: false,
         complete: false
       }
-    });
-  });
-
-  test('updatePermissions', () => {
-    expect(reducer(state, updatePermissions(true))).toMatchObject({
-      permissionsGranted: true
     });
   });
 

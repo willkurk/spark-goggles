@@ -3,7 +3,6 @@ import { call, put, take } from 'redux-saga/effects';
 import { PermissionsAndroid } from 'react-native';
 import { startPollingMessages, stopPollingMessages } from '../Redux/Messages';
 import {
-  updatePermissions,
   registerPhoneSuccess,
   registerPhoneError,
   callConnected,
@@ -29,10 +28,21 @@ const getPerson = ({ from, to, direction }) => {
  */
 export function* registerPhone(api) {
   try {
+    yield call(api.requestPermission, PermissionsAndroid.PERMISSIONS.CAMERA);
+    yield call(
+      api.requestPermission,
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
+    );
+  } catch (err) {
+    yield put(registerPhoneError('You did not accept the permissions.'));
+    return;
+  }
+
+  try {
     yield call(api.registerPhone);
     yield put(registerPhoneSuccess());
   } catch (err) {
-    yield put(registerPhoneError(err));
+    yield put(registerPhoneError('Failed to register phone with Spark.'));
   }
 }
 
@@ -78,22 +88,6 @@ export function* observePhone(api) {
       default:
         break;
     }
-  }
-}
-
-/**
- * Request permission to use the camera and audio devices
- */
-export function* requestPermissions(api) {
-  try {
-    yield call(api.requestPermission, PermissionsAndroid.PERMISSIONS.CAMERA);
-    yield call(
-      api.requestPermission,
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-    );
-    yield put(updatePermissions(true));
-  } catch (err) {
-    yield put(updatePermissions(false));
   }
 }
 
