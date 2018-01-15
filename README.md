@@ -91,4 +91,4 @@ Finally, to build an `.apk` file, you can run `yarn android:build`. This will ge
 
 For more information, consult the [React Native documentation](https://facebook.github.io/react-native/docs/signed-apk-android.html).
 
-**NOTE: It is imperative that you don't commit the .keystore file or any passwords.
+*NOTE:* It is imperative that you don't commit the .keystore file or any passwords.
