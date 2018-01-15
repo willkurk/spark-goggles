@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Button, View } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import SparkPropTypes from '../PropTypes';
 import { sendMessage } from '../Redux/Messages';
@@ -13,8 +13,8 @@ import {
 } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
 import Dialer from '../Components/Dialer';
-import Loading from '../Components/Loading';
-import ImageViewer from '../Components/ImageViewer';
+import CallRinging from '../Components/CallRinging';
+import CallConnected from '../Components/CallConnected';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
@@ -64,40 +64,26 @@ class Main extends Component {
           <VideoView style={styles.remoteView} nativeID="remoteView" />
         </View>
 
-        <ImageViewer call={call} messages={messages} />
+        {!call.connected &&
+          !call.ringing && <Dialer onCall={this.handleCall} />}
 
-        {call.ringing &&
-          call.person.isInitiator && (
-            <View style={{ flex: 1 }}>
-              <Loading text={`${call.person.email} is calling...`} />
-              <Button
-                title="Answer"
-                onPress={this.handleAcceptCall}
-                style={{ marginBottom: 10 }}
-              />
-              <Button title="Reject" onPress={this.props.rejectIncomingCall} />
-            </View>
-          )}
-
-        {call.ringing &&
-          !call.person.isInitiator && (
-            <Loading text={`Calling ${call.person.email}...`} />
-          )}
-
-        {call.connected && (
-          <Button
-            title="Send Snapshot"
-            style={{ marginTop: 10, marginBottom: 10 }}
-            onPress={this.handleTriggerSnapshot}
+        {call.ringing && (
+          <CallRinging
+            call={call}
+            onAccept={this.handleAcceptCall}
+            onReject={this.props.rejectIncomingCall}
+            onHangup={this.props.hangupPhone}
           />
         )}
 
-        {(call.connected || (call.ringing && !call.person.isInitiator)) && (
-          <Button title="Hangup call" onPress={this.props.hangupPhone} />
+        {call.connected && (
+          <CallConnected
+            call={call}
+            messages={messages}
+            onHangup={this.props.hangupPhone}
+            onTriggerSnapshot={this.handleTriggerSnapshot}
+          />
         )}
-
-        {!call.connected &&
-          !call.ringing && <Dialer onCall={this.handleCall} />}
       </View>
     );
   }
