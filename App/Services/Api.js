@@ -91,8 +91,10 @@ const create = () => {
   const getMessages = (accessToken, params) =>
     buildClient(accessToken).get(buildQuery('/messages', params));
 
-  const getRooms = accessToken =>
-    buildClient(accessToken).get(buildQuery('/rooms', { type: 'direct' }));
+  const getTeams = accessToken => buildClient(accessToken).get('/teams');
+
+  const getTeamMembers = (accessToken, teamId) =>
+    buildClient(accessToken).get(buildQuery('/team/memberships', { teamId }));
 
   return {
     acceptIncomingCall,
@@ -101,7 +103,8 @@ const create = () => {
     getAccessToken: Phone.getAccessToken,
     dialPhone,
     getMessages,
-    getRooms,
+    getTeams,
+    getTeamMembers,
     hangupPhone: Phone.hangup,
     registerPhone: Phone.register,
     rejectIncomingCall: Phone.rejectIncomingCall,

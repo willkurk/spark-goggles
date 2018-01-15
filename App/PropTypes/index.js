@@ -26,9 +26,28 @@ const messages = PropTypes.shape({
   data: PropTypes.array
 });
 
+const person = PropTypes.shape({
+  created: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  isModerator: PropTypes.bool.isRequired,
+  personDisplayName: PropTypes.string.isRequired,
+  personEmail: PropTypes.string.isRequired,
+  personId: PropTypes.string.isRequired,
+  personOrgId: PropTypes.string.isRequired,
+  teamId: PropTypes.string.isRequired
+});
+
+const people = PropTypes.shape({
+  data: PropTypes.arrayOf(person),
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string
+});
+
 export default {
   registration,
   call,
   phone,
-  messages
+  messages,
+  people,
+  person
 };

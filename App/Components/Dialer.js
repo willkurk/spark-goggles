@@ -1,41 +1,49 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { View, TextInput, Button } from 'react-native';
-import Config from 'react-native-config';
+import { View, Text, FlatList } from 'react-native';
+import SparkPropTypes from '../PropTypes/';
+import Loading from './Loading';
+import Error from './Error';
+import Person from './Person';
 
-class Dialer extends Component {
-  state = {
-    address: Config.DEFAULT_DIAL_ADDRESS || ''
-  };
+const Dialer = ({ people, onCall }) => {
+  console.log(people);
 
-  handleChange = address => {
-    this.setState({ address });
-  };
-
-  handleCall = () => {
-    this.props.onCall(this.state.address);
-  };
-
-  render() {
-    return (
-      <View stlye={{ flex: 1, ...this.props.style }}>
-        <TextInput
-          onChangeText={this.handleChange}
-          value={this.state.address}
-        />
-
-        <Button
-          title={`Call ${this.state.address}`}
-          onPress={this.handleCall}
-        />
-      </View>
-    );
+  if (people.loading || !people.data) {
+    return <Loading text="Loading people..." />;
   }
-}
+
+  if (people.error) {
+    return <Error text={people.error} />;
+  }
+
+  return (
+    <View>
+      <Text
+        style={{
+          textAlign: 'center',
+          fontSize: 20,
+          padding: 15,
+          backgroundColor: 'blue',
+          color: 'white'
+        }}
+      >
+        Who do you want to call?
+      </Text>
+
+      <FlatList
+        data={people.data.map(person => ({ ...person, key: person.id }))}
+        renderItem={({ item: person }) => (
+          <Person key={person.id} person={person} onCall={onCall} />
+        )}
+      />
+    </View>
+  );
+};
 
 Dialer.propTypes = {
   onCall: PropTypes.func.isRequired,
-  style: PropTypes.object // eslint-disable-line
+  people: SparkPropTypes.people.isRequired
 };
 
 export default Dialer;

@@ -27,7 +27,7 @@ export default {
     });
   },
 
-  getRooms() {
+  getPeople() {
     return Promise.resolve({
       data: {
         items: []
