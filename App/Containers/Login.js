@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Text, View, Button } from 'react-native';
+import { View, Button } from 'react-native';
 import { authenticate } from '../Redux/Login';
 import OAuth from '../Services/OAuth';
 import Loading from '../Components/Loading';
+import Error from '../Components/Error';
 import styles from './Styles/LoginStyles';
 
 const mapStateToProps = state => state.login;
@@ -21,7 +22,7 @@ class Login extends Component {
     }
 
     if (this.props.error) {
-      return <Text style={styles.error}>{this.props.error}</Text>;
+      return <Error text={this.props.error} />;
     }
 
     return (
