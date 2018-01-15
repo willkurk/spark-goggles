@@ -1,6 +1,6 @@
 import React from 'react';
 import SparkPropTypes from '../PropTypes/';
-import { Image } from 'react-native';
+import { View, Image } from 'react-native';
 
 const messageFilter = call => message => {
   if (!message.files || !message.files.length) {
@@ -18,14 +18,23 @@ const messageFilter = call => message => {
   return true;
 };
 
-const ImageViewer = ({ call, messages }) =>
-  messages.data
-    .filter(messageFilter(call))
-    .map(message =>
-      message.files.map(file => (
-        <Image style={{ flex: 1 }} source={file} key={file.uri} />
-      ))
-    );
+const ImageViewer = ({ call, messages }) => {
+  const images = messages.data.filter(messageFilter(call));
+
+  if (!images.length) {
+    return null;
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      {images.map(message =>
+        message.files.map(file => (
+          <Image style={{ flex: 1 }} source={file} key={file.uri} />
+        ))
+      )}
+    </View>
+  );
+};
 
 ImageViewer.propTypes = {
   call: SparkPropTypes.call,
