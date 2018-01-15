@@ -1,4 +1,3 @@
-import Metrics from './Metrics';
 import Colors from './Colors';
 
 // This file is for a reusable grouping of Theme items.
@@ -8,7 +7,7 @@ const ApplicationStyles = {
   screen: {
     container: {
       flex: 1,
-      padding: Metrics.baseMargin,
+      padding: 10,
       backgroundColor: Colors.white
     }
   }
