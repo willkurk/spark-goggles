@@ -171,7 +171,7 @@ Main.propTypes = {
       connected: PropTypes.instanceOf(Date),
       person: PropTypes.shape({
         email: PropTypes.string.isRequired,
-        isInitiator: PropTypes.bool.isRequired
+        isInitiator: PropTypes.bool
       })
     }).isRequired
   }).isRequired
