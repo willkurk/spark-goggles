@@ -8,6 +8,7 @@ import { reducer as nav } from './NavigationRedux';
 import { reducer as login } from './Login';
 import { reducer as phone } from './Phone';
 import { reducer as messages } from './Messages';
+import { reducer as people } from './People';
 
 /* ------------- Assemble The Reducers ------------- */
 
@@ -15,7 +16,8 @@ export const reducers = combineReducers({
   login,
   nav,
   phone,
-  messages
+  messages,
+  people
 });
 
 export default () => {

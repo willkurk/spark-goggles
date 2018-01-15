@@ -9,12 +9,14 @@ import DebugConfig from '../Config/DebugConfig';
 import * as Login from '../Redux/Login';
 import * as Phone from '../Redux/Phone';
 import * as Messages from '../Redux/Messages';
+import * as People from '../Redux/People';
 
 /* ------------- Sagas ------------- */
 
 import * as LoginSagas from './LoginSagas';
 import * as PhoneSagas from './PhoneSagas';
 import * as MessageSagas from './MessageSagas';
+import * as PeopleSagas from './PeopleSagas';
 
 /* ------------- API ------------- */
 
@@ -47,6 +49,11 @@ export default function* root() {
      */
     fork(MessageSagas.pollMessages, api),
     takeLatest(Messages.START_POLLING, MessageSagas.startPollingMessages, api),
-    takeLatest(Messages.SEND_MESSAGE, MessageSagas.sendMessage, api)
+    takeLatest(Messages.SEND_MESSAGE, MessageSagas.sendMessage, api),
+
+    /**
+     * People
+     */
+    takeLatest(People.GET_PEOPLE, PeopleSagas.getPeople, api)
   ]);
 }

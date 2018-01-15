@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 import SparkPropTypes from '../PropTypes';
 import { sendMessage } from '../Redux/Messages';
+import { getPeople } from '../Redux/People';
 import {
   dialPhone,
   hangupPhone,
@@ -18,6 +19,10 @@ import CallConnected from '../Components/CallConnected';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
+  componentDidMount() {
+    this.props.getPeople();
+  }
+
   handleCall = address => {
     this.props.dialPhone({
       address,
@@ -50,7 +55,7 @@ class Main extends Component {
   };
 
   render() {
-    const { phone, messages } = this.props;
+    const { phone, messages, people } = this.props;
     const { call } = phone;
 
     return (
@@ -65,7 +70,7 @@ class Main extends Component {
         </View>
 
         {!call.connected &&
-          !call.ringing && <Dialer onCall={this.handleCall} />}
+          !call.ringing && <Dialer people={people} onCall={this.handleCall} />}
 
         {call.ringing && (
           <CallRinging
@@ -90,6 +95,7 @@ class Main extends Component {
 }
 
 Main.propTypes = {
+  getPeople: PropTypes.func.isRequired,
   dialPhone: PropTypes.func.isRequired,
   hangupPhone: PropTypes.func.isRequired,
   acceptIncomingCall: PropTypes.func.isRequired,
@@ -97,15 +103,18 @@ Main.propTypes = {
   sendMessage: PropTypes.func.isRequired,
   takeSnapshot: PropTypes.func.isRequired,
   messages: SparkPropTypes.messages.isRequired,
-  phone: SparkPropTypes.phone.isRequired
+  phone: SparkPropTypes.phone.isRequired,
+  people: SparkPropTypes.people.isRequired
 };
 
-const mapStateToProps = ({ phone, messages }) => ({
+const mapStateToProps = ({ phone, people, messages }) => ({
   phone,
-  messages
+  messages,
+  people
 });
 
 const mapDispatchToProps = {
+  getPeople,
   dialPhone,
   hangupPhone,
   acceptIncomingCall,
