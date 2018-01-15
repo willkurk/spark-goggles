@@ -1,4 +1,4 @@
-import { call, put, race } from 'redux-saga/effects';
+import { call, put, all } from 'redux-saga/effects';
 import { getPeopleSuccess, getPeopleError } from '../Redux/People';
 
 export function* getPeople(api) {
@@ -7,7 +7,7 @@ export function* getPeople(api) {
   try {
     const { data: { items: teams } } = yield call(api.getTeams, accessToken);
 
-    const responses = yield race(
+    const responses = yield all(
       teams.map(team => call(api.getTeamMembers, accessToken, team.id))
     );
 

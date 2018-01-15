@@ -27,7 +27,15 @@ export default {
     });
   },
 
-  getPeople() {
+  getTeams() {
+    return Promise.resolve({
+      data: {
+        items: []
+      }
+    });
+  },
+
+  getTeamMembers() {
     return Promise.resolve({
       data: {
         items: []
