@@ -48,5 +48,10 @@ export default function* root() {
     fork(MessageSagas.pollMessages, api),
     takeLatest(Messages.START_POLLING, MessageSagas.startPollingMessages, api),
     takeLatest(Messages.SEND_MESSAGE, MessageSagas.sendMessage, api)
+
+    /**
+     * Rooms
+     */
+    takeLatest(Rooms.GET_ROOMS, RoomSagas.getRooms, api)
   ]);
 }

@@ -91,6 +91,9 @@ const create = () => {
   const getMessages = (accessToken, params) =>
     buildClient(accessToken).get(buildQuery('/messages', params));
 
+  const getRooms = accessToken =>
+    buildClient(accessToken).get(buildQuery('/rooms', { type: 'direct' }));
+
   return {
     acceptIncomingCall,
     addPhoneListener,
@@ -98,6 +101,7 @@ const create = () => {
     getAccessToken: Phone.getAccessToken,
     dialPhone,
     getMessages,
+    getRooms,
     hangupPhone: Phone.hangup,
     registerPhone: Phone.register,
     rejectIncomingCall: Phone.rejectIncomingCall,

@@ -27,6 +27,14 @@ export default {
     });
   },
 
+  getRooms() {
+    return Promise.resolve({
+      data: {
+        items: []
+      }
+    });
+  },
+
   hangupPhone() {
     return Promise.resolve(true);
   },
