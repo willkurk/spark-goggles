@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Text, Button, View } from 'react-native';
+import { Button, View } from 'react-native';
 import { connect } from 'react-redux';
 import SparkPropTypes from '../PropTypes';
 import { sendMessage } from '../Redux/Messages';
 import {
-  registerPhone,
-  requestPermissions,
   dialPhone,
   hangupPhone,
   acceptIncomingCall,
@@ -20,11 +18,6 @@ import ImageViewer from '../Components/ImageViewer';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
-  componentDidMount() {
-    this.props.registerPhone();
-    this.props.requestPermissions();
-  }
-
   handleCall = address => {
     this.props.dialPhone({
       address,
@@ -58,19 +51,7 @@ class Main extends Component {
 
   render() {
     const { phone, messages } = this.props;
-    const { call, registration } = phone;
-
-    if (registration.error) {
-      return (
-        <Text style={{ flex: 1, color: 'red' }}>
-          Failed to register: {JSON.stringify(registration.error)}
-        </Text>
-      );
-    }
-
-    if (!registration.complete) {
-      return <Loading text="Registering your device..." />;
-    }
+    const { call } = phone;
 
     return (
       <View style={styles.container}>
@@ -123,8 +104,6 @@ class Main extends Component {
 }
 
 Main.propTypes = {
-  registerPhone: PropTypes.func.isRequired,
-  requestPermissions: PropTypes.func.isRequired,
   dialPhone: PropTypes.func.isRequired,
   hangupPhone: PropTypes.func.isRequired,
   acceptIncomingCall: PropTypes.func.isRequired,
@@ -141,8 +120,6 @@ const mapStateToProps = ({ phone, messages }) => ({
 });
 
 const mapDispatchToProps = {
-  registerPhone,
-  requestPermissions,
   dialPhone,
   hangupPhone,
   acceptIncomingCall,

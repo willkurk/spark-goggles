@@ -1,6 +1,7 @@
 import { StackNavigator } from 'react-navigation';
 import Login from '../Containers/Login';
 import Main from '../Containers/Main';
+import DeviceRegistration from '../Containers/DeviceRegistration';
 
 import styles from './Styles/NavigationStyles';
 
@@ -8,6 +9,7 @@ import styles from './Styles/NavigationStyles';
 const PrimaryNav = StackNavigator(
   {
     Login: { screen: Login },
+    DeviceRegistration: { screen: DeviceRegistration },
     Main: { screen: Main }
   },
   {

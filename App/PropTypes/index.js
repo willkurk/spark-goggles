@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 
 const registration = PropTypes.shape({
   complete: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string
 });
 
 const call = PropTypes.shape({
