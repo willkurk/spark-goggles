@@ -29,6 +29,8 @@ export function* authenticate(api, oauth) {
         yield call(api.authenticate, code);
         yield put(grantAccess());
         yield put(NavigationActions.navigate({ routeName: 'Main' }));
+      } else {
+        yield put(revokeAccess(null));
       }
     } catch (error) {
       yield put(revokeAccess(error.message));

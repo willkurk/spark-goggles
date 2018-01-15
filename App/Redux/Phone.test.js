@@ -262,6 +262,23 @@ describe('reducer', () => {
     });
   });
 
+  test('dialPhone', () => {
+    const action = dialPhone({
+      localView: 'lv',
+      removeView: 'rv',
+      address: 'user@example.com'
+    });
+
+    expect(reducer(state, action)).toMatchObject({
+      call: {
+        ringing: true,
+        person: {
+          email: 'user@example.com'
+        }
+      }
+    });
+  });
+
   test('takeSnapshot', () => {
     const localView = 'localView';
     expect(takeSnapshot(localView)).toEqual({

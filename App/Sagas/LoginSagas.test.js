@@ -52,7 +52,7 @@ describe('authenticate', () => {
     });
 
     test('when code is not present', () => {
-      expect(saga.next(undefined).done).toBeTruthy();
+      expect(saga.next(undefined).value).toEqual(put(revokeAccess(null)));
     });
   });
 });

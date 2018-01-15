@@ -11,12 +11,12 @@ const mapStateToProps = state => state.login;
 const mapDispatchToProps = { authenticate };
 
 class Login extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.authenticate();
   }
 
   render() {
-    if (!this.props.loading) {
+    if (this.props.loading) {
       return <Loading text="Loading..." />;
     }
 

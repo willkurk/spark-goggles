@@ -136,6 +136,14 @@ export function reducer(state = INITIAL_STATE, action) {
     case CALL_RINGING:
       return merge({}, state, action.payload);
 
+    case DIAL_PHONE:
+      return merge({}, state, {
+        call: {
+          ringing: true,
+          person: { email: action.payload.address }
+        }
+      });
+
     default:
       return state;
   }
