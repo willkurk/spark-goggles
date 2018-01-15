@@ -21,7 +21,7 @@ const checkAuthorization = value => {
   const params = querystring.parse(location.query);
 
   if (params.error) {
-    throw new Error(params.error);
+    throw new Error(params.error_description || params.error);
   }
 
   if (redirectUri.protocol !== location.protocol) {
