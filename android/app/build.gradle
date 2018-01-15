@@ -109,6 +109,19 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+    signingConfigs {
+        release {
+            if (project.hasProperty('SPARK_GOGGLES_RELEASE_STORE_FILE')) {
+                storeFile file(SPARK_GOGGLES_RELEASE_STORE_FILE)
+                storePassword SPARK_GOGGLES_RELEASE_STORE_PASSWORD
+                keyAlias SPARK_GOGGLES_RELEASE_KEY_ALIAS
+                keyPassword SPARK_GOGGLES_RELEASE_KEY_PASSWORD
+
+            } else {
+                throw new GradleException('Missing release configuration variables. Consult the README section titled "Generating a release"')
+            }
+        }
+    }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
         exclude 'META-INF/LICENSE'
@@ -125,6 +138,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
