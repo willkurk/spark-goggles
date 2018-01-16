@@ -7,8 +7,6 @@ import Error from './Error';
 import Person from './Person';
 
 const Dialer = ({ people, onCall }) => {
-  console.log(people);
-
   if (people.loading || !people.data) {
     return <Loading text="Loading people..." />;
   }
