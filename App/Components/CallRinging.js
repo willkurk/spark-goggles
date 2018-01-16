@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import SparkPropTypes from '../PropTypes/';
 import Loading from '../Components/Loading';
 
-const CallRinging = ({ call, onAccept, onReject, onHangup }) => {
+const CallRinging = ({ call, onAccept, onReject, onHangup, style }) => {
   if (!call.person.isInitiator) {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={[style, { flex: 1 }]}>
         <Loading text={`Calling ${call.person.email}`} />
         <Button title="Hangup" onPress={onHangup} />
       </View>
@@ -15,7 +15,7 @@ const CallRinging = ({ call, onAccept, onReject, onHangup }) => {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+    <View style={[style, { flex: 1, justifyContent: 'flex-end' }]}>
       <View style={{ flex: 1 }}>
         <Loading text={`${call.person.email} is calling...`} />
       </View>
@@ -36,7 +36,8 @@ CallRinging.propTypes = {
   call: SparkPropTypes.call.isRequired,
   onAccept: PropTypes.func.isRequired,
   onReject: PropTypes.func.isRequired,
-  onHangup: PropTypes.func.isRequired
+  onHangup: PropTypes.func.isRequired,
+  style: View.propTypes.style
 };
 
 export default CallRinging;

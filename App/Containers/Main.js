@@ -74,6 +74,7 @@ class Main extends Component {
 
         {call.ringing && (
           <CallRinging
+            style={styles.callRinging}
             call={call}
             onAccept={this.handleAcceptCall}
             onReject={this.props.rejectIncomingCall}
@@ -83,6 +84,7 @@ class Main extends Component {
 
         {call.connected && (
           <CallConnected
+            style={styles.callConnected}
             call={call}
             messages={messages}
             onHangup={this.props.hangupPhone}
