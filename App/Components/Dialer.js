@@ -6,7 +6,21 @@ import Loading from './Loading';
 import Error from './Error';
 import Person from './Person';
 
-const Dialer = ({ people, onCall }) => {
+const renderHeader = () => (
+  <Text
+    style={{
+      textAlign: 'center',
+      fontSize: 20,
+      padding: 15,
+      backgroundColor: 'blue',
+      color: 'white'
+    }}
+  >
+    Who do you want to call?
+  </Text>
+);
+
+const Dialer = ({ people, onCall, style }) => {
   if (people.loading || !people.data) {
     return <Loading text="Loading people..." />;
   }
@@ -16,21 +30,10 @@ const Dialer = ({ people, onCall }) => {
   }
 
   return (
-    <View>
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 20,
-          padding: 15,
-          backgroundColor: 'blue',
-          color: 'white'
-        }}
-      >
-        Who do you want to call?
-      </Text>
-
+    <View style={style}>
       <FlatList
         data={people.data.map(person => ({ ...person, key: person.id }))}
+        ListHeaderComponent={renderHeader}
         renderItem={({ item: person }) => (
           <Person key={person.id} person={person} onCall={onCall} />
         )}
@@ -41,7 +44,8 @@ const Dialer = ({ people, onCall }) => {
 
 Dialer.propTypes = {
   onCall: PropTypes.func.isRequired,
-  people: SparkPropTypes.people.isRequired
+  people: SparkPropTypes.people.isRequired,
+  style: View.propTypes.style
 };
 
 export default Dialer;
