@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
 import android.view.View;
+import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 
 import com.ciscospark.androidsdk.CompletionHandler;
 import com.ciscospark.androidsdk.Result;
@@ -12,6 +14,7 @@ import com.ciscospark.androidsdk.auth.OAuthAuthenticator;
 import com.ciscospark.androidsdk.phone.Call;
 import com.ciscospark.androidsdk.phone.MediaOption;
 import com.ciscospark.androidsdk.phone.Phone.IncomingCallListener;
+import com.ciscospark.androidsdk.phone.Phone.FacingMode;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -47,14 +50,39 @@ public class Phone extends ReactContextBaseJavaModule {
         super(reactApplicationContext);
     }
 
+    /** A safe way to get an instance of the Camera object. */
+    public static void orientCamera(){
+        int cameraId = -1;
+        int numberOfCameras = Camera.getNumberOfCameras();
+        for (int i = 0; i < numberOfCameras; i++) {
+          CameraInfo info = new CameraInfo();
+          Camera.getCameraInfo(i, info);
+          if (info.facing == CameraInfo.CAMERA_FACING_BACK) {
+            cameraId = i;
+            break;
+          }
+        }
+        Camera c = null;
+        try {
+            c = Camera.open(cameraId); // attempt to get a Camera instance
+        }
+        catch (Exception e){
+            // Camera is not available (in use or does not exist)
+        }
+        c.setDisplayOrientation(0); // returns null if camera is unavailable
+        c.getParameters().setRotation(0);
+    }
+
     @Override
     public void initialize() {
         Activity activity = getCurrentActivity();
         Application application = activity.getApplication();
 
+        Phone.orientCamera();
         events = getReactApplicationContext().getJSModule(RCTDeviceEventEmitter.class);
         authenticator = new OAuthAuthenticator(clientId, clientSecret, scope, redirectUri);
         spark = new Spark(application, authenticator);
+        spark.phone().setDefaultFacingMode(FacingMode.ENVIROMENT);
     }
 
     @Override
@@ -67,6 +95,14 @@ public class Phone extends ReactContextBaseJavaModule {
         Log.d("Phone", "About to capture snapshot");
         VideoView view = (VideoView) findViewById(nativeId);
         view.takeSnapshot();
+    }
+
+    @ReactMethod
+    public void setTop() {
+        VideoView view = (VideoView) findViewById("remoteView");
+        VideoView localView = (VideoView) findViewById("localView");
+        view.setZOrderMediaOverlay(true);
+        localView.setZOrderMediaOverlay(false);
     }
 
     @ReactMethod

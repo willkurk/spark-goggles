@@ -73,6 +73,7 @@ export function* observePhone(api) {
             address: getPerson(action.payload).email
           })
         );
+        yield call(api.setTop);
         break;
       }
 

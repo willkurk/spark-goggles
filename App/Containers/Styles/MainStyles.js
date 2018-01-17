@@ -6,32 +6,35 @@ const { width, height } = Dimensions.get('window');
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
 
-  // By setting the size to 1x1, you won't really see the local view, but
-  // it will still be there. Display none will not work here, because it
-  // will actually remove the video view.
-
-  callViewHidden: {
-    display: 'none'
-  },
-  callViewVisible: {
-    width: width,
-    height: height
-  },
   localView: {
+    position: 'absolute',
+    width: width,
+    height: height,
+    left: 0,
+    top: 0,
+    elevation: 1
+  },
+
+  remoteView: {
+    position: 'absolute',
+    width: 160,
+    height: 90,
+    top: 0,
+    right: 0,
+    backgroundColor: 'rgba(255,0,0,0.2)',
+    elevation: 2
+  },
+
+  dialer: {
     position: 'absolute',
     width: width,
     height: height,
     left: 0,
     right: 0,
     top: 0,
-    bottom: 0
-  },
-
-  remoteView: {
-    width: 50,
-    height: 50,
-    top: 0,
-    right: 0
+    bottom: 0,
+    backgroundColor: 'white',
+    elevation: 3
   },
 
   callRinging: {
@@ -40,7 +43,7 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     width: width,
-    zIndex: 3
+    elevation: 3
   },
 
   callConnected: {
@@ -48,6 +51,7 @@ export default StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    width: width
+    width: width,
+    elevation: 3
   }
 });

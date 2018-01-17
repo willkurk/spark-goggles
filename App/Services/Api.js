@@ -111,7 +111,8 @@ const create = () => {
     removePhoneListener,
     requestPermission,
     sendMessage,
-    takeSnapshot: Phone.takeSnapshot
+    takeSnapshot: Phone.takeSnapshot,
+    setTop: Phone.setTop
   };
 };
 
