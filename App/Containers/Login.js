@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Button } from 'react-native';
+import { View } from 'react-native';
 import { authenticate } from '../Redux/Login';
 import OAuth from '../Services/OAuth';
 import Loading from '../Components/Loading';
@@ -18,13 +18,15 @@ class Login extends Component {
   }
 
   render() {
-    if (this.props.loading) {
-      return <Loading text="Loading..." />;
-    }
+    const Contents = () => {
+      if (this.props.loading) {
+        return <Loading text="Loading..." />;
+      }
 
-    if (this.props.error) {
-      return <Error text={this.props.error} />;
-    }
+      if (this.props.error) {
+        return <Error text={this.props.error} />;
+      }
+
       return (
         <Button
           label="Login to Spark"
@@ -36,7 +38,7 @@ class Login extends Component {
 
     return (
       <View style={styles.container}>
-        <Button title="Login" onPress={() => OAuth.redirect()} />
+        <Contents />
       </View>
     );
   }
