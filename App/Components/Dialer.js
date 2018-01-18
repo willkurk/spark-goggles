@@ -5,19 +5,14 @@ import SparkPropTypes from '../PropTypes/';
 import Loading from './Loading';
 import Error from './Error';
 import Person from './Person';
+import Icon from 'react-native-vector-icons/Ionicons';
+import styles from './Styles/DialerStyles';
 
 const renderHeader = () => (
-  <Text
-    style={{
-      textAlign: 'center',
-      fontSize: 20,
-      padding: 15,
-      backgroundColor: 'blue',
-      color: 'white'
-    }}
-  >
-    Contacts
-  </Text>
+  <View style={styles.header}>
+    <Icon style={styles.icon} name="ios-contacts-outline" size={30} />
+    <Text style={styles.heading}>Contacts</Text>
+  </View>
 );
 
 const Dialer = ({ people, onCall, style }) => {
