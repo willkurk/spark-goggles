@@ -3,12 +3,7 @@ import { TouchableOpacity, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import SparkPropTypes from '../PropTypes/';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-const style = {
-  padding: 15,
-  borderBottomWidth: 1,
-  borderColor: '#eee'
-};
+import styles from './Styles/PersonStyles';
 
 class Person extends Component {
   handlePress = () => {
@@ -19,12 +14,13 @@ class Person extends Component {
     const { person } = this.props;
 
     return (
-      <TouchableOpacity onPress={this.handlePress}>
-        <View style={style}>
-          <Icon name="ios-call-outline" size={24} />
-          <Text key={person.id} onPress={this.handlePress}>
-            {person.personDisplayName} ({person.personEmail})
-          </Text>
+      <TouchableOpacity key={person.id} onPress={this.handlePress}>
+        <View style={styles.item}>
+          <Icon style={styles.icon} name="ios-call-outline" size={24} />
+
+          <Text style={styles.name}>{person.personDisplayName}</Text>
+
+          <Text style={styles.email}>{person.personEmail}</Text>
         </View>
       </TouchableOpacity>
     );

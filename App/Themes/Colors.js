@@ -1,10 +1,10 @@
 const colors = {
   white: '#ffffff',
-  grey: '#d1d2d1',
-  green: '#73be46',
-  paleBlue: '#a9dff4',
-  blue: '#0a9ad7',
-  clear: 'transparent'
+  black: '#222222',
+  lightGrey: '#d9d9d9',
+  paleGrey: '#f5f5f5',
+  clear: 'transparent',
+  teal: '#0bcce8'
 };
 
 export default colors;
