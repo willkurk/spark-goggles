@@ -11,7 +11,9 @@ const ApplicationStyles = {
       right: 0,
       top: 0,
       bottom: 0,
-      backgroundColor: Colors.white
+      backgroundColor: Colors.clear,
+      alignItems: 'center',
+      justifyContent: 'center'
     }
   }
 };
