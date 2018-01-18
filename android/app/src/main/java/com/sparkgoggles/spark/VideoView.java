@@ -23,10 +23,6 @@ public class VideoView extends WseSurfaceView {
         super(reactContext);
     }
 
-    public void setTop() {
-        this.setZOrderOnTop(true);
-    }
-
     /**
      * Pull a frame off of the video feed, save it, and broadcast the path to the
      * React component's `onSnapshot` function.
