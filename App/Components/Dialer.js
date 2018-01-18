@@ -16,7 +16,7 @@ const renderHeader = () => (
       color: 'white'
     }}
   >
-    Who do you want to call?
+    Contacts
   </Text>
 );
 
