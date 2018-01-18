@@ -1,4 +1,6 @@
+import { Dimensions } from 'react-native';
 import Colors from './Colors';
+const { width, height } = Dimensions.get('window');
 
 // This file is for a reusable grouping of Theme items.
 // Similar to an XML fragment layout in Android
@@ -8,9 +10,11 @@ const ApplicationStyles = {
     container: {
       position: 'absolute',
       left: 0,
-      right: 0,
+      //right: 0,
       top: 0,
-      bottom: 0,
+      //bottom: 0,
+      width: width,
+      height: height,
       backgroundColor: Colors.clear,
       alignItems: 'center',
       justifyContent: 'center'
