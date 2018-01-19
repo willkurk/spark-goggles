@@ -6,7 +6,7 @@ export const spinnerColor = Colors.teal;
 export default StyleSheet.create({
   loadingText: {
     ...Type.default,
-    color: Colors.darkGrey,
+    color: Colors.white,
     paddingTop: Metrics.gap(2)
   }
 });
