@@ -19,6 +19,7 @@
     "android:logcat": "$ANDROID_HOME/platform-tools/adb logcat *:S ReactNative:V ReactNativeJS:V",
     "android:shake": "$ANDROID_HOME/platform-tools/adb devices | grep '\\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} $ANDROID_HOME/platform-tools/adb -s {} shell input keyevent 82",
     "android:emulator:create": "script/create-device",
+    "android:bridge": "$ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081",
     "keytool": "cd android/app && keytool -genkey -v -keystore spark-goggles.keystore -alias spark-goggles -keyalg RSA -keysize 2048 -validity 10000 && cd ../..",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -32,6 +33,7 @@
     "react": "16.0.0",
     "react-native": "0.50.4",
     "react-native-config": "^0.10.0",
+    "react-native-vector-icons": "^4.5.0",
     "react-navigation": "^1.0.0-beta.21",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
@@ -56,6 +58,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "22.0.4",
     "prettier": "^1.9.2",
+    "react-devtools": "^3.0.0",
     "react-dom": "16.0.0",
     "react-test-renderer": "16.0.0",
     "reactotron-react-native": "^1.13.2",
@@ -88,6 +91,11 @@
       "XMLHttpRequest",
       "FormData",
       "React$Element"
+    ]
+  },
+  "rnpm": {
+    "assets": [
+      "assets/fonts"
     ]
   }
 }

@@ -1,18 +1,60 @@
 import { StyleSheet } from 'react-native';
-import { ApplicationStyles } from '../../Themes/';
+import { ApplicationStyles, Metrics } from '../../Themes/';
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
 
-  // By setting the size to 1x1, you won't really see the local view, but
-  // it will still be there. Display none will not work here, because it
-  // will actually remove the video view.
   localView: {
+    position: 'absolute',
     width: 1,
-    height: 1
+    height: 1,
+    left: 0,
+    top: 0,
+    elevation: 1
   },
 
-  remoteView: {
-    flex: 1
+  remoteViewHidden: {
+    position: 'absolute',
+    width: 1,
+    height: 1,
+    top: -1,
+    right: -1
+  },
+
+  remoteViewVisible: {
+    position: 'absolute',
+    width: 160,
+    height: 90,
+    top: 0,
+    right: 0,
+    backgroundColor: 'rgba(255,0,0,0.2)',
+    elevation: 4
+  },
+
+  dialer: {
+    position: 'absolute',
+    width: Metrics.screenWidth,
+    height: Metrics.screenHeight,
+    left: 0,
+    top: 0,
+    elevation: 3
+  },
+
+  callRinging: {
+    position: 'absolute',
+    width: Metrics.screenWidth,
+    height: Metrics.screenHeight,
+    left: 0,
+    top: 0,
+    elevation: 4
+  },
+
+  callConnected: {
+    position: 'absolute',
+    width: Metrics.screenWidth,
+    height: Metrics.screenHeight,
+    left: 0,
+    top: 0,
+    elevation: 3
   }
 });

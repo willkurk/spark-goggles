@@ -57,23 +57,32 @@ class Main extends Component {
   render() {
     const { phone, messages, people } = this.props;
     const { call } = phone;
+    const remoteViewStyle = call.connected
+      ? styles.remoteViewVisible
+      : styles.remoteViewHidden;
 
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1, display: call.connected ? 'flex' : 'none' }}>
-          <VideoView
-            style={styles.localView}
-            nativeID="localView"
-            onSnapshot={this.handleReceiveSnapshot}
-          />
-          <VideoView style={styles.remoteView} nativeID="remoteView" />
-        </View>
+        <VideoView style={remoteViewStyle} nativeID="remoteView" />
+
+        <VideoView
+          style={styles.localView}
+          nativeID="localView"
+          onSnapshot={this.handleReceiveSnapshot}
+        />
 
         {!call.connected &&
-          !call.ringing && <Dialer people={people} onCall={this.handleCall} />}
+          !call.ringing && (
+            <Dialer
+              style={styles.dialer}
+              people={people}
+              onCall={this.handleCall}
+            />
+          )}
 
         {call.ringing && (
           <CallRinging
+            style={styles.callRinging}
             call={call}
             onAccept={this.handleAcceptCall}
             onReject={this.props.rejectIncomingCall}
@@ -83,6 +92,7 @@ class Main extends Component {
 
         {call.connected && (
           <CallConnected
+            style={styles.callConnected}
             call={call}
             messages={messages}
             onHangup={this.props.hangupPhone}

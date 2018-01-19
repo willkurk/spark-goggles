@@ -64,7 +64,7 @@ public class VideoView extends WseSurfaceView {
         int centerY = Math.round(height / 2f);
 
         Matrix matrix = new Matrix();
-        matrix.postScale(-1, -1, centerX, centerY);
+        matrix.postScale(1, -1, centerX, centerY);
 
         return Bitmap.createBitmap(source, 0, 0, width, height, matrix, true);
     }
