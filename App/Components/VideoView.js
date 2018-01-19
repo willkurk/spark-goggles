@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { requireNativeComponent, View, ViewPropTypes } from 'react-native';
+import { requireNativeComponent, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 
 const NativeVideoView = requireNativeComponent('VideoView', {
@@ -16,23 +16,7 @@ class VideoView extends Component {
   };
 
   render() {
-    const { style, ...rest } = this.props;
-
-    return (
-      <View style={style}>
-        <NativeVideoView
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0
-          }}
-          {...rest}
-          onSnapshot={this.handleSnapshot}
-        />
-      </View>
-    );
+    return <NativeVideoView {...this.props} onSnapshot={this.handleSnapshot} />;
   }
 }
 

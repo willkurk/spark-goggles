@@ -8,8 +8,8 @@ export default StyleSheet.create({
 
   localView: {
     position: 'absolute',
-    width: width,
-    height: height,
+    width: 1,
+    height: 1,
     left: 0,
     top: 0,
     elevation: 1
@@ -22,7 +22,7 @@ export default StyleSheet.create({
     top: 0,
     right: 0,
     backgroundColor: 'rgba(255,0,0,0.2)',
-    elevation: 2
+    elevation: 4
   },
 
   dialer: {

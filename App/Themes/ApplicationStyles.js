@@ -15,7 +15,7 @@ const ApplicationStyles = {
       //bottom: 0,
       width: width,
       height: height,
-      backgroundColor: Colors.clear,
+      backgroundColor: Colors.black,
       alignItems: 'center',
       justifyContent: 'center'
     }

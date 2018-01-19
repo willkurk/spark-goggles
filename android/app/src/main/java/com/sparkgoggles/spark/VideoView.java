@@ -23,10 +23,6 @@ public class VideoView extends WseSurfaceView {
         super(reactContext);
     }
 
-    public void setTop() {
-        this.setZOrderOnTop(true);
-    }
-
     /**
      * Pull a frame off of the video feed, save it, and broadcast the path to the
      * React component's `onSnapshot` function.
@@ -68,7 +64,7 @@ public class VideoView extends WseSurfaceView {
         int centerY = Math.round(height / 2f);
 
         Matrix matrix = new Matrix();
-        matrix.postScale(-1, -1, centerX, centerY);
+        matrix.postScale(1, -1, centerX, centerY);
 
         return Bitmap.createBitmap(source, 0, 0, width, height, matrix, true);
     }
