@@ -12,7 +12,13 @@ const CallRinging = ({ call, onAccept, onReject, onHangup, style }) => {
       return [
         <Loading key="loading" text={`Calling ${call.person.email}`} />,
         <View key="buttons" style={styles.callRingingButtons}>
-          <Button label="Hangup" onPress={onHangup} />
+          <Button
+            style={styles.callRingingButton}
+            icon="ios-close-outline"
+            type="alert"
+            label="Hangup"
+            onPress={onHangup}
+          />
         </View>
       ];
     }
@@ -20,8 +26,20 @@ const CallRinging = ({ call, onAccept, onReject, onHangup, style }) => {
     return [
       <Loading key="loading" text={`${call.person.email} is calling...`} />,
       <View key="buttons" style={styles.callRingingButtons}>
-        <Button label="Answer" onPress={onAccept} color="green" />
-        <Button label="Reject" onPress={onReject} color="red" />
+        <Button
+          style={styles.callRingingButton}
+          label="Answer"
+          onPress={onAccept}
+          type="success"
+          icon="ios-call-outline"
+        />
+        <Button
+          style={styles.callRingingButton}
+          label="Reject"
+          onPress={onReject}
+          type="alert"
+          icon="ios-close-outline"
+        />
       </View>
     ];
   };

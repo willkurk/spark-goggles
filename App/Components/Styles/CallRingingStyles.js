@@ -13,6 +13,10 @@ export default StyleSheet.create({
     flex: 1
   },
   callRingingButtons: {
-    padding: Metrics.gap()
+    padding: Metrics.gap(),
+    flexDirection: 'row'
+  },
+  callRingingButton: {
+    marginHorizontal: Metrics.gap(0.5)
   }
 });
