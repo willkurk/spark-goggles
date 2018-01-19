@@ -1,7 +1,5 @@
-import { Dimensions, StyleSheet } from 'react-native';
-import { ApplicationStyles } from '../../Themes/';
-
-const { width, height } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
+import { ApplicationStyles, Metrics } from '../../Themes/';
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
@@ -15,7 +13,15 @@ export default StyleSheet.create({
     elevation: 1
   },
 
-  remoteView: {
+  remoteViewHidden: {
+    position: 'absolute',
+    width: 1,
+    height: 1,
+    top: -1,
+    right: -1
+  },
+
+  remoteViewVisible: {
     position: 'absolute',
     width: 160,
     height: 90,
@@ -27,8 +33,8 @@ export default StyleSheet.create({
 
   dialer: {
     position: 'absolute',
-    width: width,
-    height: height,
+    width: Metrics.screenWidth,
+    height: Metrics.screenHeight,
     left: 0,
     top: 0,
     elevation: 3
@@ -36,8 +42,8 @@ export default StyleSheet.create({
 
   callRinging: {
     position: 'absolute',
-    width: width,
-    height: height,
+    width: Metrics.screenWidth,
+    height: Metrics.screenHeight,
     left: 0,
     top: 0,
     elevation: 4
@@ -45,8 +51,8 @@ export default StyleSheet.create({
 
   callConnected: {
     position: 'absolute',
-    width: width,
-    height: height,
+    width: Metrics.screenWidth,
+    height: Metrics.screenHeight,
     left: 0,
     top: 0,
     elevation: 3
