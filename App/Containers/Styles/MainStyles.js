@@ -29,10 +29,8 @@ export default StyleSheet.create({
     position: 'absolute',
     width: width,
     height: height,
-    left: 0,
     right: 0,
     top: 0,
-    bottom: 0,
     elevation: 3
   },
 
@@ -42,7 +40,7 @@ export default StyleSheet.create({
     left: 0,
     right: 0,
     width: width,
-    elevation: 3
+    elevation: 4
   },
 
   callConnected: {
