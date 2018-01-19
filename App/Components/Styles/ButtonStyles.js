@@ -13,7 +13,7 @@ export default StyleSheet.create({
   successType: {
     backgroundColor: Colors.green
   },
-  warnType: {
+  alertType: {
     backgroundColor: Colors.red
   },
   label: {

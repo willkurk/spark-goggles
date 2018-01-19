@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './Styles/ButtonStyles';
 
-const Button = ({ onPress, label, icon, type = 'default' }) => {
+const Button = ({ onPress, label, icon, style, type = 'default' }) => {
   const buttonTypeStyle = styles[`${type}Type`];
 
   return (
     <TouchableOpacity
-      style={[styles.button, buttonTypeStyle]}
+      style={[styles.button, buttonTypeStyle, style]}
       onPress={onPress}
     >
       {!!icon && <Icon style={styles.icon} name={icon} size={24} />}
@@ -22,7 +22,8 @@ Button.propTypes = {
   onPress: PropTypes.func.isRequired,
   label: PropTypes.string,
   icon: PropTypes.string,
-  type: PropTypes.oneOf(['default', 'success', 'alert'])
+  type: PropTypes.oneOf(['default', 'success', 'alert']),
+  style: View.propTypes.style
 };
 
 export default Button;
