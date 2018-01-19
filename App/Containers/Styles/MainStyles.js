@@ -29,26 +29,26 @@ export default StyleSheet.create({
     position: 'absolute',
     width: width,
     height: height,
-    right: 0,
+    left: 0,
     top: 0,
     elevation: 3
   },
 
   callRinging: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     width: width,
+    height: height,
+    left: 0,
+    top: 0,
     elevation: 4
   },
 
   callConnected: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     width: width,
+    height: height,
+    left: 0,
+    top: 0,
     elevation: 3
   }
 });
