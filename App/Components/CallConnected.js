@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
+import KeepAwake from 'react-native-keep-awake';
 import SparkPropTypes from '../PropTypes/';
 import ImageViewer from './ImageViewer';
 import Button from '../Components/Button';
@@ -16,7 +17,6 @@ const CallConnected = ({
   return (
     <View style={style}>
       <ImageViewer call={call} messages={messages} />
-
       <View style={styles.callConnectedButtons}>
         <Button
           style={styles.callConnectedButton}
@@ -31,6 +31,7 @@ const CallConnected = ({
           type="alert"
         />
       </View>
+      <KeepAwake />
     </View>
   );
 };
