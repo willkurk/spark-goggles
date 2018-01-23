@@ -3,6 +3,7 @@ package com.sparkgoggles;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnimmersive.RNImmersivePackage;
 import com.corbt.keepawake.KCKeepAwakePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNImmersivePackage(),
             new KCKeepAwakePackage(),
             new VectorIconsPackage(),
             new ReactNativeConfigPackage(),

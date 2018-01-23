@@ -33,6 +33,7 @@
     "react": "16.0.0",
     "react-native": "0.50.4",
     "react-native-config": "^0.10.0",
+    "react-native-immersive": "^1.1.0",
     "react-native-keep-awake": "^2.0.6",
     "react-native-vector-icons": "^4.5.0",
     "react-navigation": "^1.0.0-beta.21",
