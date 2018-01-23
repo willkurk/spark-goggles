@@ -27,6 +27,12 @@
     <uses-feature
         android:name="android.hardware.camera.front"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.faketouch"
+        android:required="true" />
 
     <uses-sdk
         android:minSdkVersion="21"

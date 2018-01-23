@@ -4603,6 +4603,10 @@ react-native-immersive@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-immersive/-/react-native-immersive-1.1.0.tgz#4d3c702d3ef9a566a2df308b999472a461112741"
 
+react-native-keep-awake@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-keep-awake/-/react-native-keep-awake-2.0.6.tgz#d8eaffe0a6377cc197469d9f06c7f317225403db"
+
 react-native-tab-view@^0.0.70:
   version "0.0.70"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.70.tgz#1dd2ded32acd0cb6bfef38d26e53675db733b37b"
