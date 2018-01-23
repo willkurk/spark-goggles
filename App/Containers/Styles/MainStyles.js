@@ -53,8 +53,8 @@ export default StyleSheet.create({
     position: 'absolute',
     width: Metrics.screenWidth,
     height: Metrics.screenHeight,
-    left: 0,
-    top: 0,
+    right: 0,
+    bottom: 0,
     elevation: 3
   }
 });

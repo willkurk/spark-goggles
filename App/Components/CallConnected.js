@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Button } from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import SparkPropTypes from '../PropTypes/';
 import ImageViewer from './ImageViewer';
+import Button from '../Components/Button';
+import styles from './Styles/CallConnectedStyles';
 
 const CallConnected = ({
   call,
@@ -12,10 +14,23 @@ const CallConnected = ({
   style
 }) => {
   return (
-    <View style={[style, { flex: 1 }]}>
+    <View style={style}>
       <ImageViewer call={call} messages={messages} />
-      <Button title="Send Snapshot" onPress={onTriggerSnapshot} />
-      <Button title="Hangup call" onPress={onHangup} />
+
+      <View style={styles.callConnectedButtons}>
+        <Button
+          style={styles.callConnectedButton}
+          icon="ios-camera-outline"
+          onPress={onTriggerSnapshot}
+        />
+
+        <Button
+          style={styles.callConnectedButton}
+          icon="ios-close-outline"
+          onPress={onHangup}
+          type="alert"
+        />
+      </View>
     </View>
   );
 };
