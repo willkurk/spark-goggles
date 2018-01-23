@@ -24,5 +24,11 @@ export default StyleSheet.create({
   icon: {
     color: Colors.white,
     paddingHorizontal: Metrics.gap(0.5)
+  },
+  iconShape: {
+    width: 30 + Metrics.gap(4),
+    height: 30 + Metrics.gap(4),
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });

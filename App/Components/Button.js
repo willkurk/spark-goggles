@@ -6,10 +6,11 @@ import styles from './Styles/ButtonStyles';
 
 const Button = ({ onPress, label, icon, style, type = 'default' }) => {
   const buttonTypeStyle = styles[`${type}Type`];
+  const buttonShapeStyle = !!icon && !label ? styles.iconShape : {};
 
   return (
     <TouchableOpacity
-      style={[styles.button, buttonTypeStyle, style]}
+      style={[styles.button, buttonTypeStyle, buttonShapeStyle, style]}
       onPress={onPress}
     >
       {!!icon && <Icon style={styles.icon} name={icon} size={24} />}
