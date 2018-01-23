@@ -1,6 +1,8 @@
 import React from 'react';
 import SparkPropTypes from '../PropTypes/';
 import { View, Image } from 'react-native';
+import Button from '../Components/Button';
+import styles from './Styles/ImageViewerStyles';
 
 const messageFilter = call => message => {
   if (!message.files || !message.files.length) {
@@ -26,12 +28,17 @@ const ImageViewer = ({ call, messages }) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.imageViewerContainer}>
       {images.map(message =>
         message.files.map(file => (
           <Image style={{ flex: 1 }} source={file} key={file.uri} />
         ))
       )}
+
+      <View style={styles.imageViewerButtons}>
+        <Button icon="ios-close-outline" type="alert" />
+        <Button icon="ios-close-outline" type="alert" />
+      </View>
     </View>
   );
 };
