@@ -1,6 +1,7 @@
 package com.sparkgoggles;
 
 import com.facebook.react.ReactActivity;
+import com.rnimmersive.RNImmersiveModule;
 
 public class MainActivity extends ReactActivity {
 
@@ -11,5 +12,14 @@ public class MainActivity extends ReactActivity {
     @Override
     protected String getMainComponentName() {
         return "SparkGoggles";
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus && RNImmersiveModule.getInstance() != null) {
+            RNImmersiveModule.getInstance().emitImmersiveStateChangeEvent();
+        }
     }
 }
