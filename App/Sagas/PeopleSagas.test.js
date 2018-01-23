@@ -5,9 +5,13 @@ import api from '../Services/FixtureApi';
 
 const accessToken = '1234567890';
 const teams = { data: { items: [{ id: 'team-1' }, { id: 'team-2' }] } };
+const memberOne = { id: 'member-1' };
+const memberTwo = { id: 'member-2' };
+const memberThree = { id: 'member-3' };
 const teamMembers = [
-  { data: { items: [{ id: 'member-1' }] } },
-  { data: { items: [{ id: 'member-2' }] } }
+  { data: { items: [memberOne, memberTwo] } },
+  { data: { items: [memberTwo] } },
+  { data: { items: [memberThree, memberOne] } }
 ];
 
 test('getPeople', () => {
@@ -25,12 +29,7 @@ test('getPeople', () => {
   );
 
   expect(saga.next(teamMembers).value).toEqual(
-    put(
-      getPeopleSuccess([
-        teamMembers[0].data.items[0],
-        teamMembers[1].data.items[0]
-      ])
-    )
+    put(getPeopleSuccess([memberOne, memberTwo, memberThree]))
   );
 });
 

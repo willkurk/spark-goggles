@@ -11,9 +11,20 @@ export function* getPeople(api) {
       teams.map(team => call(api.getTeamMembers, accessToken, team.id))
     );
 
-    const people = responses.reduce(
-      (acc, resp) => acc.concat(resp.data.items),
-      []
+    const people = Object.values(
+      responses.reduce(
+        (acc, resp) => ({
+          ...acc,
+          ...resp.data.items.reduce(
+            (people, person) => ({
+              ...people,
+              ...{ [person.id]: person }
+            }),
+            {}
+          )
+        }),
+        {}
+      )
     );
 
     yield put(getPeopleSuccess(people));
