@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, ViewPropTypes } from 'react-native';
 import SparkPropTypes from '../PropTypes/';
 import Loading from './Loading';
 import Error from './Error';
@@ -40,7 +40,7 @@ const Dialer = ({ people, onCall, style }) => {
 Dialer.propTypes = {
   onCall: PropTypes.func.isRequired,
   people: SparkPropTypes.people.isRequired,
-  style: View.propTypes.style
+  style: ViewPropTypes.style
 };
 
 export default Dialer;

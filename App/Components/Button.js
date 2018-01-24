@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, ViewPropTypes } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './Styles/ButtonStyles';
 
@@ -24,7 +24,7 @@ Button.propTypes = {
   label: PropTypes.string,
   icon: PropTypes.string,
   type: PropTypes.oneOf(['default', 'success', 'alert']),
-  style: View.propTypes.style
+  style: ViewPropTypes.style
 };
 
 export default Button;

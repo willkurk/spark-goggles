@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import SparkPropTypes from '../PropTypes/';
 import Loading from '../Components/Loading';
@@ -54,7 +54,7 @@ CallRinging.propTypes = {
   onAccept: PropTypes.func.isRequired,
   onReject: PropTypes.func.isRequired,
   onHangup: PropTypes.func.isRequired,
-  style: View.propTypes.style
+  style: ViewPropTypes.style
 };
 
 export default CallRinging;

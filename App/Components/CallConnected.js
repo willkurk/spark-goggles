@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import KeepAwake from 'react-native-keep-awake';
 import SparkPropTypes from '../PropTypes/';
@@ -41,7 +41,7 @@ CallConnected.propTypes = {
   messages: SparkPropTypes.messages.isRequired,
   onTriggerSnapshot: PropTypes.func.isRequired,
   onHangup: PropTypes.func.isRequired,
-  style: View.propTypes.style
+  style: ViewPropTypes.style
 };
 
 export default CallConnected;
