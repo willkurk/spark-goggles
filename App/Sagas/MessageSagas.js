@@ -62,6 +62,6 @@ export function* pollMessages(api) {
       yield put(appendMessages({ data: newMessages }));
     }
 
-    yield call(delay, 7000);
+    yield call(delay, 3000);
   }
 }
