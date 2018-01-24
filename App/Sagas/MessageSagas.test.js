@@ -88,7 +88,7 @@ describe('pollMessages', () => {
       put(appendMessages({ data: [postTwo, three] }))
     );
 
-    expect(saga.next().value).toEqual(call(delay, 7000));
+    expect(saga.next().value).toEqual(call(delay, 3000));
     expect(saga.next().value).toEqual(call(api.getAccessToken));
   });
 });
