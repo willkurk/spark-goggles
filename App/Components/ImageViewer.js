@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import SparkPropTypes from '../PropTypes/';
 import { View, Image } from 'react-native';
 import Button from '../Components/Button';
@@ -20,28 +20,68 @@ const messageFilter = call => message => {
   return true;
 };
 
-const ImageViewer = ({ call, messages }) => {
-  const images = messages.data.filter(messageFilter(call));
+class ImageViewer extends Component {
+  state = {
+    isReducedSize: false,
+    image: null
+  };
 
-  if (!images.length) {
-    return null;
+  handleDismissImage = () => {
+    this.setState({ image: null });
+  };
+
+  handleResizeImage = () => {
+    this.setState({ isReducedSize: !this.state.isReducedSize });
+  };
+
+  componentWillReceiveProps({ messages, call }) {
+    const images = messages.data.filter(messageFilter(call));
+    if (images.length) {
+      this.setState({ image: images[images.length - 1].files[0] });
+    }
   }
 
-  return (
-    <View style={styles.imageViewerContainer}>
-      {images.map(message =>
-        message.files.map(file => (
-          <Image style={{ flex: 1 }} source={file} key={file.uri} />
-        ))
-      )}
+  render() {
+    const { image } = this.state;
 
-      <View style={styles.imageViewerButtons}>
-        <Button icon="ios-close-outline" type="alert" />
-        <Button icon="ios-close-outline" type="alert" />
+    if (!image) {
+      return null;
+    }
+
+    const imageSizeStyle = this.state.isReducedSize
+      ? styles.imageReducedSizeStyle
+      : styles.imageFullSizeStyle;
+    const imageResizeIcon = this.state.isReducedSize
+      ? 'ios-expand-outline'
+      : 'ios-contract-outline';
+
+    return (
+      <View style={styles.imageViewerContainer}>
+        <Image
+          style={[styles.imageViewerImage, imageSizeStyle]}
+          source={image}
+          key={image.uri}
+          resizeMode="contain"
+        />
+
+        <View style={styles.imageViewerButtons}>
+          <Button
+            icon="ios-trash-outline"
+            type="alert"
+            onPress={this.handleDismissImage}
+            style={styles.imageViewerButton}
+          />
+
+          <Button
+            icon={imageResizeIcon}
+            onPress={this.handleResizeImage}
+            style={styles.imageViewerButton}
+          />
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 ImageViewer.propTypes = {
   call: SparkPropTypes.call,
