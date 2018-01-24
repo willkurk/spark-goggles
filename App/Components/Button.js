@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, TouchableOpacity, View, ViewPropTypes } from 'react-native';
+import { Text, TouchableOpacity, ViewPropTypes } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './Styles/ButtonStyles';
 
