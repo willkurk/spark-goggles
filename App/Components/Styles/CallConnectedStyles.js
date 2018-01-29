@@ -10,6 +10,7 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   callConnectedButton: {
-    marginLeft: Metrics.gap()
+    marginLeft: Metrics.gap(),
+    elevation: 4
   }
 });

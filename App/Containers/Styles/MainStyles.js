@@ -27,7 +27,6 @@ export default StyleSheet.create({
     height: 90,
     top: 0,
     right: 0,
-    backgroundColor: 'rgba(255,0,0,0.2)',
     elevation: 4
   },
 

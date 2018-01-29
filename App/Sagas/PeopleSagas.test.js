@@ -5,9 +5,9 @@ import api from '../Services/FixtureApi';
 
 const accessToken = '1234567890';
 const teams = { data: { items: [{ id: 'team-1' }, { id: 'team-2' }] } };
-const memberOne = { id: 'member-1' };
-const memberTwo = { id: 'member-2' };
-const memberThree = { id: 'member-3' };
+const memberOne = { personId: 'member-1' };
+const memberTwo = { personId: 'member-2' };
+const memberThree = { personId: 'member-3' };
 const teamMembers = [
   { data: { items: [memberOne, memberTwo] } },
   { data: { items: [memberTwo] } },

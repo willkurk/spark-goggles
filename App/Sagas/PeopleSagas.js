@@ -18,7 +18,7 @@ export function* getPeople(api) {
           ...resp.data.items.reduce(
             (people, person) => ({
               ...people,
-              ...{ [person.id]: person }
+              ...{ [person.personId]: person }
             }),
             {}
           )
