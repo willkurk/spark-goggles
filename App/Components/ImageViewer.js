@@ -23,7 +23,7 @@ const messageFilter = call => message => {
 class ImageViewer extends Component {
   state = {
     isReducedSize: false,
-    messageToShow: null,
+    shownMessage: null,
     image: null
   };
 
