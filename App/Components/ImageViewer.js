@@ -23,6 +23,7 @@ const messageFilter = call => message => {
 class ImageViewer extends Component {
   state = {
     isReducedSize: false,
+    messageToShow: null,
     image: null
   };
 
@@ -37,7 +38,13 @@ class ImageViewer extends Component {
   componentWillReceiveProps({ messages, call }) {
     const images = messages.data.filter(messageFilter(call));
     if (images.length) {
-      this.setState({ image: images[images.length - 1].files[0] });
+      const messageToShow = images[images.length - 1];
+      if (this.state.shownMessage !== messageToShow.id) {
+        this.setState({
+          shownMessage: messageToShow.id,
+          image: messageToShow.files[0]
+        });
+      }
     }
   }
 
