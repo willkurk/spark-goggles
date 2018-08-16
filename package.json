@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start": "node node_modules/react-native/local-cli/cli.js start --port 8081",
     "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf node_modules && yarn && npm run -S android:clean",
+    "bundle": " react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "test": "jest",
     "test:watch": "jest --watch",
     "updateSnapshot": "jest --updateSnapshot",
@@ -65,7 +66,8 @@
     "react-test-renderer": "16.0.0",
     "reactotron-react-native": "^1.13.2",
     "reactotron-redux": "^1.13.0",
-    "reactotron-redux-saga": "^1.13.0"
+    "reactotron-redux-saga": "^1.13.0",
+    "react-native-cli": "*"
   },
   "resolutions": {
     "uglify-es": "3.2.2"
