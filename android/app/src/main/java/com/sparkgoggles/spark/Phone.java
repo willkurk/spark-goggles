@@ -3,6 +3,7 @@ package com.sparkgoggles.spark;
 import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
 import com.ciscospark.androidsdk.CompletionHandler;
@@ -20,6 +21,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEmitter;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
 import com.sparkgoggles.BuildConfig;
+
 
 public class Phone extends ReactContextBaseJavaModule {
     private final String REACT_CLASS = "Phone";
@@ -125,13 +127,13 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void dial(String address, String localViewId, String remoteViewId, final Promise promise) {
+    public void dial(String address, String localViewId, String remoteViewId, String sharingViewId, final Promise promise) {
         if (getActiveCall() != null) {
             promise.reject(E_CALL_ALREADY_IN_PROGRESS, "There is already a call in progress.");
             return;
         }
 
-        spark.phone().dial(address, getMediaOption(localViewId, remoteViewId), new CompletionHandler<Call>() {
+        spark.phone().dial(address, getMediaOption(localViewId, remoteViewId, sharingViewId), new CompletionHandler<Call>() {
             @Override
             public void onComplete(Result<Call> result) {
                 if (result.isSuccessful()) {
@@ -172,8 +174,8 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void answerIncomingCall(String localViewId, String remoteViewId, final Promise promise) {
-        incomingCall.answer(getMediaOption(localViewId, remoteViewId), new CompletionHandler<Void>() {
+    public void answerIncomingCall(String localViewId, String remoteViewId, String sharingViewId, final Promise promise) {
+        incomingCall.answer(getMediaOption(localViewId, remoteViewId, sharingViewId), new CompletionHandler<Void>() {
             @Override
             public void onComplete(Result<Void> result) {
                 if (result.isSuccessful()) {
@@ -241,10 +243,11 @@ public class Phone extends ReactContextBaseJavaModule {
         return activeCall;
     }
 
-    private MediaOption getMediaOption(String localViewId, String remoteViewId) {
+    private MediaOption getMediaOption(String localViewId, String remoteViewId, String sharingViewId) {
         View localView = findViewById(localViewId);
         View remoteView = findViewById(remoteViewId);
-        return MediaOption.audioVideo(localView, remoteView);
+	View sharingView = findViewById(sharingViewId);
+        return MediaOption.audioVideoSharing(new Pair<>(localView, remoteView), sharingView);
     }
 
     private View findViewById(String nativeId) {

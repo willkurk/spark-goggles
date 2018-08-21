@@ -48,20 +48,21 @@ export const registerPhoneError = error => ({
   }
 });
 
-export const dialPhone = ({ address, localView, remoteView }) => ({
+export const dialPhone = ({ address, localView, remoteView, sharingView }) => ({
   type: DIAL_PHONE,
-  payload: { address, localView, remoteView }
+  payload: { address, localView, remoteView, sharingView }
 });
 
 export const hangupPhone = () => ({
   type: HANGUP_PHONE
 });
 
-export const acceptIncomingCall = ({ localView, remoteView }) => ({
+export const acceptIncomingCall = ({ localView, remoteView, sharingView }) => ({
   type: ACCEPT_INCOMING_CALL,
   payload: {
     localView,
-    remoteView
+    remoteView,
+    sharingView
   }
 });
 

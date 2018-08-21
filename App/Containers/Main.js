@@ -27,14 +27,16 @@ class Main extends Component {
     this.props.dialPhone({
       address,
       localView: 'localView',
-      remoteView: 'remoteView'
+      remoteView: 'remoteView',
+      sharingView: 'sharingView'
     });
   };
 
   handleAcceptCall = () => {
     this.props.acceptIncomingCall({
       localView: 'localView',
-      remoteView: 'remoteView'
+      remoteView: 'remoteView',
+      sharingView: 'sharingView'
     });
   };
 
@@ -64,6 +66,8 @@ class Main extends Component {
     return (
       <View style={styles.container}>
         <VideoView style={remoteViewStyle} nativeID="remoteView" />
+
+	<VideoView style={styles.sharingVIewVisible} nativeID="sharingView" />
 
         <VideoView
           style={styles.localView}

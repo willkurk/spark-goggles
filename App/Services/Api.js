@@ -31,12 +31,12 @@ const create = () => {
     }
   };
 
-  const dialPhone = async ({ address, localView, remoteView }) => {
-    return Phone.dial(address, localView, remoteView);
+  const dialPhone = async ({ address, localView, remoteView, sharingView }) => {
+    return Phone.dial(address, localView, remoteView, sharingView);
   };
 
-  const acceptIncomingCall = async ({ localView, remoteView }) => {
-    return Phone.answerIncomingCall(localView, remoteView);
+  const acceptIncomingCall = async ({ localView, remoteView, sharingView }) => {
+    return Phone.answerIncomingCall(localView, remoteView, sharingView);
   };
 
   const addPhoneListener = callback => {

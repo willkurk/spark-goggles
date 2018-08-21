@@ -36,4 +36,11 @@ public class PhoneObserver implements CallObserver {
         Log.d("PhoneObserver", "onMediaChanged");
         events.emit("phone:media-changed", CallSerializer.serialize(event.getCall()));
     }
+
+    @Override
+    public void onCallMembershipChanged(CallMembershipChangedEvent event) {
+	Log.d("PhoneObserver", "onCallMembershipChange");
+	events.emit("phone:membership-changed", CallSerializer.serialize(event.getCall()));
+
+    }
 }
