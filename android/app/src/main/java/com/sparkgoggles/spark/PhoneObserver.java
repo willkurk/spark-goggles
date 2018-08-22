@@ -1,6 +1,7 @@
 package com.sparkgoggles.spark;
 
 import android.util.Log;
+import android.view.View;
 
 import com.ciscospark.androidsdk.phone.Call;
 import com.ciscospark.androidsdk.phone.CallObserver;
@@ -8,9 +9,12 @@ import com.facebook.react.modules.core.DeviceEventManagerModule.RCTDeviceEventEm
 
 public class PhoneObserver implements CallObserver {
     private RCTDeviceEventEmitter events;
+    
+    View shareView;
 
-    public PhoneObserver(RCTDeviceEventEmitter events) {
+    public PhoneObserver(RCTDeviceEventEmitter events, View shareView) {
         this.events = events;
+	this.shareView = shareView;
     }
 
     @Override
@@ -32,9 +36,15 @@ public class PhoneObserver implements CallObserver {
     }
 
     @Override
-    public void onMediaChanged(MediaChangedEvent event) {
+    public void onMediaChanged(MediaChangedEvent mediaChangedEvent) {
         Log.d("PhoneObserver", "onMediaChanged");
-        events.emit("phone:media-changed", CallSerializer.serialize(event.getCall()));
+        events.emit("phone:media-changed", CallSerializer.serialize(mediaChangedEvent.getCall()));
+	if (mediaChangedEvent instanceof RemoteSendingSharingEvent) {
+		if (((RemoteSendingSharingEvent) mediaChangedEvent).isSending()) {							mediaChangedEvent.getCall().setSharingRenderView(shareView);
+		} else if (!((RemoteSendingSharingEvent) mediaChangedEvent).isSending()) {
+			mediaChangedEvent.getCall().setSharingRenderView(null);
+														                        }
+																	                    }
     }
 
     @Override

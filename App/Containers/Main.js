@@ -63,11 +63,15 @@ class Main extends Component {
       ? styles.remoteViewVisible
       : styles.remoteViewHidden;
 
+    const sharingViewStyle = call.connected
+      ? styles.sharingViewVisible
+      : styles.sharingViewHidden;
+
     return (
       <View style={styles.container}>
         <VideoView style={remoteViewStyle} nativeID="remoteView" />
 
-	<VideoView style={styles.sharingVIewVisible} nativeID="sharingView" />
+        <VideoView style={sharingViewStyle} nativeID="sharingView" />
 
         <VideoView
           style={styles.localView}

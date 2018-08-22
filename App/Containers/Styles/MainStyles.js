@@ -29,7 +29,7 @@ export default StyleSheet.create({
     right: 0,
     elevation: 4
   },
-  
+
   sharingViewHidden: {
     position: 'absolute',
     width: 1,
@@ -46,7 +46,6 @@ export default StyleSheet.create({
     right: 0,
     elevation: 4
   },
-
 
   dialer: {
     position: 'absolute',

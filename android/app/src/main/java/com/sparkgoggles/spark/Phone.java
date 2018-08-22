@@ -127,7 +127,7 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void dial(String address, String localViewId, String remoteViewId, String sharingViewId, final Promise promise) {
+    public void dial(String address, String localViewId, String remoteViewId, final String sharingViewId, final Promise promise) {
         if (getActiveCall() != null) {
             promise.reject(E_CALL_ALREADY_IN_PROGRESS, "There is already a call in progress.");
             return;
@@ -138,7 +138,7 @@ public class Phone extends ReactContextBaseJavaModule {
             public void onComplete(Result<Call> result) {
                 if (result.isSuccessful()) {
                     Call call = result.getData();
-                    call.setObserver(new PhoneObserver(events));
+                    call.setObserver(new PhoneObserver(events, findViewById(sharingViewId)));
                     activeCall = call;
                     promise.resolve(true);
                 } else {
@@ -217,7 +217,7 @@ public class Phone extends ReactContextBaseJavaModule {
                 incomingCall = call;
 
                 Log.d("Phone", "Call incoming");
-                call.setObserver(new PhoneObserver(events));
+                call.setObserver(new PhoneObserver(events, null));
 
                 // This puts the call in the ringing state.
                 call.acknowledge(new CompletionHandler<Void>() {
