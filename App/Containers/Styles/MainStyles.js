@@ -29,8 +29,16 @@ export default StyleSheet.create({
     right: 0,
     elevation: 4
   },
-  
-  remoteViewVisible: {
+ 
+  sharingViewHidden: {
+    position: 'absolute',
+    width: 1,
+    height: 1,
+    top: -1,
+    right: -1,
+  },
+
+  sharingViewVisible: {
       position: 'absolute',
       width: 160,
       height: 90,
