@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start --port 8081",
-    "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf node_modules && yarn && npm run -S android:clean",
-    "bundle": " react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "start":
+      "node node_modules/react-native/local-cli/cli.js start --port=8088",
+    "clean":
+      "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf node_modules && yarn && npm run -S android:clean",
     "test": "jest",
     "test:watch": "jest --watch",
     "updateSnapshot": "jest --updateSnapshot",
