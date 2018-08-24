@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import SparkPropTypes from '../PropTypes';
 import { sendMessage } from '../Redux/Messages';
@@ -19,6 +19,10 @@ import CallConnected from '../Components/CallConnected';
 import styles from './Styles/MainStyles';
 
 class Main extends Component {
+  state = {
+    fullScreen: false
+  };
+
   componentDidMount() {
     this.props.getPeople();
   }
@@ -40,6 +44,11 @@ class Main extends Component {
     });
   };
 
+  handleToggleFullScreen = () => {
+    // eslint-disable-next-line
+    this.setState(prevState => ({ fullScreen: !prevState.fullScreen }));
+  };
+
   handleTriggerSnapshot = () => {
     this.props.takeSnapshot('localView');
   };
@@ -58,10 +67,19 @@ class Main extends Component {
 
   render() {
     const { phone, messages, people } = this.props;
+    const { fullScreen } = this.state;
     const { call } = phone;
     const remoteViewStyle = call.connected
       ? styles.remoteViewVisible
       : styles.remoteViewHidden;
+    const remoteViewFullScreen = call.connected
+      ? fullScreen
+        ? {
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height
+          }
+        : {}
+      : {};
 
     const sharingViewStyle = call.connected
       ? styles.sharingViewVisible
@@ -69,7 +87,10 @@ class Main extends Component {
 
     return (
       <View style={styles.container}>
-        <VideoView style={remoteViewStyle} nativeID="remoteView" />
+        <VideoView
+          style={[remoteViewStyle, remoteViewFullScreen]}
+          nativeID="remoteView"
+        />
 
         <VideoView style={sharingViewStyle} nativeID="sharingView" />
 
@@ -105,6 +126,7 @@ class Main extends Component {
             messages={messages}
             onHangup={this.props.hangupPhone}
             onTriggerSnapshot={this.handleTriggerSnapshot}
+            onToggleFullScreen={this.handleToggleFullScreen}
           />
         )}
       </View>

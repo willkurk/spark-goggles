@@ -62,7 +62,7 @@ export default StyleSheet.create({
     height: Metrics.screenHeight,
     left: 0,
     top: 0,
-    elevation: 4
+    elevation: 6
   },
 
   callConnected: {
@@ -71,6 +71,6 @@ export default StyleSheet.create({
     height: Metrics.screenHeight,
     right: 0,
     bottom: 0,
-    elevation: 3
+    elevation: 5
   }
 });
