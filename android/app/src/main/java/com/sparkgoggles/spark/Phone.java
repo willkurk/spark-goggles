@@ -174,13 +174,14 @@ public class Phone extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void answerIncomingCall(String localViewId, String remoteViewId, String sharingViewId, final Promise promise) {
+    public void answerIncomingCall(String localViewId, String remoteViewId, final String sharingViewId, final Promise promise) {
         incomingCall.answer(getMediaOption(localViewId, remoteViewId, sharingViewId), new CompletionHandler<Void>() {
             @Override
             public void onComplete(Result<Void> result) {
                 if (result.isSuccessful()) {
                     activeCall = incomingCall;
                     incomingCall = null;
+		    activeCall.setObserver(new PhoneObserver(events, findViewById(sharingViewId)));
                     promise.resolve(true);
                 } else {
                     Log.w("Phone", "An error occurred when accepting the call");
