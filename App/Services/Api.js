@@ -96,6 +96,9 @@ const create = () => {
   const getTeamMembers = (accessToken, teamId) =>
     buildClient(accessToken).get(buildQuery('/team/memberships', { teamId }));
 
+  const getRooms = (accessToken, teamId) =>
+    buildClient(accessToken).get(buildQuery('/rooms', { teamId }));
+
   return {
     acceptIncomingCall,
     addPhoneListener,
@@ -111,7 +114,8 @@ const create = () => {
     removePhoneListener,
     requestPermission,
     sendMessage,
-    takeSnapshot: Phone.takeSnapshot
+    takeSnapshot: Phone.takeSnapshot,
+    getRooms
   };
 };
 

@@ -43,11 +43,24 @@ const people = PropTypes.shape({
   error: PropTypes.string
 });
 
+const room = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  teamId: PropTypes.string.isRequired
+});
+
+const rooms = PropTypes.shape({
+  data: PropTypes.arrayOf(room),
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string
+});
+
 export default {
   registration,
   call,
   phone,
   messages,
   people,
-  person
+  person,
+  room,
+  rooms
 };

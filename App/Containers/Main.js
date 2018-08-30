@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import SparkPropTypes from '../PropTypes';
 import { sendMessage } from '../Redux/Messages';
 import { getPeople } from '../Redux/People';
+import { getRooms } from '../Redux/Rooms';
 import {
   dialPhone,
   hangupPhone,
@@ -14,6 +15,7 @@ import {
 } from '../Redux/Phone';
 import VideoView from '../Components/VideoView';
 import Dialer from '../Components/Dialer';
+import DialerRooms from '../Components/DialerRooms';
 import CallRinging from '../Components/CallRinging';
 import CallConnected from '../Components/CallConnected';
 import styles from './Styles/MainStyles';
@@ -25,6 +27,7 @@ class Main extends Component {
 
   componentDidMount() {
     this.props.getPeople();
+//    this.props.getRooms();
   }
 
   handleCall = address => {
@@ -59,7 +62,7 @@ class Main extends Component {
     }
 
     this.props.sendMessage({
-      text: 'Do you see what I see?',
+      text: '',
       toPersonEmail: this.props.phone.call.person.email,
       files: [snapshot.path]
     });
@@ -67,6 +70,7 @@ class Main extends Component {
 
   render() {
     const { phone, messages, people } = this.props;
+    const rooms = {data: [{id: 1, teamId: 1}], loading: false, error: ""};
     const { fullScreen } = this.state;
     const { call } = phone;
     const remoteViewStyle = call.connected
@@ -102,9 +106,9 @@ class Main extends Component {
 
         {!call.connected &&
           !call.ringing && (
-            <Dialer
+            <DialerRooms
               style={styles.dialer}
-              people={people}
+              rooms={rooms}
               onCall={this.handleCall}
             />
           )}
@@ -136,6 +140,7 @@ class Main extends Component {
 
 Main.propTypes = {
   getPeople: PropTypes.func.isRequired,
+  getRooms: PropTypes.func.isRequired,
   dialPhone: PropTypes.func.isRequired,
   hangupPhone: PropTypes.func.isRequired,
   acceptIncomingCall: PropTypes.func.isRequired,
@@ -144,17 +149,20 @@ Main.propTypes = {
   takeSnapshot: PropTypes.func.isRequired,
   messages: SparkPropTypes.messages.isRequired,
   phone: SparkPropTypes.phone.isRequired,
-  people: SparkPropTypes.people.isRequired
+  people: SparkPropTypes.people.isRequired,
+  rooms: SparkPropTypes.rooms.isRequired
 };
 
-const mapStateToProps = ({ phone, people, messages }) => ({
+const mapStateToProps = ({ phone, people, messages, rooms }) => ({
   phone,
   messages,
   people
+//  rooms
 });
 
 const mapDispatchToProps = {
   getPeople,
+  getRooms,
   dialPhone,
   hangupPhone,
   acceptIncomingCall,

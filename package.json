@@ -7,6 +7,7 @@
       "node node_modules/react-native/local-cli/cli.js start --port=8088",
     "clean":
       "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf node_modules && yarn && npm run -S android:clean",
+    "bundle": " react-native bundle --platform android --dev true --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "test": "jest",
     "test:watch": "jest --watch",
     "updateSnapshot": "jest --updateSnapshot",
