@@ -31,7 +31,7 @@ const DialerRooms = ({ rooms, onCall, style }) => {
         data={rooms.data.map(room => ({ ...room, key: room.id }))}
         ListHeaderComponent={renderHeader}
         renderItem={({ item: room }) => (
-          <Person key={room.id} room={room} onCall={onCall} />
+          <Room key={room.id} room={room} onCall={onCall} />
         )}
       />
     </View>

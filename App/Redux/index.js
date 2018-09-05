@@ -9,6 +9,7 @@ import { reducer as login } from './Login';
 import { reducer as phone } from './Phone';
 import { reducer as messages } from './Messages';
 import { reducer as people } from './People';
+import { reducer as rooms } from './Rooms';
 
 /* ------------- Assemble The Reducers ------------- */
 
@@ -17,7 +18,8 @@ export const reducers = combineReducers({
   nav,
   phone,
   messages,
-  people
+  people,
+  rooms
 });
 
 export default () => {

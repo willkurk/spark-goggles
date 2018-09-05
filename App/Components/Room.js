@@ -18,7 +18,7 @@ class Room extends Component {
         <View style={styles.item}>
           <Icon style={styles.icon} name="ios-call-outline" size={24} />
 
-          <Text style={styles.name}>{room.id}</Text>
+          <Text style={styles.name}>{room.title}</Text>
         </View>
       </TouchableOpacity>
     );

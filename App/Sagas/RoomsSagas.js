@@ -17,7 +17,7 @@ export function* getRooms(api) {
           ...acc,
           ...resp.data.items.reduce(
             (rooms, room) => ({
-              ...room,
+              ...rooms,
               ...{ [room.id]: room }
             }),
             {}

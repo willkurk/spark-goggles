@@ -71,5 +71,13 @@ export default {
 
   takeSnapshot() {
     return Promise.resolve(true);
+  },
+
+  getRooms() {
+    return Promise.resolve({
+      data: {
+        items: []
+      }
+    });
   }
 };

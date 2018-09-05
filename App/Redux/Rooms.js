@@ -7,12 +7,12 @@ export const getRooms = () => ({
   payload: { data: null, error: null, loading: true }
 });
 
-export const getRoomSuccess = data => ({
+export const getRoomsSuccess = data => ({
   type: GET_ROOMS_SUCCESS,
   payload: { data, error: null, loading: false }
 });
 
-export const getRoomError = error => ({
+export const getRoomsError = error => ({
   type: GET_ROOMS_ERROR,
   payload: { error, data: null, loading: false }
 });

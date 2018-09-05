@@ -27,7 +27,7 @@ class Main extends Component {
 
   componentDidMount() {
     this.props.getPeople();
-//    this.props.getRooms();
+    this.props.getRooms();
   }
 
   handleCall = address => {
@@ -69,8 +69,7 @@ class Main extends Component {
   };
 
   render() {
-    const { phone, messages, people } = this.props;
-    const rooms = {data: [{id: 1, teamId: 1}], loading: false, error: ""};
+    const { phone, messages, people, rooms } = this.props;
     const { fullScreen } = this.state;
     const { call } = phone;
     const remoteViewStyle = call.connected
@@ -156,8 +155,8 @@ Main.propTypes = {
 const mapStateToProps = ({ phone, people, messages, rooms }) => ({
   phone,
   messages,
-  people
-//  rooms
+  people,
+  rooms
 });
 
 const mapDispatchToProps = {

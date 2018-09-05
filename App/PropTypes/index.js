@@ -45,6 +45,7 @@ const people = PropTypes.shape({
 
 const room = PropTypes.shape({
   id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   teamId: PropTypes.string.isRequired
 });
 
